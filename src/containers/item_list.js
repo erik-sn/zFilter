@@ -2,15 +2,18 @@ import React from 'react'
 
 const ItemList = (props) => {
 
-    const killmails = props.killmails.map((killmail) => {
+    const items = props.killmails.map((killmail) => {
        const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
+       const killUrl = `https://zkillboard.com/kill/${killmail.killID}/`
+       let group = killmail.victimCorp;
+       if(killmail.victimAlliance.trim() != '') {
+           group += ' / ' + killmail.victimAlliance
+       }
        return (
             <tr key={killmail.killID } >
                 <td><img src={ imgUrl } height="40" width="40" /></td>
-                <td>{ killmail.shipName }</td>
                 <td>{ killmail.victimName }</td>
-                <td>{ killmail.victimCorp }</td>
-                <td>{ killmail.victimAlliance }</td>
+                <td>{group }</td>
                 <td>{ killmail.security }</td>
                 <td>{ killmail.system }</td>
                 <td>{ killmail.time }</td>
@@ -21,7 +24,7 @@ const ItemList = (props) => {
     return (
         <table>
             <tbody>
-            { killmails }
+            { items }
             </tbody>
         </table>
     )
