@@ -1,4 +1,4 @@
-import { GET_KILLMAIL } from '../actions/index'
+import { GET_KILLMAIL } from '../actions/actions'
 
 export default function(state = [], action) {
     switch (action.type) {

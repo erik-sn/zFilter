@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URL_INITIALIZE = 'https://zkillboard.com/api/kills/limit/200/desc/'
+const URL_INITIALIZE = 'https://zkillboard.com/api/kills/page/1/desc/'
 const URL_GET_KILLS = 'https://zkillboard.com/api/kills/afterKillID/'
 const URL_GET_IMAGE = 'https://image.eveonline.com/Render/'
 

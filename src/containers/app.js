@@ -2,8 +2,8 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { intializeList } from '../actions/index'
-import { getKillmails } from '../actions/index'
+import { intializeList } from '../actions/actions'
+import { getKillmails } from '../actions/actions'
 
 import SearchBar from '../containers/search_bar'
 import ItemList from '../containers/item_list'

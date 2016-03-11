@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getKillmails } from '../actions/index'
+import { getKillmails } from '../actions/actions'
 
 class SearchBar extends Component {
 
