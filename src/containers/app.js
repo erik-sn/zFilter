@@ -6,7 +6,7 @@ import { intializeList } from '../actions/actions'
 import { getKillmails } from '../actions/actions'
 
 import SearchBar from '../containers/search_bar'
-import ItemList from '../containers/item_list'
+import ItemList from '../components/item_list'
 
 class App extends Component {
 
