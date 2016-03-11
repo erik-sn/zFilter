@@ -19,7 +19,7 @@ class App extends Component {
         return (
             <div>
               <div id="search-bar"><SearchBar /></div>
-              <div id="list-container"><ItemList killmails= { this.props.killmail_list } /></div>
+              <div id="list-container"><ItemList items= { this.props.killmail_list } name="item-table" /></div>
             </div>
         );
     }

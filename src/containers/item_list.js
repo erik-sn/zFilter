@@ -1,28 +1,18 @@
 import React from 'react'
 
+import Item from '../components/item'
+
+// Returns generic table that holds a list of items. Items are customized at the item object level
 const ItemList = (props) => {
 
-    const items = props.killmails.map((killmail) => {
-       const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
-       const killUrl = `https://zkillboard.com/kill/${killmail.killID}/`
-       let group = killmail.victimCorp;
-       if(killmail.victimAlliance.trim() != '') {
-           group += ' / ' + killmail.victimAlliance
-       }
+    const items = props.items.map((item) => {
        return (
-            <tr key={killmail.killID } >
-                <td><img src={ imgUrl } height="40" width="40" /></td>
-                <td>{ killmail.victimName }</td>
-                <td>{group }</td>
-                <td>{ killmail.security }</td>
-                <td>{ killmail.system }</td>
-                <td>{ killmail.time }</td>
-            </tr>
+           <Item item={ item } />
        )
     })
 
     return (
-        <table>
+        <table className={ props.name }>
             <tbody>
             { items }
             </tbody>
