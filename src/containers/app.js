@@ -6,6 +6,7 @@ import { intializeList } from '../actions/index'
 import { getKillmails } from '../actions/index'
 
 import SearchBar from '../containers/search_bar'
+import ItemList from '../containers/item_list'
 
 class App extends Component {
 
@@ -13,9 +14,13 @@ class App extends Component {
         super(props)
         this.refreshList = this.refreshList.bind(this)
     }
+
     render() {
         return (
-          <div id="search-bar"><SearchBar /></div>
+            <div>
+              <div id="search-bar"><SearchBar /></div>
+              <div id="list-container"><ItemList killmails= { this.props.killmail_list } /></div>
+            </div>
         );
     }
 
