@@ -11,35 +11,58 @@ class SystemFilter extends Component {
           jumps: props.jumps,
           ly: props.ly
         }
-        console.log(this.state)
+
         this.updateJumps = this.updateJumps.bind(this)
         this.updateLY = this.updateLY.bind(this)
+        this.deleteFilter = this.deleteFilter.bind(this)
     }
 
     updateJumps(event) {
       this.setState({ jumps: event.target.value })
-//      this.props.modifySystemFilter(this.state)
+      this.props.editSystemFilter(this.props.systemName, this.props.systemId, 'jumps', event.target.value)
     }
 
     updateLY(event) {
       this.setState({ ly: event.target.value })
-//      this.props.modifySystemFilter(this.state)
+      this.props.editSystemFilter(this.props.systemName, this.props.systemId, 'ly', event.target.value)
     }
+
+     deleteFilter() {
+       this.props.removeSystemFilter(this.props.systemName)
+     }
 
     render() {
         return (
            <div className="input-group">
             <span className="input-group-addon" id="basic-addon1">{ this.props.systemName }</span>
-            <input type="text" className="form-control, system-filter" placeholder="Jumps" aria-describedby="basic-addon1" value={ this.state.jumps } onChange={ this.updateJumps }/>
-            <input type="text" className="form-control, system-filter" placeholder="LY" aria-describedby="basic-addon1" value={ this.state.ly } onChange={ this.updateLY } />
+            <input
+              type="text"
+              className="form-control, system-filter"
+              placeholder="Jumps"
+              aria-describedby="basic-addon1"
+              value={ this.state.jumps }
+              onChange={ this.updateJumps }
+            />
+            <input
+              type="text"
+              className="form-control, system-filter"
+              placeholder="LY"
+              aria-describedby="basic-addon1"
+              value={ this.state.ly }
+              onChange={ this.updateLY }
+            />
+            <span class="input-group-btn">
+              <button class="btn btn-secondary" type="button" onClick={ this.deleteFilter }>Close</button>
+            </span>
           </div>
+
         )
     }
 }
 
 
-function mapStateToProps({ killmail_list, system_filter }) {
-    return { killmail_list, system_filter }
+function mapStateToProps({ system_filter }) {
+    return { system_filter }
 }
 
 

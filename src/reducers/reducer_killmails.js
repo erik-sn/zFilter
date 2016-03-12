@@ -4,7 +4,6 @@ export default function(state = [], action) {
     switch (action.type) {
         case GET_KILLMAIL:
             let killmails = []
-            let filterIDs = [30000142, 30002537]
             for(let kill of action.payload.data) {
                 const shipID = kill.victim.shipTypeID
                 const systemID = kill.solarSystemID

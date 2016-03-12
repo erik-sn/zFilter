@@ -18,9 +18,9 @@ class AddFilter extends Component {
    createFilter(event) {
      event.preventDefault()
      const system = this.state.input
-     const val = systemExists(system);
-     if(val) {
-       this.props.createSystemFilter(val)
+     const keyPair = systemExists(system);
+     if(keyPair) {
+       this.props.createSystemFilter(keyPair)
        this.setState({ input: ''})
      }
      else {
@@ -28,6 +28,7 @@ class AddFilter extends Component {
      }
 
    }
+
 
    render() {
       return (

@@ -1,10 +1,8 @@
-import { FILTER_SYSTEM_CREATE } from '../actions/actions'
-import { FILTER_SYSTEM_MODIFY } from '../actions/actions'
-import { FILTER_SYSTEM_DELETE } from '../actions/actions'
+import { FILTER_JUMPS } from '../actions/actions'
 
 export default function(state = [], action) {
     switch (action.type) {
-        case FILTER_SYSTEM_CREATE:
+        case FILTER_JUMPS:
             return state.concat(action.payload)
 
         case FILTER_SYSTEM_DELETE:
