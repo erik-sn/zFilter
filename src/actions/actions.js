@@ -8,7 +8,7 @@ export const GET_KILLMAIL = 'GET_KILLMAIL'
 export const FILTER_SYSTEM_CREATE = 'FILTER_SYSTEM_CREATE'
 export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
 
-export function getKillmails(maxId) {
+export function getKillmails(maxId, system_filter) {
     const request = axios.get(URL_GET_KILLS + maxId + '/nocache?_=' + new Date().getTime())
     return {
         type: GET_KILLMAIL,
@@ -30,7 +30,6 @@ export function createSystemFilter(system, jumps, ly) {
       jumps: jumps,
       ly: ly
     }
-    console.log('Create Filter Action: ', filter)
     return {
         type: FILTER_SYSTEM_CREATE,
         payload: filter

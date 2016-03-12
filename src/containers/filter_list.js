@@ -16,7 +16,6 @@ class FilterList extends Component {
     }
 
     addSystemFilter(system) {
-      console.log(system)
       this.props.createSystemFilter(system, 0, '')
     }
 
@@ -26,7 +25,6 @@ class FilterList extends Component {
 
     render() {
        const items = this.props.system_filter.map((item) => {
-            console.log(item)
            return (
                <tr className="system-filter-row">
                    <td>
@@ -39,7 +37,6 @@ class FilterList extends Component {
                </tr>
            )
         });
-        console.log('Filters: ', items)
 
         return (
             <div>

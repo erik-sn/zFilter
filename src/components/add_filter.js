@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import { systemExists } from '../functions/system_functions'
 
 class AddFilter extends Component {
 
@@ -14,12 +15,23 @@ class AddFilter extends Component {
       this.setState({ input: event.target.value })
     }
 
-   createFilter(system) {
-     this.props.createSystemFilter(this.state.input)
+   createFilter(event) {
+     event.preventDefault()
+     const system = this.state.input
+     const val = systemExists(system);
+     if(val) {
+       this.props.createSystemFilter(val)
+       this.setState({ input: ''})
+     }
+     else {
+       alert('This system does not exist.')
+     }
+
    }
 
    render() {
       return (
+        <form>
           <div className="input-group">
             <input
                 type="text"
@@ -31,13 +43,16 @@ class AddFilter extends Component {
             <span className="input-group-btn">
               <button
                 className="btn btn-secondary"
-                type="button"
-                onClick={ this.createFilter }>
+                type="submit"
+                onClick={ this.createFilter }
+                onFormSubmit={ this.createFilter }>
               Add</button>
             </span>
           </div>
+        </form>
       )
    }
 }
 
 export default AddFilter
+

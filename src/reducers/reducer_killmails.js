@@ -15,6 +15,7 @@ export default function(state = [], action) {
                         killID: kill.killID,
                         shipID: shipID,
                         shipName: shipdata[shipID].shipname,
+                        systemID: systemID,
                         system: systemData[systemID].name,
                         security: security,
                         victimName: kill.victim.characterName,
@@ -46,37 +47,8 @@ function isValid(shipID, systemID) {
     return true;
 }
 
-/**
- * Given a target system, one or more systems to check against, and a limit, determine
- * if the target system is within light year range of at least one of the filtering
- * systems.
- *
- * @param   {integer} systemID  - The ID of the system the kill occured in
- * @param   {Array} filterIDs   - Array of integers that contains the systems to filter against
- * @param   {integer} limit     - The lightyear limit the kill must be within range of
- * @returns {array}             - First index is a boolean determining whether or not the system
- *                              is in range. Second index is the lightyear distance or -1 if it is
- *                              not in range.
- */
 
-function inLyRange(systemID, filterIDs, limit) {
-    const xDestination = systemData[systemID].x
-    const yDestination = systemData[systemID].y
-    const zDestination = systemData[systemID].z
 
-    for(let filterID of filterIDs) {
-        const xOrigin = systemData[filterID].x
-        const yOrigin = systemData[filterID].y
-        const zOrigin = systemData[filterID].z
-        const distance = Math.sqrt(Math.pow((xOrigin - xDestination), 2)
-                                   + Math.pow((yOrigin - yDestination), 2)
-                                   + Math.pow((zOrigin - zDestination), 2))/9.461e15
-        if(distance <= limit) {
-            return [true, distance]
-        }
-    }
-    return [false, -1]
-}
 
 
 

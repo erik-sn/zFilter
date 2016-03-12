@@ -38,5 +38,9 @@ class SystemFilter extends Component {
 }
 
 
+function mapStateToProps({ killmail_list, system_filter }) {
+    return { killmail_list, system_filter }
+}
 
-export default connect(null, null)(SystemFilter) // do not need app state
+
+export default connect(mapStateToProps)(SystemFilter) // do not need app state

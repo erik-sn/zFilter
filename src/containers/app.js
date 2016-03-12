@@ -20,7 +20,7 @@ class App extends Component {
         return (
             <div id="app-container">
               <div id="search-bar"><SearchBar /></div>
-              <div id="list-container"><ItemList items= { this.props.killmail_list } name="item-table" /></div>
+              <div id="list-container"><ItemList name="item-table" /></div>
               <div id="filter-container"><FilterList name="filter-table"/></div>
             </div>
         );
@@ -39,7 +39,7 @@ class App extends Component {
 
     componentDidMount() {
         this.props.intializeList()
-        setInterval(this.refreshList, 30000);
+        setInterval(this.refreshList, 15000);
     }
 }
 

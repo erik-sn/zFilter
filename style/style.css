@@ -36,7 +36,15 @@ body {
   width: 1100px;
 }
 
+.system-filter-row .input-group {
+  margin-bottom: 5px;
+}
 .system-filter  {
   padding-left: 10px;
   width: 75px !important;
+  text-align: center;
+}
+
+.input-group-addon {
+  width: 150px !important;
 }

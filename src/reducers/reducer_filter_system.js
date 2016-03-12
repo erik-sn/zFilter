@@ -4,7 +4,6 @@ import { FILTER_SYSTEM_MODIFY } from '../actions/actions'
 export default function(state = [], action) {
     switch (action.type) {
         case FILTER_SYSTEM_CREATE:
-            console.log('Create Filter Reducer: ', action.payload)
             return state.concat(action.payload)
     }
     return state
