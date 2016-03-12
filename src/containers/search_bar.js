@@ -31,6 +31,7 @@ class SearchBar extends Component {
                     className="form-control"
                     value={ this.state.search }
                     onChange={ this.onInputChange }
+                    id="search-filter"
                 />
             </form>
         )

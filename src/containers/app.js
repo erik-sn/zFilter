@@ -6,6 +6,7 @@ import { intializeList } from '../actions/actions'
 import { getKillmails } from '../actions/actions'
 
 import SearchBar from '../containers/search_bar'
+import FilterList from '../containers/filter_list'
 import ItemList from '../components/item_list'
 
 class App extends Component {
@@ -17,9 +18,10 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div id="app-container">
               <div id="search-bar"><SearchBar /></div>
               <div id="list-container"><ItemList items= { this.props.killmail_list } name="item-table" /></div>
+              <div id="filter-container"><FilterList name="filter-table"/></div>
             </div>
         );
     }

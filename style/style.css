@@ -4,10 +4,39 @@ body {
 
 .input-group {
     padding-left: 10px;
-    width: 800px;
     height: 40px;
 }
 
 #search-bar {
     margin-top: 40px;
+}
+
+#search-filter {
+    width: 800px;
+}
+
+#app-container {
+
+}
+
+#filter-container {
+  float: right;
+  display: inline-block;
+  width: 200px;
+  height: 600px;
+}
+
+#list-container {
+  float: left;
+  width: 800px;
+}
+
+.container {
+  margin-left: 50px;
+  width: 1100px;
+}
+
+.system-filter  {
+  padding-left: 10px;
+  width: 75px !important;
 }

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import KillmailReducer from './reducer_killmails'
-import TopKill from './reducer_top_kill'
+import SystemFilterReducer from './reducer_filter_system'
 
 const rootReducer = combineReducers({
-  top_kill: TopKill,
+  system_filter: SystemFilterReducer,
   killmail_list: KillmailReducer
 });
 

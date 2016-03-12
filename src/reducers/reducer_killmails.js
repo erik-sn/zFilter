@@ -23,7 +23,6 @@ export default function(state = [], action) {
                         shipTypeID: kill.victim.shipTypeID,
                         time: time
                     }
-                    console.log('Name: ', killmail.victimName, ' Ship: ', killmail.shipName,' Time: ', killmail.time)
                     killmails.push(killmail)
                 }
             }
