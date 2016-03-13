@@ -39,7 +39,7 @@ class App extends Component {
 
     componentDidMount() {
         this.props.intializeList()
-        setInterval(this.refreshList, 15000);
+        setInterval(this.refreshList, 60000);
     }
 }
 

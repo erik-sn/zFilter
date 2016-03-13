@@ -33,15 +33,16 @@ class FilterList extends Component {
 
     render() {
        const items = this.props.system_filter.map((item) => {
+           console.log('Rendering: ', item)
            return (
                <tr className="system-filter-row">
                    <td>
                      <SystemFilter
                          systemName={ item.system }
-                          systemId={ item.systemId }
+                         systemId={ item.systemId }
                          jumps={ item.jumps }
                          ly={ item.ly }
-                          editSystemFilter={ this.editSystemFilter }
+                         editSystemFilter={ this.editSystemFilter }
                          removeSystemFilter={ this.removeSystemFilter }
                         />
                      </td>

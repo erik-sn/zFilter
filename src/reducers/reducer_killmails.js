@@ -1,5 +1,7 @@
 import { GET_KILLMAIL } from '../actions/actions'
 
+import { getJumpRange } from '../functions/system_functions'
+
 export default function(state = [], action) {
     switch (action.type) {
         case GET_KILLMAIL:
@@ -9,6 +11,7 @@ export default function(state = [], action) {
                 const systemID = kill.solarSystemID
                 const security = Math.round(systemData[systemID].security *10) / 10
                 const time = kill.killTime.substring(10,16)
+
                 if(isValid(shipID, systemID)) {
                     const killmail = {
                         killID: kill.killID,

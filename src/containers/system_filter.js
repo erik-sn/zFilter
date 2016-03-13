@@ -8,23 +8,31 @@ class SystemFilter extends Component {
         super(props)
         this.state = {
           system: props.systemName,
+          systemId: props.systemId,
           jumps: props.jumps,
           ly: props.ly
         }
-
+        console.log('State:',this.state)
         this.updateJumps = this.updateJumps.bind(this)
         this.updateLY = this.updateLY.bind(this)
         this.deleteFilter = this.deleteFilter.bind(this)
     }
 
+
+
     updateJumps(event) {
-      this.setState({ jumps: event.target.value })
-      this.props.editSystemFilter(this.props.systemName, this.props.systemId, 'jumps', event.target.value)
+      const jumps = event.target.value
+      this.setState({ jumps: jumps }, function() {
+        this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
+      })
+
     }
 
     updateLY(event) {
-      this.setState({ ly: event.target.value })
-      this.props.editSystemFilter(this.props.systemName, this.props.systemId, 'ly', event.target.value)
+      const ly = event.target.value
+      this.setState({ ly: ly }, function() {
+        this.props.editSystemFilter(this.state.system, this.state.systemId, 'ly', ly)
+      })
     }
 
      deleteFilter() {
@@ -40,7 +48,7 @@ class SystemFilter extends Component {
               className="form-control, system-filter"
               placeholder="Jumps"
               aria-describedby="basic-addon1"
-              value={ this.state.jumps }
+              value={ this.props.jumps }
               onChange={ this.updateJumps }
             />
             <input
@@ -48,7 +56,7 @@ class SystemFilter extends Component {
               className="form-control, system-filter"
               placeholder="LY"
               aria-describedby="basic-addon1"
-              value={ this.state.ly }
+              value={ this.props.ly }
               onChange={ this.updateLY }
             />
             <span class="input-group-btn">

@@ -10,7 +10,6 @@ const Item = (props) => {
        group += ' / ' + killmail.victimAlliance
     }
 
-//            <td>{ killmail.security }</td>
     return (
         <tr key={killmail.killID } >
             <td><img src={ imgUrl } height="40" width="40" /></td>

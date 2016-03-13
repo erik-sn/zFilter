@@ -2,7 +2,6 @@ import axios from 'axios'
 
 const URL_INITIALIZE = 'https://zkillboard.com/api/kills/page/1/desc/'
 const URL_GET_KILLS = 'https://zkillboard.com/api/kills/afterKillID/'
-const URL_GET_JUMPS = 'http://127.0.0.1:8000/api/v1/route/'
 
 export const INITIALIZE_LIST = 'INITIALIZE_LIST'
 export const GET_KILLMAIL = 'GET_KILLMAIL'

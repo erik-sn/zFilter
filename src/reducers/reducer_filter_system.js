@@ -8,14 +8,12 @@ export default function(state = [], action) {
             return state.concat(action.payload)
 
         case FILTER_SYSTEM_DELETE:
-            let updatedFilter = []
             for(let i = 0; i < state.length; i++) {
-              console.log(state[i].system, ' vs. ', action.payload)
-              if(state[i].system != action.payload) {
-                updatedFilter.push(state[i])
+              if(state[i].system == action.payload) {
+                let deleteFilter = state.slice(0, i).concat(state.slice(i + 1))
+                return deleteFilter
               }
             }
-            return updatedFilter
 
          case FILTER_SYSTEM_MODIFY:
             console.log(action.payload)
@@ -35,7 +33,6 @@ export default function(state = [], action) {
                 modifyFilter.push(state[i])
               }
             }
-            console.log(modifyFilter)
             return modifyFilter
     }
     return state

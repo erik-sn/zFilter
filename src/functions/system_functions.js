@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 /**
  * See if a system exists in the system database by system name, and return it's info if it does
  * @param   {string}         input      - system name
@@ -13,6 +15,11 @@ export function systemExists(input) {
    return false;
 }
 
+/**
+ * Given a solar system name return its type id
+ * @param   {string}  systemName - String representation of solar system name
+ * @returns {integer/boolean} returns the type id if the system exists, boolean false if not
+ */
 
 export function getSystemID(systemName) {
    const formattedName = systemName.toLowerCase().trim()
@@ -25,6 +32,14 @@ export function getSystemID(systemName) {
 }
 
 
+export function getJumpRange(destination, origin) {
+  const URL_GET_JUMPS = `http://127.0.0.1:8000/api/v1/route/${destination}/${origin}`
+   const request = axios.get(URL_GET_JUMPS).then(function(data) {
+     console.log(data)
+   })
+
+}
+
 /**
  * Given a target system, one or more systems to check against, and a limit, determine
  * if the target system is within light year range of at least one of the filtering
@@ -33,7 +48,7 @@ export function getSystemID(systemName) {
  * @param   {integer} destinationID  - Destination system typeID
  * @param   {integer} originID       - Origin system typeID
  * @param   {integer} limit          - The lightyear limit the system must be within range of
- * @returns {array}                - Index 0: if system is in range, Index1: ly distance to destination
+ * @returns {boolean}                - if system is within limit
  */
 export function inLyRange(destinationID, originID, limit) {
     const destination = systemData[destinationID]
@@ -49,7 +64,7 @@ export function inLyRange(destinationID, originID, limit) {
     const distance = Math.sqrt(Math.pow((xOrigin - xDestination), 2)
                                + Math.pow((yOrigin - yDestination), 2)
                                + Math.pow((zOrigin - zDestination), 2))/9.461e15
-//    console.log('LY Limit: ', limit, ' distance: ', distance,' dest: ', destinationID, ' origin: ', originID)
+
     if(distance <= limit) {
         return true
     }
