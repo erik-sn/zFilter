@@ -41,28 +41,36 @@ class SystemFilter extends Component {
 
     render() {
         return (
-           <div className="input-group">
-            <span className="input-group-addon" id="basic-addon1">{ this.props.systemName }</span>
-            <input
-              type="text"
-              className="form-control, system-filter"
-              placeholder="Jumps"
-              aria-describedby="basic-addon1"
-              value={ this.props.jumps }
-              onChange={ this.updateJumps }
-            />
-            <input
-              type="text"
-              className="form-control, system-filter"
-              placeholder="LY"
-              aria-describedby="basic-addon1"
-              value={ this.props.ly }
-              onChange={ this.updateLY }
-            />
-            <span class="input-group-btn">
-              <button class="btn btn-secondary" type="button" onClick={ this.deleteFilter }>Close</button>
-            </span>
-          </div>
+           <tr className="system-filter-row">
+            <td className="system-filter-label">
+                <span className="input-group-addon" id="basic-addon1">{ this.props.systemName }</span>
+            </td>
+            <td className="system-filter-input">
+                <input
+                  type="text"
+                  className="form-control, system-filter"
+                  placeholder="Jumps"
+                  aria-describedby="basic-addon1"
+                  value={ this.props.jumps }
+                  onChange={ this.updateJumps }
+                />
+            </td>
+            <td className="system-filter-input">
+                <input
+                  type="text"
+                  className="form-control, system-filter"
+                  placeholder="LY"
+                  aria-describedby="basic-addon1"
+                  value={ this.props.ly }
+                  onChange={ this.updateLY }
+                />
+            </td>
+            <td className="system-filter-button">
+                <span className="input-group-btn">
+                  <button className="btn btn-secondary" type="button" onClick={ this.deleteFilter }>Close</button>
+                </span>
+            </td>
+          </tr>
 
         )
     }

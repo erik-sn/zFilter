@@ -35,26 +35,26 @@ class FilterList extends Component {
        const items = this.props.system_filter.map((item) => {
            console.log('Rendering: ', item)
            return (
-               <tr className="system-filter-row">
-                   <td>
-                     <SystemFilter
-                         systemName={ item.system }
-                         systemId={ item.systemId }
-                         jumps={ item.jumps }
-                         ly={ item.ly }
-                         editSystemFilter={ this.editSystemFilter }
-                         removeSystemFilter={ this.removeSystemFilter }
-                        />
-                     </td>
-               </tr>
+                 <SystemFilter
+                     systemName={ item.system }
+                     systemId={ item.systemId }
+                     jumps={ item.jumps }
+                     ly={ item.ly }
+                     editSystemFilter={ this.editSystemFilter }
+                     removeSystemFilter={ this.removeSystemFilter }
+                    />
            )
         });
 
         return (
             <div>
-              <AddFilter
-                createSystemFilter={ this.addSystemFilter }
-              />
+              <table>
+                <tbody>
+                  <AddFilter
+                    createSystemFilter={ this.addSystemFilter }
+                  />
+                </tbody>
+              </table>
               <table className={ this.props.name }>
                   <tbody>
                   { items }

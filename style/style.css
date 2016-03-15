@@ -12,18 +12,54 @@ body {
 }
 
 #search-filter {
-    width: 800px;
+    left: -10px;
+    width: 810px;
 }
 
 #app-container {
 
 }
 
+.container {
+    margin-left: 50px;
+    width: 1200px;
+}
+
 #filter-container {
-  float: right;
-  display: inline-block;
-  width: 200px;
-  height: 600px;
+    margin-top: 10px;
+    float: right;
+    display: inline-block;
+    width: 300px;
+    height: 1000px;
+}
+
+.form-control {
+    height: 41px;
+    width: 150px;
+}
+
+.system-filter-row td {
+    padding-top: 5px;
+}
+
+.system-filter-label {
+    width: 100px;
+}
+
+.system-filter-label span {
+    width: 100px;
+}
+
+
+.system-filter-input {
+    width: 50px;
+}
+
+
+.system-filter {
+    height: 41px;
+    width: 50px;
+    text-align: center;
 }
 
 #list-container {
@@ -31,20 +67,13 @@ body {
   width: 800px;
 }
 
-.container {
-  margin-left: 50px;
-  width: 1100px;
-}
-
-.system-filter-row .input-group {
-  margin-bottom: 5px;
-}
-.system-filter  {
-  padding-left: 10px;
-  width: 75px !important;
-  text-align: center;
-}
 
 .input-group-addon {
-  width: 150px !important;
+    width: 100px;
+    height: 40px;
+}
+
+.btn {
+    height: 41px;
+    width: 100px;
 }

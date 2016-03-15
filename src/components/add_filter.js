@@ -33,23 +33,27 @@ class AddFilter extends Component {
    render() {
       return (
         <form>
-          <div className="input-group">
-            <input
-                type="text"
-                className="form-control"
-                placeholder="Add System..."
-                onChange={ this.onInputChange }
-                value={ this.state.input }
-            />
-            <span className="input-group-btn">
-              <button
-                className="btn btn-secondary"
-                type="submit"
-                onClick={ this.createFilter }
-                onFormSubmit={ this.createFilter }>
-              Add</button>
-            </span>
-          </div>
+          <tr>
+            <td>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Add System..."
+                    onChange={ this.onInputChange }
+                    value={ this.state.input }
+                />
+            </td>
+            <td>
+                <span className="input-group-btn">
+                  <button
+                    className="btn btn-secondary"
+                    type="submit"
+                    onClick={ this.createFilter }
+                    onFormSubmit={ this.createFilter }>
+                  Add</button>
+                </span>
+            </td>
+          </tr>
         </form>
       )
    }
