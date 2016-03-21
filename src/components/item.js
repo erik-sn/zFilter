@@ -11,7 +11,7 @@ const Item = (props) => {
     }
 
     return (
-        <tr key={killmail.killID } >
+        <tr>
             <td><img src={ imgUrl } height="40" width="40" /></td>
             <td>{ killmail.victimName }</td>
             <td>{ group }</td>

@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const URL_INITIALIZE = 'https://zkillboard.com/api/kills/page/1/desc/'
 const URL_GET_KILLS = 'https://zkillboard.com/api/kills/afterKillID/'
+const URL_EVE_NAV = 'http://127.0.0.1:8000/api/v1'
 
 export const INITIALIZE_LIST = 'INITIALIZE_LIST'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
@@ -60,11 +61,24 @@ export function modifySystemFilter(system, systemId, key, value) {
     }
 }
 
-export function getJumps(origin, destination) {
-  const request = axios.get(URL_GET_JUMPS + '/' + origin + '/' + destination)
+export function getJumps(filters) {
+  let origins = ''
+  let jumps = ''
+  for(let i = 0; i < filters.length; i++) {
+    origins += filters[i].systemId + ','
+    if(filters[i].jumps == '') {
+      jumps += '0,'
+    }
+    else {
+      jumps += filters[i].jumps + ','
+    }
+  }
+  console.log(origins, jumps)
+
+  const request = axios.get(`${URL_EVE_NAV}/jumps/${origins}/${jumps}`)
   return {
         type: FILTER_JUMPS,
         payload: request
-    }
+  }
 }
 

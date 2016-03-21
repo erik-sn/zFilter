@@ -22,7 +22,7 @@ class ItemList extends Component {
          const active = isActive(item, this.props.system_filter)
          if(active) {
            return (
-               <Item item={ item } />
+               <Item key={ item.killID } item={ item } />
            )
          }
       })
