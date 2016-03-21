@@ -8,7 +8,7 @@ import Item from '../components/item'
 import { inLyRange } from '../functions/system_functions'
 import { getSystemID } from '../functions/system_functions'
 import { systemExists } from '../functions/system_functions'
-import { getJumpRange } from '../functions/system_functions'
+import { getJumps } from '../functions/system_functions'
 
 // Returns generic table that holds a list of items. Items are customized at the item object level
 class ItemList extends Component {
@@ -37,8 +37,12 @@ class ItemList extends Component {
     }
 }
 
-function mapStateToProps({ killmail_list, system_filter }) {
-    return { killmail_list, system_filter }
+function mapStateToProps(state) {
+    return {
+        killmail_list: state.killmail_list,
+        system_filter: state.system_filter,
+        jumps_filter: getJumps(state.system_filter)
+    }
 }
 
 export default connect(mapStateToProps)(ItemList)

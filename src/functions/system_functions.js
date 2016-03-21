@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const URL_EVE_NAV = 'http://127.0.0.1:8000/api/v1'
+
 /**
  * See if a system exists in the system database by system name, and return it's info if it does
  * @param   {string}         input      - system name
@@ -32,12 +34,25 @@ export function getSystemID(systemName) {
 }
 
 
-export function getJumpRange(destination, origin) {
-  const URL_GET_JUMPS = `http://127.0.0.1:8000/api/v1/route/${destination}/${origin}`
-   const request = axios.get(URL_GET_JUMPS).then(function(data) {
-     console.log(data)
-   })
 
+export function getJumps(filters) {
+  let origins = ''
+  let jumps = ''
+  for(let i = 0; i < filters.length; i++) {
+    origins += filters[i].systemId + ','
+    if(filters[i].jumps == '') {
+      jumps += '0,'
+    }
+    else {
+      jumps += filters[i].jumps + ','
+    }
+  }
+  console.log(origins, jumps)
+
+  axios.get(`${URL_EVE_NAV}/jumps/${origins}/${jumps}`)
+  .then(function(data) {
+      console.log(data)
+  })
 }
 
 /**

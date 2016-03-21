@@ -7,13 +7,11 @@ import { getJumps } from '../actions/actions'
 export default function(state = [], action) {
     switch (action.type) {
         case FILTER_SYSTEM_CREATE:
-            getJumps(state.concat(action.payload))
             return state.concat(action.payload)
 
         case FILTER_SYSTEM_DELETE:
             for(let i = 0; i < state.length; i++) {
               if(state[i].system == action.payload) {
-                getJumps(state.slice(0, i).concat(state.slice(i + 1)))
                 return state.slice(0, i).concat(state.slice(i + 1))
               }
             }
@@ -36,7 +34,6 @@ export default function(state = [], action) {
                 modifyFilter.push(state[i])
               }
             }
-            getJumps(modifyFilter)
             return modifyFilter
     }
     return state
