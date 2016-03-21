@@ -33,6 +33,16 @@ body {
     height: 1000px;
 }
 
+#filter-add-input {
+  display: inline-block;
+  width: 200px;
+}
+
+#filter-add-button {
+  display: inline-block;
+}
+
+
 .form-control {
     height: 41px;
     width: 150px;

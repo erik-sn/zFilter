@@ -53,19 +53,19 @@ function isActive(killmail, systemFilter) {
     const filter = systemFilter[i]
     // check to see if killmail is in current system (if jumps enabled)
     if(isInteger(filter.jumps) && killmail.system == filter.system) {
-      console.log('Included by JUMPS_0: ', filter.system, ' - ', killmail.victimName)
+//      console.log('Included by JUMPS_0: ', filter.system, ' - ', killmail.victimName)
       return true
     }
     // check to see if killmail is within light year range (if ly enabled)
     if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) {
-      console.log('Included by LY_' + filter.ly + ':', filter.system, ' - ', killmail.victimName)
+//      console.log('Included by LY_' + filter.ly + ':', filter.system, ' - ', killmail.victimName)
       return true
     }
-    // check to see if killmail is within stargate jump-range (if jumps enabled)
-    if(isInteger(filter.jumps)) {
-      console.log('Included by JUMPS: ', filter.system, ' - ', killmail.victimName)
-      return false
-    }
+//    // check to see if killmail is within stargate jump-range (if jumps enabled)
+//    if(isInteger(filter.jumps)) {
+//      console.log('Included by JUMPS: ', filter.system, ' - ', killmail.victimName)
+//      return false
+//    }
   }
   return false
 }

@@ -17,6 +17,7 @@ class AddFilter extends Component {
 
    createFilter(event) {
      event.preventDefault()
+
      const system = this.state.input
      const keyPair = systemExists(system);
      if(keyPair) {
@@ -24,7 +25,9 @@ class AddFilter extends Component {
        this.setState({ input: ''})
      }
      else {
-       alert('This system does not exist.')
+       if(this.state.input.trim() !== '') {
+         alert('This system does not exist.')
+       }
      }
 
    }
@@ -32,29 +35,19 @@ class AddFilter extends Component {
 
    render() {
       return (
-        <form>
-          <tr>
-            <td>
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Add System..."
-                    onChange={ this.onInputChange }
-                    value={ this.state.input }
-                />
-            </td>
-            <td>
-                <span className="input-group-btn">
-                  <button
-                    className="btn btn-secondary"
-                    type="submit"
-                    onClick={ this.createFilter }
-                    onFormSubmit={ this.createFilter }>
-                  Add</button>
-                </span>
-            </td>
-          </tr>
-        </form>
+          <form onSubmit={ this.createFilter }>
+              <input
+                  id="filter-add-input"
+                  type="text"
+                  className="form-control"
+                  placeholder="Add System..."
+                  onChange={ this.onInputChange }
+                  value={ this.state.input }
+              />
+              <span className="input-group-btn" id="filter-add-button">
+              <button className="btn btn-secondary" type="submit">Add</button>
+              </span>
+          </form>
       )
    }
 }

@@ -23,44 +23,40 @@ class FilterList extends Component {
     }
 
     editSystemFilter(system, systemId, key, value) {
+      console.log(system, systemId, key, value)
       this.props.modifySystemFilter(system, systemId, key, value)
     }
 
-    removeSystemFilter(system) {
+    removeSystemFilter(system, component) {
       this.props.deleteSystemFilter(system)
     }
 
 
     render() {
-       const items = this.props.system_filter.map((item) => {
+      const items = this.props.system_filter.map((item) => {
            console.log('Rendering: ', item)
            return (
                  <SystemFilter
+                     key = { item.systemId}
                      systemName={ item.system }
                      systemId={ item.systemId }
                      jumps={ item.jumps }
                      ly={ item.ly }
                      editSystemFilter={ this.editSystemFilter }
                      removeSystemFilter={ this.removeSystemFilter }
-                    />
+                  />
            )
         });
-
         return (
-            <div>
-              <table>
-                <tbody>
-                  <AddFilter
-                    createSystemFilter={ this.addSystemFilter }
-                  />
-                </tbody>
-              </table>
+          <div>
+              <AddFilter createSystemFilter={ this.addSystemFilter } />
               <table className={ this.props.name }>
                   <tbody>
                   { items }
                   </tbody>
               </table>
-            </div>
+          </div>
+
         )
     }
 }

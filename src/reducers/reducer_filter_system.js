@@ -10,8 +10,7 @@ export default function(state = [], action) {
         case FILTER_SYSTEM_DELETE:
             for(let i = 0; i < state.length; i++) {
               if(state[i].system == action.payload) {
-                let deleteFilter = state.slice(0, i).concat(state.slice(i + 1))
-                return deleteFilter
+                return state.slice(0, i).concat(state.slice(i + 1))
               }
             }
 

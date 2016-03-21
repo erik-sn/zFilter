@@ -2,17 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-class SystemFilter extends Component {
+export default class SystemFilter extends Component {
 
     constructor(props) {
         super(props)
+        console.log('Constructor: ', props)
         this.state = {
           system: props.systemName,
           systemId: props.systemId,
-          jumps: props.jumps,
-          ly: props.ly
+          jumps: 0,
+          ly: 0
         }
         console.log('State:',this.state)
+
         this.updateJumps = this.updateJumps.bind(this)
         this.updateLY = this.updateLY.bind(this)
         this.deleteFilter = this.deleteFilter.bind(this)
@@ -25,18 +27,17 @@ class SystemFilter extends Component {
       this.setState({ jumps: jumps }, function() {
         this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
       })
-
     }
 
     updateLY(event) {
       const ly = event.target.value
-      this.setState({ ly: ly }, function() {
+      this.setState({ ly: event.target.value }, function() {
         this.props.editSystemFilter(this.state.system, this.state.systemId, 'ly', ly)
       })
     }
 
      deleteFilter() {
-       this.props.removeSystemFilter(this.props.systemName)
+       this.props.removeSystemFilter(this.props.systemName, this)
      }
 
     render() {
@@ -51,7 +52,7 @@ class SystemFilter extends Component {
                   className="form-control, system-filter"
                   placeholder="Jumps"
                   aria-describedby="basic-addon1"
-                  value={ this.props.jumps }
+                  value={ this.state.jumps }
                   onChange={ this.updateJumps }
                 />
             </td>
@@ -61,7 +62,7 @@ class SystemFilter extends Component {
                   className="form-control, system-filter"
                   placeholder="LY"
                   aria-describedby="basic-addon1"
-                  value={ this.props.ly }
+                  value={ this.state.ly }
                   onChange={ this.updateLY }
                 />
             </td>
@@ -78,9 +79,3 @@ class SystemFilter extends Component {
 }
 
 
-function mapStateToProps({ system_filter }) {
-    return { system_filter }
-}
-
-
-export default connect(mapStateToProps)(SystemFilter) // do not need app state

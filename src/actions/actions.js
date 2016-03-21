@@ -53,6 +53,7 @@ export function modifySystemFilter(system, systemId, key, value) {
       key: key,
       value: value
     }
+    console.log('Update: ', update)
     return {
         type: FILTER_SYSTEM_MODIFY,
         payload: update
