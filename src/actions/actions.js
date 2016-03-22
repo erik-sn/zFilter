@@ -10,6 +10,8 @@ export const FILTER_SYSTEM_DELETE = 'FILTER_SYSTEM_DELETE'
 export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
 export const FILTER_JUMPS = 'FILTER_JUMPS'
 
+import { getJumpRangeUrl } from '../functions/system_functions'
+
 export function getKillmails(maxId, system_filter) {
     const request = axios.get(URL_GET_KILLS + maxId + '/nocache?_=' + new Date().getTime())
     return {
@@ -26,37 +28,73 @@ export function intializeList() {
     }
 }
 
-export function createSystemFilter(system, systemId, jumps, ly) {
+export function createSystemFilter(system, systemId, jumps, ly, currentState) {
     const filter = {
       system: system,
       systemId: systemId,
       jumps: jumps,
       ly: ly
     }
+
+    const updatedState = currentState.concat(filter)
+    const request = axios.get(getJumpRangeUrl(updatedState))
     return {
         type: FILTER_SYSTEM_CREATE,
-        payload: filter
+        payload: request,
+        meta: {
+          filter: updatedState
+        }
     }
 }
 
-export function deleteSystemFilter(system) {
-    return {
-        type: FILTER_SYSTEM_DELETE,
-        payload: system
+export function deleteSystemFilter(system, currentState) {
+     for(let i = 0; i < currentState.length; i++) {
+      if(currentState[i].system == system) {
+        const updatedState = currentState.slice(0, i).concat(currentState.slice(i + 1))
+
+        let request = false
+        if(updatedState.length > 0) {
+          request = axios.get(getJumpRangeUrl(updatedState))
+        }
+        return {
+          type: FILTER_SYSTEM_DELETE,
+          payload: request,
+          meta: {
+            filter: updatedState
+          }
+        }
+
+      }
     }
+
 }
 
-export function modifySystemFilter(system, systemId, key, value) {
-    const update = {
-      system: system,
-      systemId: systemId,
-      key: key,
-      value: value
+export function modifySystemFilter(system, systemId, key, value, currentState) {
+
+    let updatedState = []
+    for(let i = 0; i < currentState.length; i++) {
+      if(currentState[i].system == system) {
+        let filter = {
+          system: currentState[i].system,
+          systemId: currentState[i].systemId,
+          jumps: currentState[i].jumps,
+          ly: currentState[i].ly
+        }
+        filter[key] = value
+        updatedState.push(filter)
+      }
+      else {
+        updatedState.push(currentState[i])
+      }
     }
-    console.log('Update: ', update)
+
+    const request = axios.get(getJumpRangeUrl(updatedState))
     return {
-        type: FILTER_SYSTEM_MODIFY,
-        payload: update
+      type: FILTER_SYSTEM_MODIFY,
+      payload: request,
+      meta: {
+        filter: updatedState
+      }
     }
 }
 

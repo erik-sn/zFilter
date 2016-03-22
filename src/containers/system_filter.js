@@ -6,14 +6,12 @@ export default class SystemFilter extends Component {
 
     constructor(props) {
         super(props)
-        console.log('Constructor: ', props)
         this.state = {
           system: props.systemName,
           systemId: props.systemId,
           jumps: 0,
           ly: 0
         }
-        console.log('State:',this.state)
 
         this.updateJumps = this.updateJumps.bind(this)
         this.updateLY = this.updateLY.bind(this)

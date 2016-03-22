@@ -4,19 +4,21 @@ import { FILTER_SYSTEM_CREATE } from '../actions/actions'
 import { FILTER_SYSTEM_MODIFY } from '../actions/actions'
 import { FILTER_SYSTEM_DELETE } from '../actions/actions'
 
-import { getJumpRangeUrl } from '../functions/system_functions'
 
 export default function(state = [], action) {
 
     switch (action.type) {
         case FILTER_SYSTEM_CREATE:
-            return action.meta.filter
+            return action.payload.data.systems
 
         case FILTER_SYSTEM_DELETE:
-            return action.meta.filter
+            if(action.payload) {
+              return action.payload.data.systems
+            }
+            return state
 
          case FILTER_SYSTEM_MODIFY:
-            return action.meta.filter
+            return action.payload.data.systems
     }
     return state
 }

@@ -19,16 +19,15 @@ class FilterList extends Component {
     }
 
     addSystemFilter(keyPair) {
-      this.props.createSystemFilter(keyPair[1], keyPair[0], 0, '')
+      this.props.createSystemFilter(keyPair[1], keyPair[0], 0, '', this.props.system_filter)
     }
 
     editSystemFilter(system, systemId, key, value) {
-      console.log(system, systemId, key, value)
-      this.props.modifySystemFilter(system, systemId, key, value)
+      this.props.modifySystemFilter(system, systemId, key, value, this.props.system_filter)
     }
 
     removeSystemFilter(system, component) {
-      this.props.deleteSystemFilter(system)
+      this.props.deleteSystemFilter(system, this.props.system_filter)
     }
 
 

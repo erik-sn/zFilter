@@ -8,7 +8,6 @@ import Item from '../components/item'
 import { inLyRange } from '../functions/system_functions'
 import { getSystemID } from '../functions/system_functions'
 import { systemExists } from '../functions/system_functions'
-import { getJumps } from '../functions/system_functions'
 
 // Returns generic table that holds a list of items. Items are customized at the item object level
 class ItemList extends Component {
@@ -18,37 +17,35 @@ class ItemList extends Component {
     }
 
     render() {
-      const items = this.props.killmail_list.map((item) => {
-         const active = isActive(item, this.props.system_filter)
-         if(active) {
-           return (
-               <Item key={ item.killID } item={ item } />
-           )
-         }
-      })
+        console.log(this.props.jump_filter)
+        const items = this.props.killmail_list.map((item) => {
+           const active = isActive(item, this.props.system_filter, this.props.jump_filter)
+           if(active) {
+             return (
+                 <Item key={ item.killID } item={ item } />
+             )
+           }
+        })
 
-      return (
+        return (
           <table className={ this.props.name }>
               <tbody>
               { items }
               </tbody>
           </table>
-      )
+        )
+
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        killmail_list: state.killmail_list,
-        system_filter: state.system_filter,
-        jumps_filter: getJumps(state.system_filter)
-    }
+function mapStateToProps({ killmail_list, system_filter, jump_filter }) {
+    return ({ killmail_list, system_filter, jump_filter })
 }
 
 export default connect(mapStateToProps)(ItemList)
 
 
-function isActive(killmail, systemFilter) {
+function isActive(killmail, systemFilter, jumpFilter) {
   // check case where there are no filters
   if(systemFilter.length === 0) {
     return true
@@ -57,19 +54,19 @@ function isActive(killmail, systemFilter) {
     const filter = systemFilter[i]
     // check to see if killmail is in current system (if jumps enabled)
     if(isInteger(filter.jumps) && killmail.system == filter.system) {
-//      console.log('Included by JUMPS_0: ', filter.system, ' - ', killmail.victimName)
+      console.log('Included by JUMPS_0: ', filter.system, ' - ', killmail.victimName)
       return true
     }
     // check to see if killmail is within light year range (if ly enabled)
     if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) {
-//      console.log('Included by LY_' + filter.ly + ':', filter.system, ' - ', killmail.victimName)
+      console.log('Included by LY_' + filter.ly + ':', filter.system, ' - ', killmail.victimName)
       return true
     }
-//    // check to see if killmail is within stargate jump-range (if jumps enabled)
-//    if(isInteger(filter.jumps)) {
-//      console.log('Included by JUMPS: ', filter.system, ' - ', killmail.victimName)
-//      return false
-//    }
+    // check to see if killmail is within stargate jump-range (if jumps enabled)
+    if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) != -1) {
+      console.log('Included by JUMPS: ', filter.system + '_' + filter.jumps, ' - ', killmail.victimName)
+      return true
+    }
   }
   return false
 }

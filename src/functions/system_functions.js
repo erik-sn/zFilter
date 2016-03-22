@@ -35,7 +35,7 @@ export function getSystemID(systemName) {
 
 
 
-export function getJumps(filters) {
+export function getJumpRangeUrl(filters) {
   let origins = ''
   let jumps = ''
   for(let i = 0; i < filters.length; i++) {
@@ -47,12 +47,7 @@ export function getJumps(filters) {
       jumps += filters[i].jumps + ','
     }
   }
-  console.log(origins, jumps)
-
-  axios.get(`${URL_EVE_NAV}/jumps/${origins}/${jumps}`)
-  .then(function(data) {
-      console.log(data)
-  })
+  return `${URL_EVE_NAV}/jumps/${origins}/${jumps}`
 }
 
 /**
