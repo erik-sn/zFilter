@@ -2,25 +2,17 @@ body {
     background-image: url(./img/background1.jpg)
 }
 
+
 .input-group {
-    padding-left: 10px;
     height: 40px;
 }
 
-#search-bar {
-    margin-top: 40px;
-}
-
 #search-filter {
-    left: -10px;
-    width: 810px;
-}
-
-#app-container {
-
+    width: 800px;
 }
 
 .container {
+    margin-top: 20px;
     margin-left: 50px;
     width: 1200px;
 }
@@ -30,7 +22,7 @@ body {
     float: right;
     display: inline-block;
     width: 300px;
-    height: 1000px;
+    height: 600px;
 }
 
 #filter-add-input {
@@ -41,7 +33,6 @@ body {
 #filter-add-button {
   display: inline-block;
 }
-
 
 .form-control {
     height: 41px;
@@ -60,16 +51,18 @@ body {
     width: 125px;
 }
 
-
 .system-filter-input {
     width: 50px;
 }
-
 
 .system-filter {
     height: 41px;
     width: 50px;
     text-align: center;
+}
+
+.filter-container input {
+  padding-left: 10px;
 }
 
 #list-container {
@@ -87,3 +80,4 @@ body {
     height: 41px;
     width: 100px;
 }
+

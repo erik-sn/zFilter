@@ -1,6 +1,10 @@
-import React, { Component } from 'react'
 
+import React, { Component } from 'react'
+import { ComboBox, Option } from 'belle'
+
+import { shipDataToArray } from '../functions/system_functions'
 import { systemExists } from '../functions/system_functions'
+
 
 class AddFilter extends Component {
 
@@ -34,23 +38,31 @@ class AddFilter extends Component {
 
 
    render() {
+       const ships = shipDataToArray(shipdata).map((ship) => {
+           return (
+               <Option key={ ship.typeID } value={ ship.name } >{ ship.name }</Option>
+           )
+      })
+
       return (
-          <form onSubmit={ this.createFilter }>
-              <input
-                  id="filter-add-input"
-                  type="text"
-                  className="form-control"
-                  placeholder="Add System..."
-                  onChange={ this.onInputChange }
-                  value={ this.state.input }
-              />
-              <span className="input-group-btn" id="filter-add-button">
-              <button className="btn btn-secondary" type="submit">Add</button>
-              </span>
-          </form>
+        <div>
+          <ComboBox
+              className="filter-box"
+              defaultValue="Select Ship..."
+              onUpdate={ (event) => {
+                console.log(event.value);
+                console.log(event.identifier);
+                console.log(event.isMatchingOption);
+                console.log(event.isOptionSelection); }}
+              maxOptions = { 5 }
+          >
+            { ships }
+          </ComboBox>
+        </div>
       )
    }
 }
+
 
 export default AddFilter
 

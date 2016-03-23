@@ -1,35 +1,39 @@
 import { GET_KILLMAIL } from '../actions/actions'
+import { GET_KILLMAIL_REDIS } from '../actions/actions'
+import _ from 'lodash'
 
 import { getJumpRange } from '../functions/system_functions'
 
 export default function(state = [], action) {
     switch (action.type) {
         case GET_KILLMAIL:
-            let killmails = []
-            for(let kill of action.payload.data) {
-                const shipID = kill.victim.shipTypeID
-                const systemID = kill.solarSystemID
-                const security = Math.round(systemData[systemID].security *10) / 10
-                const time = kill.killTime.substring(10,16)
+            if(action.payload.data.package == null) return state
 
-                if(isValid(shipID, systemID)) {
-                    const killmail = {
-                        killID: kill.killID,
-                        shipID: shipID,
-                        shipName: shipdata[shipID].shipname,
-                        systemID: systemID,
-                        system: systemData[systemID].name,
-                        security: security,
-                        victimName: kill.victim.characterName,
-                        victimCorp: kill.victim.corporationName,
-                        victimAlliance: kill.victim.allianceName,
-                        shipTypeID: kill.victim.shipTypeID,
-                        time: time
-                    }
-                    killmails.push(killmail)
+            let killmails = []
+            const kill = action.payload.data.package.killmail
+            const shipID = kill.victim.shipType.id
+            const systemID = kill.solarSystem.id
+            const security = Math.round(systemData[systemID].security * 10) / 10
+            const time = kill.killTime.substring(10,16)
+
+
+            if(isValid(shipID, systemID)) {
+                const killmail = {
+                    killID: kill.killID,
+                    shipID: shipID,
+                    shipName: shipdata[shipID].shipname,
+                    systemID: systemID,
+                    system: systemData[systemID].name,
+                    security: security,
+                    victimName: kill.victim.character.name,
+                    victimCorp: kill.victim.corporation.name,
+                    shipTypeID: shipID,
+                    attackerCount: kill.attackerCount,
+                    attackerAlliance: getAttackerAlliance(kill.attackers),
+                    time: time
                 }
+                killmails.push(killmail)
             }
-            console.log('Adding kills to list: ', killmails.length)
             return killmails.concat(state) // concatanate killmails to the beginning of array
     }
     return state
@@ -49,6 +53,21 @@ function isValid(shipID, systemID) {
     return true;
 }
 
+/**
+ * Given a list of attackers iterate through and find the most common alliance
+ * @param   {array} attackers [[Description]]
+ * @returns {String} most occuring alliance on the killmail
+ */
+
+function getAttackerAlliance(attackers) {
+  let allianceCount = {}
+  for(let i in attackers) {
+    let attacker = attackers[i]
+    if(allianceCount[attacker.alliance.name]) allianceCount[attacker.alliance.name]++
+    else allianceCount[attacker.alliance.name] = 1
+  }
+  return _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
+}
 
 
 

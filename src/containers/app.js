@@ -2,7 +2,8 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { intializeList } from '../actions/actions'
+import io from 'socket.io-client'
+
 import { getKillmails } from '../actions/actions'
 
 import SearchBar from '../containers/search_bar'
@@ -27,29 +28,27 @@ class App extends Component {
     }
 
     refreshList() {
-        let maxId = -1
-        console.log('List size: ', this.props.killmail_list.length)
-        for(let killmail of this.props.killmail_list) {
-            if(killmail.killID > maxId ) {
-                maxId = killmail.killID;
-            }
-        }
-        this.props.getKillmails(maxId)
+        this.props.getKillmails()
     }
 
     componentDidMount() {
-        this.props.intializeList()
-        setInterval(this.refreshList, 60000);
+        setInterval(this.refreshList, 5000);
+//
+//      var socket = io.connect('http://redisq.zkillboard.com/listen.php')
+//      socket.on('news', function(news) {
+//        console.log(news)
+//      })
+//
+//      socket.on('message', function(msg) {
+//        console.log(msg)
+//      })
     }
 }
 
-function mapStateToProps({ killmail_list }) {
-    return { killmail_list }
-}
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ intializeList, getKillmails }, dispatch)
+    return bindActionCreators({ getKillmails }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App) // do not need app state
+export default connect(null, mapDispatchToProps)(App) // do not need app state
 

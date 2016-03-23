@@ -17,6 +17,20 @@ export function systemExists(input) {
    return false;
 }
 
+export function shipDataToArray(shipDataObject) {
+  let ships = []
+  Object.keys(shipdata).forEach(function (id) {
+      const shipObject = shipdata[id]
+      let ship = {
+        typeID: id,
+        name: shipObject.shipname
+      }
+      ships.push(ship)
+  })
+  return ships
+}
+
+
 /**
  * Given a solar system name return its type id
  * @param   {string}  systemName - String representation of solar system name
