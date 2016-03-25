@@ -3,18 +3,19 @@ body {
 }
 
 
-.input-group {
-    height: 40px;
-}
-
-#search-filter {
-    width: 800px;
-}
-
 .container {
-    margin-top: 20px;
+    margin-top: 50px;
     margin-left: 50px;
     width: 1200px;
+}
+
+.filter-container input {
+  padding-left: 15px;
+  width: 250px !important;
+}
+
+.filter-image {
+  margin-right: 15px;
 }
 
 #filter-container {
@@ -59,10 +60,6 @@ body {
     height: 41px;
     width: 50px;
     text-align: center;
-}
-
-.filter-container input {
-  padding-left: 10px;
 }
 
 #list-container {

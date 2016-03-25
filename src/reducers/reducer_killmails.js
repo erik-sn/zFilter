@@ -1,5 +1,5 @@
 import { GET_KILLMAIL } from '../actions/actions'
-import { GET_KILLMAIL_REDIS } from '../actions/actions'
+import { INITIALIZE_KILLMAILS } from '../actions/actions'
 import _ from 'lodash'
 
 import { getJumpRange } from '../functions/system_functions'
@@ -33,8 +33,20 @@ export default function(state = [], action) {
                     time: time
                 }
                 killmails.push(killmail)
+                let localStore = JSON.parse(localStorage.getItem('killmails'))
+                if(localStore == null) localStore = []
+                console.log('Store Length: ', localStore.length)
+
+                if(localStore.length >= 500) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
+                else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
+                localStorage.setItem('updateTime', new Date)
+
             }
             return killmails.concat(state) // concatanate killmails to the beginning of array
+
+        case INITIALIZE_KILLMAILS:
+          return JSON.parse(action.payload)
+
     }
     return state
 }
@@ -47,10 +59,9 @@ export default function(state = [], action) {
  */
 
 function isValid(shipID, systemID) {
-    if(!shipdata[shipID] || !systemData[systemID]) {
-        return false;
-    }
-    return true;
+    if(shipID == 670 || shipID == 33328) return false
+    if(!shipdata[shipID] || !systemData[systemID]) return false
+    return true
 }
 
 /**
@@ -62,9 +73,11 @@ function isValid(shipID, systemID) {
 function getAttackerAlliance(attackers) {
   let allianceCount = {}
   for(let i in attackers) {
-    let attacker = attackers[i]
-    if(allianceCount[attacker.alliance.name]) allianceCount[attacker.alliance.name]++
-    else allianceCount[attacker.alliance.name] = 1
+    const attacker = attackers[i]
+    if(attacker.alliance) {
+      if(allianceCount[attacker.alliance]) allianceCount[attacker.alliance.name]++
+      else allianceCount[attacker.alliance.name] = 1
+    }
   }
   return _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
 }
