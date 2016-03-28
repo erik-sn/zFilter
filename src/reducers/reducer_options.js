@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Option } from 'belle'
 
 import { GET_OPTIONS } from '../actions/actions'
 

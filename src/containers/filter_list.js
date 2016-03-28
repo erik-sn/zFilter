@@ -48,6 +48,7 @@ class FilterList extends Component {
                   { items }
                   </tbody>
               </table>
+
           </div>
 
         )

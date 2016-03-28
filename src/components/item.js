@@ -18,9 +18,9 @@ class Item extends Component {
       const killmail = this.props.item
       const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
       let group = killmail.victimCorp;
-
+      const key = Math.round((killmail.killID * killmail.shipID) / killmail.systemID)
       return (
-          <tr className="item-row" key={ killmail.killID }>
+          <tr className="item-row" key={ key }>
               <td onClick={ this.onClick }><img src={ imgUrl } height="40" width="40" /></td>
               <td onClick={ this.onClick }>
                   <span className="victim-name">{ killmail.victimName }</span>

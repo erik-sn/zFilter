@@ -6,6 +6,7 @@ import { getSystemID } from '../functions/system_functions'
 import { getOptions } from '../actions/actions'
 import { resetOptions } from '../actions/actions'
 import { createSystemFilter } from '../actions/actions'
+import { createPilotFilter } from '../actions/actions'
 
 class SearchFilter extends Component {
 
@@ -31,7 +32,9 @@ class SearchFilter extends Component {
       const systemName = item.name.slice(0, item.name.indexOf('(') - 1)
       this.props.createSystemFilter(systemName, getSystemID(systemName), 0 ,0, this.props.system_filter)
     }
-
+    else if(item.type === 'character' || item.type === 'corporation' || item.type === 'alliance') {
+      this.props.createPilotFilter(item.type, item.id, item.name)
+    }
   }
 
   show() {
@@ -94,7 +97,7 @@ function mapStateToProps({ options, system_filter }) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getOptions, resetOptions, createSystemFilter }, dispatch)
+    return bindActionCreators({ getOptions, resetOptions, createSystemFilter, createPilotFilter }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)
