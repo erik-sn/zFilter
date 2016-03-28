@@ -7,19 +7,14 @@ import { deleteSystemFilter } from '../actions/actions'
 
 import Item from '../components/item'
 import SystemFilter from '../containers/system_filter'
-import AddFilter from '../components/add_filter'
+import SearchFilter from '../components/search_filter'
 
 class FilterList extends Component {
 
     constructor(props) {
         super(props);
-        this.addSystemFilter = this.addSystemFilter.bind(this)
         this.editSystemFilter = this.editSystemFilter.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
-    }
-
-    addSystemFilter(keyPair) {
-      this.props.createSystemFilter(keyPair[1], keyPair[0], 0, '', this.props.system_filter)
     }
 
     editSystemFilter(system, systemId, key, value) {
@@ -47,7 +42,7 @@ class FilterList extends Component {
         });
         return (
           <div>
-              <AddFilter createSystemFilter={ this.addSystemFilter } />
+              <SearchFilter  />
               <table className={ this.props.name }>
                   <tbody>
                   { items }

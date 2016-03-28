@@ -35,7 +35,6 @@ export default function(state = [], action) {
                 killmails.push(killmail)
                 let localStore = JSON.parse(localStorage.getItem('killmails'))
                 if(localStore == null) localStore = []
-                console.log('Store Length: ', localStore.length)
 
                 if(localStore.length >= 500) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
                 else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))

@@ -43,7 +43,7 @@ export function setInitialKillmails(killmails) {
     }
 }
 
-export function createSystemFilter(system, systemId, jumps, ly, currentState) {
+export function createSystemFilter(system, systemId, jumps, ly, currentSystemFilter) {
     const filter = {
       system: system,
       systemId: systemId,
@@ -51,8 +51,9 @@ export function createSystemFilter(system, systemId, jumps, ly, currentState) {
       ly: ly
     }
 
-    const updatedState = currentState.concat(filter)
+    const updatedState = currentSystemFilter.concat(filter)
     const request = axios.get(getJumpRangeUrl(updatedState))
+    console.log(updatedState)
     return {
         type: FILTER_SYSTEM_CREATE,
         payload: request,

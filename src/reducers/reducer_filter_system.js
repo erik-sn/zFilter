@@ -10,6 +10,7 @@ export default function(state = [], action) {
 
     switch (action.type) {
         case FILTER_SYSTEM_CREATE:
+            console.log('Reducer: ', action.meta.filter)
             return action.meta.filter
 
         case FILTER_SYSTEM_DELETE:

@@ -1,0 +1,52 @@
+.dropdown-input {
+  height: 40px;
+  width: 250px;
+  font-size: 20px;
+   padding-left: 15px;
+}
+
+.dropdown-container {
+  height: 40px;
+  width: 200px;
+  background-color: aliceblue;
+}
+
+.dropdown-container-show {
+  height: 40px;
+}
+
+.filter-list {
+  display: none;
+}
+
+.filter-list-clicked {
+
+}
+
+.filter-list-item {
+  background-color: white;
+  height: 40px;
+  width: 300px;
+  text-align: center;
+  color: black;
+}
+
+.filter-list-item img {
+  float: left;
+  margin-right: 5px;
+}
+
+.item-name {
+  font-size: 16px;
+  text-align: left;
+  display: block;
+  vertical-align: bottom;
+}
+
+.item-type {
+  margin-top: -5px;
+  vertical-align: top;
+  text-align: left;
+  display: block;
+  font-size: 13px;
+}
