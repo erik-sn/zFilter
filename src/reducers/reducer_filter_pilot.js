@@ -14,7 +14,7 @@ export default function(state = {pilots:[], corporations:[], alliances:[]}, acti
         case FILTER_PILOT_CREATE:
             switch(action.payload.group) {
               case 'character':
-                const pilots = state.pilots.concat(action.payload.id)
+                const pilots = state.pilots.concat(action.payload)
                 let updatedPilot = {
                   pilots: pilots,
                   corporations: state.corporations,
@@ -23,7 +23,7 @@ export default function(state = {pilots:[], corporations:[], alliances:[]}, acti
                 return updatedPilot
 
               case 'corporation':
-                const corporations = state.corporations.concat(action.payload.id)
+                const corporations = state.corporations.concat(action.payload)
                 const updatedCorporation = {
                   pilots: state.pilots,
                   corporations: corporations,
@@ -32,7 +32,7 @@ export default function(state = {pilots:[], corporations:[], alliances:[]}, acti
                 return updatedCorporation
 
               case 'alliance':
-                const alliances = state.alliances.concat(action.payload.id)
+                const alliances = state.alliances.concat(action.payload)
                 const updatedAlliance = {
                   pilots: state.pilots,
                   corporations: state.corporations,

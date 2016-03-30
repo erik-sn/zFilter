@@ -9,9 +9,6 @@ export default class SystemFilter extends Component {
         this.state = {
 
         }
-        this.updateJumps = this.updateJumps.bind(this)
-        this.updateLY = this.updateLY.bind(this)
-        this.deleteFilter = this.deleteFilter.bind(this)
     }
 
 
@@ -29,9 +26,12 @@ export default class SystemFilter extends Component {
 
     render() {
         return (
-           <table>
-
-           </table>
+          <div className="filter-object">
+              <span className="tag label label-info">
+                <span>{ this.props.name }</span>
+                <a><i className="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a>
+              </span>
+          </div>
         )
     }
 }

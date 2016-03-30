@@ -1,6 +1,6 @@
 .dropdown-input {
   height: 40px;
-  width: 250px;
+  width: 350px;
   font-size: 20px;
    padding-left: 15px;
 }
@@ -17,10 +17,6 @@
 
 .filter-list {
   display: none;
-}
-
-.filter-list-clicked {
-
 }
 
 .filter-list-item {
@@ -49,4 +45,38 @@
   text-align: left;
   display: block;
   font-size: 13px;
+}
+
+
+.filter-object {
+  margin-top: 5px;
+  float: left;
+}
+
+.tag {
+  font-size: 16px !important;
+  background-color: red !important;
+  padding: .3em .4em .4em;
+  margin: 0 .1em;
+}
+
+.tag a {
+  color: #bbb;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.tag a:hover {
+  opacity: 1.0 !important
+}
+.tag .remove {
+  vertical-align: middle;
+  top: 0;
+}
+.tag a {
+  margin: 0 0 0 .3em;
+}
+.tag a .glyphicon-white {
+  color: #fff;
+  margin-bottom: 2px;
 }

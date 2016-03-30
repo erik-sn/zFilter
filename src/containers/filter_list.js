@@ -6,6 +6,7 @@ import { modifySystemFilter } from '../actions/actions'
 import { deleteSystemFilter } from '../actions/actions'
 
 import Item from '../components/item'
+import Filter from '../containers/filter'
 import SystemFilter from '../containers/system_filter'
 import SearchFilter from '../components/search_filter'
 
@@ -27,27 +28,73 @@ class FilterList extends Component {
 
 
     render() {
-      const items = this.props.system_filter.map((item) => {
-           return (
-               <SystemFilter
-                   key = { item.systemId}
-                   systemName={ item.system }
-                   systemId={ item.systemId }
-                   jumps={ item.jumps }
-                   ly={ item.ly }
-                   editSystemFilter={ this.editSystemFilter }
-                   removeSystemFilter={ this.removeSystemFilter }
-                />
-           )
-        });
+       let systemFilters = []
+        if(this.props.system_filter) {
+          systemFilters = this.props.system_filter.map((item) => {
+               return (
+                   <SystemFilter
+                       key = { item.systemId}
+                       systemName={ item.system }
+                       systemId={ item.systemId }
+                       jumps={ item.jumps }
+                       ly={ item.ly }
+                       editSystemFilter={ this.editSystemFilter }
+                       removeSystemFilter={ this.removeSystemFilter }
+                    />
+               )
+            });
+        }
+
+        let allianceFilters = []
+        if(this.props.pilot_filter) {
+          allianceFilters = this.props.pilot_filter.alliances.map((allianceFilter) => {
+             return (
+                 <Filter
+                     key = { allianceFilter.id}
+                     name={ allianceFilter.name }
+                     id={ allianceFilter.id }
+                  />
+             )
+          });
+        }
+
+        let corporationFilters = []
+        if(this.props.pilot_filter) {
+          corporationFilters = this.props.pilot_filter.corporations.map((corporationFilter) => {
+             return (
+                 <Filter
+                     key = { corporationFilter.id}
+                     name={ corporationFilter.name }
+                     id={ corporationFilter.id }
+                  />
+             )
+          });
+        }
+
+        let pilotFilters = []
+        if(this.props.pilot_filter) {
+          pilotFilters = this.props.pilot_filter.pilots.map((pilotFilter) => {
+             console.log('Pilot: ', pilotFilter)
+             return (
+                 <Filter
+                     key = { pilotFilter.id}
+                     name={ pilotFilter.name }
+                     id={ pilotFilter.id }
+                  />
+             )
+          });
+        }
         return (
           <div>
               <SearchFilter  />
               <table className={ this.props.name }>
                   <tbody>
-                  { items }
+                  { systemFilters }
                   </tbody>
               </table>
+              <div className="alliance-filter">{ allianceFilters }</div>
+              <div className="corporation-filter"> { corporationFilters } </div>
+              <div className="pilot-filter"> { pilotFilters } </div>
 
           </div>
 
@@ -55,8 +102,9 @@ class FilterList extends Component {
     }
 }
 
-function mapStateToProps({ system_filter }) {
-    return { system_filter }
+function mapStateToProps({ system_filter, pilot_filter }) {
+    console.log('Pilot Filter: ', pilot_filter)
+    return { system_filter, pilot_filter }
 }
 
 function mapDispatchToProps(dispatch) {
