@@ -1,18 +1,16 @@
 #list-container {
+  display: block;
   height: 800px;
   overflow-y: auto;
 }
 
 .item-table {
-  width: 100%;
+  float: left;
+  width: 800px;
 }
 
 ::-webkit-scrollbar {
     display: none;
-}
-
-.item-row td {
-
 }
 
 .item-table tr td:nth-child(1) {
