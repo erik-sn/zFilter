@@ -1,12 +1,11 @@
 #list-container {
-  display: block;
   height: 800px;
+  width: 750px;
   overflow-y: auto;
 }
 
 .item-table {
   float: left;
-  width: 800px;
 }
 
 ::-webkit-scrollbar {

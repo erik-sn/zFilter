@@ -32,6 +32,7 @@ export default function(state = [], action) {
                     attackerAlliance: getAttackerAlliance(kill.attackers),
                     time: time
                 }
+//                console.log(killmail)
                 killmails.push(killmail)
                 let localStore = JSON.parse(localStorage.getItem('killmails'))
                 if(localStore == null) localStore = []

@@ -74,7 +74,6 @@ class FilterList extends Component {
         let pilotFilters = []
         if(this.props.pilot_filter) {
           pilotFilters = this.props.pilot_filter.pilots.map((pilotFilter) => {
-             console.log('Pilot: ', pilotFilter)
              return (
                  <Filter
                      key = { pilotFilter.id}
@@ -103,7 +102,6 @@ class FilterList extends Component {
 }
 
 function mapStateToProps({ system_filter, pilot_filter }) {
-    console.log('Pilot Filter: ', pilot_filter)
     return { system_filter, pilot_filter }
 }
 

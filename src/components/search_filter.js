@@ -21,6 +21,7 @@ class SearchFilter extends Component {
     this.select = this.select.bind(this)
     this.show = this.show.bind(this)
     this.hide = this.hide.bind(this)
+    this.update = this.update.bind(this)
     this.renderListItems = this.renderListItems.bind(this)
   }
 
@@ -29,12 +30,20 @@ class SearchFilter extends Component {
     this.props.resetOptions()
     this.setState({ input: '' })
     if(item.type === 'system') {
-      const systemName = item.name.slice(0, item.name.indexOf('(') - 1)
-      this.props.createSystemFilter(systemName, getSystemID(systemName), 0 ,0, this.props.system_filter)
+      this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props.system_filter)
     }
     else if(item.type === 'character' || item.type === 'corporation' || item.type === 'alliance') {
       this.props.createPilotFilter(item.type, item.id, item.name)
     }
+    else if(item.type === 'region' || item.type == 'ship') {
+      this.props.createPilotFilter(item.type, item.id, item.name)
+    }
+
+  }
+
+  update(input) {
+    this.props.resetOptions()
+    this.props.getOptions(input)
   }
 
   show() {
@@ -43,19 +52,20 @@ class SearchFilter extends Component {
   }
 
   hide() {
+    this.props.resetOptions()
     this.setState({ listVisible: false})
     document.removeEventListener("click", this.hide)
   }
 
   renderListItems() {
-
+      console.log(this.props.options)
       let items = []
       for(var i = 0; i < this.props.options.length; i++) {
         var item = this.props.options[i]
         let label = item.name
         if(label.length > 30) label = label.substring(0, 27) + '...'
         let type = item.type.charAt(0).toUpperCase() + item.type.slice(1)
-        let imgUrl = `https://image.eveonline.com/${item.image}`
+        let imgUrl = `https://image.eveonline.com/Type/${item.id}_64.png`
         if(item.type === 'system') imgUrl = 'http://evemaps.dotlan.net/images/celestials/star_128.png'
         if(item.type === 'region') imgUrl = 'http://evemaps.dotlan.net/images/celestials/lava.png'
         items.push(
@@ -78,7 +88,7 @@ class SearchFilter extends Component {
                 type="text"
                 className="dropdown-input"
                 onClick={ this.show }
-                onChange={(e)=>{ this.setState({ input: e.target.value }); this.props.getOptions(e.target.value) }}
+                onChange={(e)=>{ this.setState({ input: e.target.value }); this.update(e.target.value) }}
                 value={ this.state.input }
             />
             <div className={"filter-list" + (this.state.listVisible ? "-clicked": "")}>

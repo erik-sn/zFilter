@@ -1,10 +1,15 @@
 body {
   background-image: url(./img/background1.jpg)
 }
-.container {
-  margin-top: 50px;
+
+.app-container {
+
 }
 
+.container {
+  margin-top: 50px;
+  width: 90%;
+}
 
 .filter-image {
   margin-right: 15px;
@@ -12,10 +17,8 @@ body {
 
 #filter-container {
   margin-top: 10px;
-  position: relative;
-  display: block;
   float: right;
-  width: 300px;
+  width: 350px;
 }
 
 #filter-add-input {
@@ -55,6 +58,7 @@ body {
 }
 
 #list-container {
+  display: block;
   float: left;
   width: 800px;
 }

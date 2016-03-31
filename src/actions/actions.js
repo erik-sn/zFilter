@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const URL_LISTEN = 'http://redisq.zkillboard.com/listen.php'
-const URL_OPTION = 'https://zkillboard.com/autocomplete'
 
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
 export const GET_OPTIONS = 'GET_OPTIONS'
+export const RESET_OPTIONS = 'RESET_OPTIONS'
 export const FILTER_SYSTEM_CREATE = 'FILTER_SYSTEM_CREATE'
 export const FILTER_SYSTEM_DELETE = 'FILTER_SYSTEM_DELETE'
 export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
@@ -13,20 +13,18 @@ export const FILTER_JUMPS = 'FILTER_JUMPS'
 export const FILTER_PILOT_CREATE = 'FILTER_GROUP_CREATE'
 export const FILTER_PILOT_DELETE = 'FILTER_GROUP_CREATE'
 
-
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
-    const request = axios.get(`${URL_OPTION}/${input}`)
     return {
         type: GET_OPTIONS,
-        payload: request
+        payload: findOptions(input)
     }
 }
 
 export function resetOptions() {
     return {
-        type: GET_OPTIONS,
+        type: RESET_OPTIONS,
         payload: []
     }
 }
@@ -129,5 +127,28 @@ export function deletePilotFilter(group, id, name) {
         type: FILTER_PILOT_DELETE,
         payload: {group: group, id: id, name: name }
     }
+}
+
+function findOptions(input) {
+   let list = []
+   const formattedName = input.toLowerCase().trim()
+   if(formattedName.length > 2) {
+     for(let key in systemData){
+       if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase().indexOf(formattedName) != -1) {
+           list.push({ name: systemData[key].name, id: key, type: 'system' });
+       }
+     }
+     for(let key in ships){
+       if (ships.hasOwnProperty(key) && ships[key].name.toLowerCase().indexOf(formattedName) != -1) {
+           list.push({ name: ships[key].name, id: ships[key].typeID, type: 'ship' });
+       }
+     }
+     for(let key in regions){
+       if (regions.hasOwnProperty(key) && regions[key].name.toLowerCase().indexOf(formattedName) != -1) {
+           list.push({ name: regions[key].name, id: regions[key].typeID, type: 'region' });
+       }
+     }
+   }
+   return list
 }
 

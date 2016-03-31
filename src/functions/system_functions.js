@@ -18,22 +18,21 @@ export function systemExists(input) {
 }
 
 
-/**
- * Given a solar system name return its type id
- * @param   {string}  systemName - String representation of solar system name
- * @returns {integer/boolean} returns the type id if the system exists, boolean false if not
- */
-
-export function getSystemID(systemName) {
-   const formattedName = systemName.toLowerCase().trim()
+export function findOptions(input) {
+   let list = []
+   const formattedName = input.toLowerCase().trim()
    for(let key in systemData){
      if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase() == formattedName) {
-         return key;
+         list.push({ name: input, id: key, type: 'system' });
+     }
+   }
+   for(let key in systemData){
+     if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase() == formattedName) {
+         return [systemName, key, 'system'];
      }
    }
    return false;
 }
-
 
 
 export function getJumpRangeUrl(filters) {

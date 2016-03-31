@@ -19,7 +19,6 @@ export default class SystemFilter extends Component {
     }
 
 
-
     updateJumps(event) {
       const jumps = event.target.value
       this.setState({ jumps: jumps }, function() {
