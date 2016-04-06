@@ -12,7 +12,7 @@ export default class Filter extends Component {
     }
 
     updateStatus() {
-      if(this.props.type == 'region') return
+      if(this.props.type == 'region' || this.props.type == 'group') return
       switch(this.state.status) {
         case 'both':
           this.setState({ status: 'attacker' })

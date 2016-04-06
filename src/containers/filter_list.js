@@ -72,6 +72,20 @@ class FilterList extends Component {
           });
         }
 
+        let groupFilters = []
+        if(this.props.filters) {
+          groupFilters = this.props.filters.ships.map((group) => {
+             return (
+                 <Filter
+                     type="group"
+                     key={ group.id}
+                     name={ group.name }
+                     id={ group.id }
+                  />
+             )
+          });
+        }
+
         let regionFilters = []
         if(this.props.filters) {
           regionFilters = this.props.filters.regions.map((regionFilter) => {
