@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { FILTER_CREATE } from '../actions/actions'
 import { FILTER_DELETE } from '../actions/actions'
 
-export default function(state = { player:[], ships:[], regions:[]}, action) {
+export default function(state = { player:[], ships:[], groups:[], regions:[]}, action) {
     switch (action.type) {
         case FILTER_CREATE:
             switch(action.payload.group) {
@@ -12,6 +12,7 @@ export default function(state = { player:[], ships:[], regions:[]}, action) {
                 let playerFilter = {
                   player: player,
                   ships: state.ships,
+                  groups: state.groups,
                   regions: state.regions
                 }
                 return playerFilter
@@ -21,15 +22,27 @@ export default function(state = { player:[], ships:[], regions:[]}, action) {
                 let shipFilter = {
                   player: state.player,
                   ships: ships,
+                  groups: state.groups,
                   regions: state.regions
                 }
                 return shipFilter
+
+              case 'group':
+                const groups = state.groups.concat(action.payload)
+                let groupFilter = {
+                  player: state.player,
+                  ships: ships,
+                  groups: groups,
+                  regions: state.regions
+                }
+                return groupFilter
 
               case 'region':
                 const regions = state.regions.concat(action.payload)
                 let regionFilter = {
                   player: state.player,
                   ships: state.ships,
+                  groups: state.groups,
                   regions: regions
                 }
                 return regionFilter

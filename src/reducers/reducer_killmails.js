@@ -27,8 +27,10 @@ export default function(state = [], action) {
                     security: security,
                     victimName: kill.victim.character.name,
                     victimCorp: kill.victim.corporation.name,
+                    victimShip: kill.victim.shipType.id,
                     shipTypeID: shipID,
                     attackerCount: kill.attackerCount,
+                    attackerShips: getAttackerShips(kill.attackers),
                     attackerAlliance: getAttackerAlliance(kill.attackers),
                     time: time
                 }
@@ -82,6 +84,15 @@ function getAttackerAlliance(attackers) {
   return _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
 }
 
+
+function getAttackerShips(attackers) {
+  let attackerShips = []
+  for(let i in attackers) {
+    const attacker = attackers[i]
+    attackerShips.push(attacker.shipType.id)
+  }
+  return attackerShips
+}
 
 
 

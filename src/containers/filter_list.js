@@ -74,11 +74,11 @@ class FilterList extends Component {
 
         let groupFilters = []
         if(this.props.filters) {
-          groupFilters = this.props.filters.ships.map((group) => {
+          groupFilters = this.props.filters.groups.map((group) => {
              return (
                  <Filter
                      type="group"
-                     key={ group.id}
+                     key={ group.id }
                      name={ group.name }
                      id={ group.id }
                   />
@@ -109,8 +109,8 @@ class FilterList extends Component {
               </table>
               <div className="player-filter">{ playerFilters }</div>
               <div className="ship-filter"> { shipFilters } </div>
+              <div className="group-filter"> { groupFilters } </div>
               <div className="region-filter"> { regionFilters } </div>
-
           </div>
 
         )

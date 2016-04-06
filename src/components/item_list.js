@@ -45,7 +45,10 @@ class ItemList extends Component {
     isActive(killmail) {
       const systemFilter = this.props.system_filter
       const jumpFilter = this.props.jump_filter
-      const groupFilter = this.props.pilot_filter
+      const shipFilter = this.props.filters.ships
+      const groupFilter = this.props.filters.groups
+      const regionFilter = this.props.filters.regions
+      const playerFilter = this.props.filters.player
 
       // check to make sure killmail is a valid object
       if(!killmail) return false
@@ -59,6 +62,7 @@ class ItemList extends Component {
         if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
         // check to see if killmail is within stargate jump-range (if jumps enabled)
         if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) != -1) return true
+        if()
       }
       return false
     }
@@ -84,8 +88,8 @@ class ItemList extends Component {
     }
 }
 
-function mapStateToProps({ killmail_list, system_filter, jump_filter, pilot_filter }) {
-    return ({ killmail_list, system_filter, jump_filter, pilot_filter })
+function mapStateToProps({ killmail_list, system_filter, jump_filter, filters }) {
+    return ({ killmail_list, system_filter, jump_filter, filters })
 }
 
 export default connect(mapStateToProps)(ItemList)
