@@ -6,7 +6,7 @@ import { getSystemID } from '../functions/system_functions'
 import { getOptions } from '../actions/actions'
 import { resetOptions } from '../actions/actions'
 import { createSystemFilter } from '../actions/actions'
-import { createPilotFilter } from '../actions/actions'
+import { createFilter } from '../actions/actions'
 
 class SearchFilter extends Component {
 
@@ -32,11 +32,8 @@ class SearchFilter extends Component {
     if(item.type === 'system') {
       this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props.system_filter)
     }
-    else if(item.type === 'character' || item.type === 'corporation' || item.type === 'alliance') {
-      this.props.createPilotFilter(item.type, item.id, item.name)
-    }
     else if(item.type === 'region' || item.type == 'ship') {
-      this.props.createPilotFilter(item.type, item.id, item.name)
+      this.props.createFilter(item.type, item.id, item.name)
     }
 
   }
@@ -102,12 +99,12 @@ class SearchFilter extends Component {
 
 }
 
-function mapStateToProps({ options, system_filter }) {
-    return { options, system_filter }
+function mapStateToProps({ options, system_filter, filters }) {
+    return { options, system_filter, filters }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getOptions, resetOptions, createSystemFilter, createPilotFilter }, dispatch)
+    return bindActionCreators({ getOptions, resetOptions, createSystemFilter, createFilter }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)

@@ -1,17 +1,30 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 
-export default class SystemFilter extends Component {
+export default class Filter extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-
+          type: props.type,
+          status: 'both'
         }
+        this.updateStatus = this.updateStatus.bind(this)
     }
 
-
+    updateStatus() {
+      if(this.props.type == 'region') return
+      switch(this.state.status) {
+        case 'both':
+          this.setState({ status: 'attacker' })
+          break;
+        case 'attacker':
+          this.setState({ status: 'victim' })
+          break;
+        case 'victim':
+          this.setState({ status: 'both' })
+          break;
+      }
+    }
 
     updateJumps(event) {
       const jumps = event.target.value
@@ -25,9 +38,10 @@ export default class SystemFilter extends Component {
     }
 
     render() {
+        const filterClass = "tag-" + this.state.status + " label tag label-info"
         return (
-          <div className="filter-object">
-              <span className="tag label label-info">
+          <div onClick={ this.updateStatus }>
+              <span className={ filterClass }>
                 <span>{ this.props.name }</span>
                 <a><i className="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a>
               </span>

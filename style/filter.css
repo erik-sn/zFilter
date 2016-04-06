@@ -48,16 +48,29 @@
 }
 
 
-.filter-object {
+.filter-object-both {
+  background-color: blue !important;
   margin-top: 5px;
   float: left;
 }
 
-.tag {
-  font-size: 16px !important;
+.tag-both {
+  background-color: blue !important;
+}
+
+.tag-victim {
   background-color: red !important;
-  padding: .3em .4em .4em;
-  margin: 0 .1em;
+}
+
+.tag-attacker {
+  background-color: green !important;
+}
+
+.tag {
+  margin-right: 5px;
+  margin-top: 5px;
+  float: left;
+  font-size: 24px !important;
 }
 
 .tag a {
@@ -77,6 +90,5 @@
   margin: 0 0 0 .3em;
 }
 .tag a .glyphicon-white {
-  color: #fff;
   margin-bottom: 2px;
 }

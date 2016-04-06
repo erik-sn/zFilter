@@ -45,40 +45,42 @@ class FilterList extends Component {
             });
         }
 
-        let allianceFilters = []
-        if(this.props.pilot_filter) {
-          allianceFilters = this.props.pilot_filter.alliances.map((allianceFilter) => {
+        let playerFilters = []
+        if(this.props.filters) {
+          playerFilters = this.props.filters.player.map((player, index) => {
              return (
                  <Filter
-                     key = { allianceFilter.id}
-                     name={ allianceFilter.name }
-                     id={ allianceFilter.id }
+                     type="player"
+                     key= { index }
+                     name={ player.name }
                   />
              )
           });
         }
 
-        let corporationFilters = []
-        if(this.props.pilot_filter) {
-          corporationFilters = this.props.pilot_filter.corporations.map((corporationFilter) => {
+        let shipFilters = []
+        if(this.props.filters) {
+          shipFilters = this.props.filters.ships.map((ship) => {
              return (
                  <Filter
-                     key = { corporationFilter.id}
-                     name={ corporationFilter.name }
-                     id={ corporationFilter.id }
+                     type="ship"
+                     key={ ship.id}
+                     name={ ship.name }
+                     id={ ship.id }
                   />
              )
           });
         }
 
-        let pilotFilters = []
-        if(this.props.pilot_filter) {
-          pilotFilters = this.props.pilot_filter.pilots.map((pilotFilter) => {
+        let regionFilters = []
+        if(this.props.filters) {
+          regionFilters = this.props.filters.regions.map((regionFilter) => {
              return (
                  <Filter
-                     key = { pilotFilter.id}
-                     name={ pilotFilter.name }
-                     id={ pilotFilter.id }
+                     type="region"
+                     key={ regionFilter.id}
+                     name={ regionFilter.name }
+                     id={ regionFilter.id }
                   />
              )
           });
@@ -91,9 +93,9 @@ class FilterList extends Component {
                   { systemFilters }
                   </tbody>
               </table>
-              <div className="alliance-filter">{ allianceFilters }</div>
-              <div className="corporation-filter"> { corporationFilters } </div>
-              <div className="pilot-filter"> { pilotFilters } </div>
+              <div className="player-filter">{ playerFilters }</div>
+              <div className="ship-filter"> { shipFilters } </div>
+              <div className="region-filter"> { regionFilters } </div>
 
           </div>
 
@@ -101,8 +103,8 @@ class FilterList extends Component {
     }
 }
 
-function mapStateToProps({ system_filter, pilot_filter }) {
-    return { system_filter, pilot_filter }
+function mapStateToProps({ system_filter, filters }) {
+    return { system_filter, filters }
 }
 
 function mapDispatchToProps(dispatch) {

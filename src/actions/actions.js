@@ -10,8 +10,8 @@ export const FILTER_SYSTEM_CREATE = 'FILTER_SYSTEM_CREATE'
 export const FILTER_SYSTEM_DELETE = 'FILTER_SYSTEM_DELETE'
 export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
 export const FILTER_JUMPS = 'FILTER_JUMPS'
-export const FILTER_PILOT_CREATE = 'FILTER_GROUP_CREATE'
-export const FILTER_PILOT_DELETE = 'FILTER_GROUP_CREATE'
+export const FILTER_CREATE = 'FILTER_CREATE'
+export const FILTER_DELETE = 'FILTER_DELETE'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
 
@@ -115,19 +115,21 @@ export function modifySystemFilter(system, systemId, key, value, currentState) {
     }
 }
 
-export function createPilotFilter(group, id, name) {
+export function createFilter(group, id, name) {
     return {
-        type: FILTER_PILOT_CREATE,
-        payload: {group: group, id: id, name: name }
+        type: FILTER_CREATE,
+        payload: { group: group, id: id, name: name }
     }
 }
 
-export function deletePilotFilter(group, id, name) {
+export function deleteFilter(group, id, name) {
     return {
-        type: FILTER_PILOT_DELETE,
-        payload: {group: group, id: id, name: name }
+        type: FILTER_DELETE,
+        payload: { group: group, id: id, name: name }
     }
 }
+
+
 
 function findOptions(input) {
    let list = []
