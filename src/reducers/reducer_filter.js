@@ -31,7 +31,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
                 const groups = state.groups.concat(action.payload)
                 let groupFilter = {
                   player: state.player,
-                  ships: ships,
+                  ships: state.ships,
                   groups: groups,
                   regions: state.regions
                 }

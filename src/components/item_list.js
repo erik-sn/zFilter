@@ -14,7 +14,7 @@ class ItemList extends Component {
 
    constructor(props) {
         super(props)
-        this.isActive = this.isActive.bind(this)
+        this.isActiveAny = this.isActiveAny.bind(this)
     }
 
       /**
@@ -42,48 +42,22 @@ class ItemList extends Component {
      *
     *
      */
-    isActive(killmail) {
-      const systemFilter = this.props.system_filter
-      const jumpFilter = this.props.jump_filter
-      const shipFilter = this.props.filters.ships
-      const groupFilter = this.props.filters.groups
-      const regionFilter = this.props.filters.regions
-      const playerFilter = this.props.filters.player
-
-
-      // check to make sure killmail is a valid object
+    isActiveAny(killmail) {
       if(!killmail) return false
-      // check if no filters are present
-      if(systemFilter.length === 0 &&
-         shipFilter.length === 0 &&
-         groupFilter.length === 0 &&
-         regionFilter.length === 0 &&
-         playerFilter.length === 0) return true
-
-      for(let i in shipFilter) {
-        if(killmail.shipID == shipFilter[i].id) return true // victim match
-        for(let j in killmail.attackerShips) {
-          if(killmail.attackerShips[j] == shipFilter[i].id) return true // attacker match
-        }
-      }
-
-      for(let i in systemFilter) {
-        const filter = systemFilter[i]
-        // check to see if killmail is in current system (if jumps enabled)
-        if(isInteger(filter.jumps) && killmail.system == filter.system) return true
-        // check to see if killmail is within light year range (if ly enabled)
-        if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
-        // check to see if killmail is within stargate jump-range (if jumps enabled)
-        if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return true
-      }
-
-
+      if(testNoFilter(this.props)) return true
+      if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail, 'both')) return true
+      if(this.props.filters.groups.length > 0 && testShipFilter(this.props.filters.groups, killmail, 'both')) return true
+      if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail)) return true
       return false
+    }
+
+    isActiveAll(killmail) {
+      // match ALL filters
     }
 
     render() {
         const items = this.props.killmail_list.map((item) => {
-           const active = this.isActive(item)
+           const active = this.isActiveAny(item)
            if(active) {
              return (
                  <Item key={ item.killID } item={ item } />
@@ -124,3 +98,43 @@ function isInteger(input) {
     return false;
 }
 
+function testNoFilter(props) {
+      if(props.system_filter.length === 0 &&
+         props.filters.ships.length === 0 &&
+         props.filters.player.length === 0 &&
+         props.filters.groups.length === 0 &&
+         props.filters.regions.length === 0) return true
+      return false
+}
+
+function testSystemFilter(systemFilter, killmail) {
+    for(let i in systemFilter) {
+      const filter = systemFilter[i]
+      if(isInteger(filter.jumps) && killmail.system != filter.system) return true
+      if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
+      if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return true
+    }
+    return false
+}
+
+function testShipFilter(shipFilter, killmail, status) {
+   if(shipFilter.length === 0) return true
+   for(let i in shipFilter) {
+      if((status == 'both' || status == 'victim') && (killmail.shipID == shipFilter[i].id)) return true // victim match
+      if(status == 'both' || status == 'attacker') {
+        for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == shipFilter[i].id) return true // attacker match
+      }
+   }
+   return false
+}
+
+function testGroupFilter(groupFilter, killmail, status) {
+   if(shipFilter.length === 0) return true
+   for(let id in groupFilter.ids) {
+      if((status == 'both' || status == 'victim') && (killmail.shipID == id)) return true // victim match
+      if(status == 'both' || status == 'attacker') {
+        for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == id) return true // attacker match
+      }
+   }
+   return false
+}

@@ -32,7 +32,7 @@ class SearchFilter extends Component {
     if(item.type === 'system') {
       this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props.system_filter)
     }
-    else if(item.type === 'region' || item.type == 'ship') {
+    else if(item.type === 'region' || item.type == 'ship' || item.type == 'group') {
       this.props.createFilter(item.type, item.id, item.name)
     }
 
