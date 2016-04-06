@@ -27,8 +27,6 @@ export default function(state = [], action) {
                     security: security,
                     victimName: kill.victim.character.name,
                     victimCorp: kill.victim.corporation.name,
-                    victimShip: kill.victim.shipType.id,
-                    shipTypeID: shipID,
                     attackerCount: kill.attackerCount,
                     attackerShips: getAttackerShips(kill.attackers),
                     attackerAlliance: getAttackerAlliance(kill.attackers),
@@ -86,13 +84,15 @@ function getAttackerAlliance(attackers) {
   return _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
 }
 
+/**
+ * Return an array of type IDs that correspond to the attacker ships from a killmail
+ * @param   {array} attackers array of attackers from the killmail object
+ * @returns {array} list of type ids
+ */
 
 function getAttackerShips(attackers) {
   let attackerShips = []
-  for(let i in attackers) {
-    const attacker = attackers[i]
-    attackerShips.push(attacker.shipType.id)
-  }
+  for(let i in attackers) if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
   return attackerShips
 }
 

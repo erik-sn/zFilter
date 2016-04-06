@@ -55,7 +55,6 @@ class SearchFilter extends Component {
   }
 
   renderListItems() {
-      console.log(this.props.options)
       let items = []
       for(var i = 0; i < this.props.options.length; i++) {
         var item = this.props.options[i]

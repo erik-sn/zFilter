@@ -50,19 +50,34 @@ class ItemList extends Component {
       const regionFilter = this.props.filters.regions
       const playerFilter = this.props.filters.player
 
+
       // check to make sure killmail is a valid object
       if(!killmail) return false
-      // check case where there are no filters
-      if(systemFilter.length === 0) return true
-      for(let i = 0; i < systemFilter.length; i++) {
+      // check if no filters are present
+      if(systemFilter.length === 0 &&
+         shipFilter.length === 0 &&
+         groupFilter.length === 0 &&
+         regionFilter.length === 0 &&
+         playerFilter.length === 0) return true
+
+      for(let i in shipFilter) {
+        if(killmail.shipID == shipFilter[i].id) return true // victim match
+        for(let j in killmail.attackerShips) {
+          if(killmail.attackerShips[j] == shipFilter[i].id) return true // attacker match
+        }
+      }
+
+      for(let i in systemFilter) {
         const filter = systemFilter[i]
         // check to see if killmail is in current system (if jumps enabled)
         if(isInteger(filter.jumps) && killmail.system == filter.system) return true
         // check to see if killmail is within light year range (if ly enabled)
         if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
         // check to see if killmail is within stargate jump-range (if jumps enabled)
-        if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) != -1) return true
+        if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return true
       }
+
+
       return false
     }
 
