@@ -19,6 +19,10 @@
   display: none;
 }
 
+.filter-list-clicked {
+  position: absolute;
+}
+
 .filter-list-item {
   background-color: white;
   height: 40px;
@@ -45,13 +49,6 @@
   text-align: left;
   display: block;
   font-size: 13px;
-}
-
-
-.filter-object-both {
-  background-color: blue !important;
-  margin-top: 5px;
-  float: left;
 }
 
 .tag-both {

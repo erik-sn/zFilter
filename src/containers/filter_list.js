@@ -100,7 +100,7 @@ class FilterList extends Component {
           });
         }
         return (
-          <div>
+          <div className="filter-containers">
               <SearchFilter  />
               <table className={ this.props.name }>
                   <tbody>

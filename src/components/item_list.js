@@ -62,7 +62,6 @@ class ItemList extends Component {
         if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
         // check to see if killmail is within stargate jump-range (if jumps enabled)
         if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) != -1) return true
-        if()
       }
       return false
     }
