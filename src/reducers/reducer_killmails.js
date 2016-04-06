@@ -54,15 +54,17 @@ export default function(state = [], action) {
 }
 
 /**
- * Check to make sure this killmail is valid (ship or pos)
+ * Check to make sure this killmail is valid; no pods, shuttles or rookie ships
  * @param   {integer} shipID   - Type ID of the ship
  * @param   {integer} systemID - Type ID of the system
  * @returns {boolean}   - Whether or not the killmail is valid
  */
 
 function isValid(shipID, systemID) {
-    if(shipID == 670 || shipID == 33328) return false
-    if(!shipdata[shipID] || !systemData[systemID]) return false
+    if(shipID == 670 || shipID == 33328) return false // ignore pods
+    if(groups.RookieShips.indexOf(shipID) != -1) return false // ignore rookie ships
+    if(groups.Shuttles.indexOf(shipID) != -1) return false // ignore shuttles
+    if(!shipdata[shipID] || !systemData[systemID]) return false // if we do not have the system on record
     return true
 }
 

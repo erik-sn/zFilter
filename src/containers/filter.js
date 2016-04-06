@@ -15,14 +15,11 @@ export default class Filter extends Component {
       if(this.props.type == 'region' || this.props.type == 'group') return
       switch(this.state.status) {
         case 'both':
-          this.setState({ status: 'attacker' })
-          break;
+          this.setState({ status: 'attacker' }); break
         case 'attacker':
-          this.setState({ status: 'victim' })
-          break;
+          this.setState({ status: 'victim' }); break
         case 'victim':
-          this.setState({ status: 'both' })
-          break;
+          this.setState({ status: 'both' }); break
       }
     }
 

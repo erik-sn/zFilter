@@ -99,6 +99,7 @@ class FilterList extends Component {
              )
           });
         }
+        console.log(groups)
         return (
           <div className="filter-containers">
               <SearchFilter  />
