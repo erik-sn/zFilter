@@ -6,7 +6,6 @@ export default class Filter extends Component {
         super(props)
         this.state = {
           type: props.type,
-          name: props.name,
           status: 'both'
         }
         this.deleteFilter = this.deleteFilter.bind(this)
@@ -26,8 +25,7 @@ export default class Filter extends Component {
     }
 
     deleteFilter() {
-       console.log('Deleting: ', this.props.name)
-       this.props.removeSystemFilter(this.props.name, this)
+       this.props.removeFilter(this.props.name, this.props.type)
     }
 
     render() {

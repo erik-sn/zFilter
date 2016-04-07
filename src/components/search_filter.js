@@ -81,6 +81,7 @@ class SearchFilter extends Component {
     return (
          <div>
             <input
+                placeholder="Search for a filter here..."
                 type="text"
                 className="dropdown-input"
                 onClick={ this.show }

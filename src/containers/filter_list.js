@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux'
 import { createSystemFilter } from '../actions/actions'
 import { modifySystemFilter } from '../actions/actions'
 import { deleteSystemFilter } from '../actions/actions'
+import { deleteFilter } from '../actions/actions'
 
 import Item from '../components/item'
 import Filter from '../containers/filter'
@@ -16,6 +17,7 @@ class FilterList extends Component {
         super(props);
         this.editSystemFilter = this.editSystemFilter.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
+        this.removeFilter = this.removeFilter.bind(this)
     }
 
     editSystemFilter(system, systemId, key, value) {
@@ -26,6 +28,10 @@ class FilterList extends Component {
       this.props.deleteSystemFilter(system, this.props.system_filter)
     }
 
+    removeFilter(filterName, filterType) {
+      console.log('Removing: ' + filterName)
+      this.props.deleteFilter(filterName, filterType)
+    }
 
     render() {
        let systemFilters = []
@@ -53,6 +59,7 @@ class FilterList extends Component {
                      type="player"
                      key= { index }
                      name={ player.name }
+                     removeFilter={ this.removeFilter }
                   />
              )
           });
@@ -67,6 +74,7 @@ class FilterList extends Component {
                      key={ ship.id}
                      name={ ship.name }
                      id={ ship.id }
+                     removeFilter={ this.removeFilter }
                   />
              )
           });
@@ -81,6 +89,7 @@ class FilterList extends Component {
                      key={ group.id }
                      name={ group.name }
                      id={ group.id }
+                     removeFilter={ this.removeFilter }
                   />
              )
           });
@@ -95,6 +104,7 @@ class FilterList extends Component {
                      key={ regionFilter.id}
                      name={ regionFilter.name }
                      id={ regionFilter.id }
+                     removeFilter={ this.removeFilter }
                   />
              )
           });
@@ -123,7 +133,7 @@ function mapStateToProps({ system_filter, filters }) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createSystemFilter, modifySystemFilter, deleteSystemFilter }, dispatch)
+    return bindActionCreators({ createSystemFilter, modifySystemFilter, deleteSystemFilter, deleteFilter }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)

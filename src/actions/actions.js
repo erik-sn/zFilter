@@ -122,10 +122,10 @@ export function createFilter(group, id, name) {
     }
 }
 
-export function deleteFilter(group, id, name) {
+export function deleteFilter(name, type) {
     return {
         type: FILTER_DELETE,
-        payload: { group: group, id: id, name: name }
+        payload: { name: name, type: type }
     }
 }
 

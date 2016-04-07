@@ -23,16 +23,16 @@ class ItemList extends Component {
      *  - Jumps From system (lowsec and highsec)
      *  - LY from system
      *  - Region
-     *  - Ship TYpe
+     *  - Ship Type
      *  - Ship group
      *  - Pilot
      *  - Pilot corporation
      *  - Pilot Alliance
-     *  - ISK Value
-     *  - Solo kills
-     *  - Fleet kills
-     *  - Smartbombers
-     *  - Cyno ships
+     *  - ISK Value**
+     *  - Solo kills**
+     *  - Fleet kills**
+     *  - Smartbombers**
+     *  - Cyno ships**
      *
      * @param   {object}     killmail     killmail being analyzed
      * @param   {object}     systemFilter filter object specified by the user
