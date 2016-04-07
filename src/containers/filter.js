@@ -6,8 +6,10 @@ export default class Filter extends Component {
         super(props)
         this.state = {
           type: props.type,
+          name: props.name,
           status: 'both'
         }
+        this.deleteFilter = this.deleteFilter.bind(this)
         this.updateStatus = this.updateStatus.bind(this)
     }
 
@@ -23,25 +25,19 @@ export default class Filter extends Component {
       }
     }
 
-    updateJumps(event) {
-      const jumps = event.target.value
-      this.setState({ jumps: jumps }, function() {
-        this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
-      })
-    }
-
     deleteFilter() {
-       this.props.removeSystemFilter(this.props.systemName, this)
+       console.log('Deleting: ', this.props.name)
+       this.props.removeSystemFilter(this.props.name, this)
     }
 
     render() {
         const filterClass = "tag-" + this.state.status + " label tag label-info"
         return (
-          <div onClick={ this.updateStatus }>
-              <span className={ filterClass }>
-                <span>{ this.props.name }</span>
-                <a><i className="remove glyphicon glyphicon-remove-sign glyphicon-white"></i></a>
-              </span>
+          <div onClick={ this.updateStatus } className={ filterClass }>
+              <div className="filter-label">{ this.props.name }</div>
+              <div className="filter-button" onClick={ this.deleteFilter }>
+                <span className="glyphicon glyphicon-remove"></span>
+              </div>
           </div>
         )
     }

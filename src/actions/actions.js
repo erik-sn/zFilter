@@ -152,7 +152,7 @@ function findOptions(input) {
      }
      for(let group in groups){
        if (group.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: group, id: groups[group][0], ids: groups[group], type: 'group' });
+           list.push({ name: group, id: groups[group][0], ships: groups[group], type: 'group' });
        }
      }
    }

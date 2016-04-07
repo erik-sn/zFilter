@@ -17,7 +17,7 @@ class App extends Component {
 
     render() {
         return (
-            <div id="app-container">
+            <div className="app-container">
               <div id="list-container"><ItemList name="item-table" /></div>
               <div id="filter-container"><FilterList name="filter-table"/></div>
             </div>

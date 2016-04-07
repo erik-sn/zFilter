@@ -118,7 +118,6 @@ function testSystemFilter(systemFilter, killmail) {
 }
 
 function testShipFilter(shipFilter, killmail, status) {
-   if(shipFilter.length === 0) return true
    for(let i in shipFilter) {
       if((status == 'both' || status == 'victim') && (killmail.shipID == shipFilter[i].id)) return true // victim match
       if(status == 'both' || status == 'attacker') {
@@ -129,11 +128,10 @@ function testShipFilter(shipFilter, killmail, status) {
 }
 
 function testGroupFilter(groupFilter, killmail, status) {
-   if(shipFilter.length === 0) return true
-   for(let id in groupFilter.ids) {
-      if((status == 'both' || status == 'victim') && (killmail.shipID == id)) return true // victim match
+   for(let shipID in groupFilter.ships) {
+      if((status == 'both' || status == 'victim') && (killmail.shipID == shipID)) return true // victim match
       if(status == 'both' || status == 'attacker') {
-        for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == id) return true // attacker match
+        for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == shipID) return true // attacker match
       }
    }
    return false

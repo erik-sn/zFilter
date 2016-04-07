@@ -52,7 +52,11 @@
 }
 
 .tag-both {
-  background-color: blue !important;
+  background-color: #2A88AD !important;
+  -moz-border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
 }
 
 .tag-victim {
@@ -60,14 +64,19 @@
 }
 
 .tag-attacker {
-  background-color: green !important;
+  background-color:  #32cd32 !important;
 }
 
 .tag {
   margin-right: 5px;
   margin-top: 5px;
   float: left;
-  font-size: 24px !important;
+  font-size: 22px !important;
+  text-align: center;
+  height: 40px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
 }
 
 .tag a {
@@ -76,9 +85,14 @@
   opacity: 0.6;
 }
 
+.tag span {
+  float: left;
+}
+
 .tag a:hover {
   opacity: 1.0 !important
 }
+
 .tag .remove {
   vertical-align: middle;
   top: 0;
@@ -88,4 +102,100 @@
 }
 .tag a .glyphicon-white {
   margin-bottom: 2px;
+}
+
+.filter-label {
+  margin-top: 5px;
+  float: left;
+  display: inline-block;
+  text-align: center;
+}
+
+.filter-button {
+  display: inline-block;
+  margin-left: 5px;
+  margin-top: 2px;
+  font-size: 16px;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+}
+
+.filter-button span {
+  margin-left: 7px;
+  margin-top: 7px;
+}
+
+.filter-button:hover {
+  opacity: 1;
+  background: white;
+}
+
+.filter-button:hover span {
+  color: #2A88AD;
+}
+
+.system-container {
+  color: white;
+  width: 350px;
+  height: 40px;
+  margin-top: 5px;
+  background-color: #2A88AD !important;
+  border-radius: 10px;
+  opacity: 1;
+  -moz-border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.13);
+}
+
+
+.system-label-container {
+  float: left;
+  text-align: center;
+  margin-top: 5px;
+  padding-left: 15px;
+  width: 160px;
+  font-size: 24px;
+}
+
+.system-inputs-container {
+  display: inline-block;
+  float: left;
+  width: 150px;
+  color: #333;
+}
+
+.system-filter-button {
+  font-size: 16px;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  margin-top: 5px;
+  display: inline-block;
+}
+
+.system-filter-button:hover {
+  opacity: 1;
+  background: white;
+}
+
+.system-filter-button:hover span {
+  color: #2A88AD;
+}
+
+.system-filter-button span {
+  margin-left: 7px;
+  margin-top: 7px;
+}
+
+.system-container input {
+  margin-left: 10px;
+  margin-top: 5px;
+  width: 60px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
 }

@@ -1,14 +1,22 @@
 body {
-  background-image: url(./img/background1.jpg)
+  background-image: url(./img/background2.jpg)
 }
 
 .app-container {
-
 }
 
 .container {
-  margin-top: 50px;
+  color: #333;
   width: 90%;
+  background: #F8F8F8;
+  opacity: .9;
+  height: 100vh;
+  font: normal 14px 'Lato';
+  opacity: .9;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+
 }
 
 .filter-image {
@@ -30,32 +38,6 @@ body {
   display: inline-block;
 }
 
-.form-control {
-  height: 41px;
-  width: 150px;
-}
-
-.system-filter-row td {
-  padding-top: 5px;
-}
-
-.system-filter-label {
-  width: 125px;
-}
-
-.system-filter-label span {
-  width: 125px;
-}
-
-.system-filter-input {
-  width: 50px;
-}
-
-.system-filter {
-  height: 41px;
-  width: 50px;
-  text-align: center;
-}
 
 #list-container {
   display: block;

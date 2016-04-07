@@ -37,7 +37,7 @@ export default function(state = [], action) {
                 let localStore = JSON.parse(localStorage.getItem('killmails'))
                 if(localStore == null) localStore = []
 
-                if(localStore.length >= 2500) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
+                if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
                 else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
                 localStorage.setItem('updateTime', new Date)
 
