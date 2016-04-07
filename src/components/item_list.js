@@ -47,7 +47,7 @@ class ItemList extends Component {
       if(testNoFilter(this.props)) return true
       if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail, 'both')) return true
       if(this.props.filters.groups.length > 0 && testShipFilter(this.props.filters.groups, killmail, 'both')) return true
-      if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail)) return true
+      if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail, this.props.jump_filter)) return true
       return false
     }
 
@@ -107,13 +107,15 @@ function testNoFilter(props) {
       return false
 }
 
-function testSystemFilter(systemFilter, killmail) {
+function testSystemFilter(systemFilter, killmail, jumpFilter) {
     for(let i in systemFilter) {
       const filter = systemFilter[i]
-      if(isInteger(filter.jumps) && killmail.system != filter.system) return true
+      if(filter.jumps === 0 && killmail.system == filter.system) return true
       if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
       if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return true
     }
+
+    console.log('Testing system filter: ', false)
     return false
 }
 
