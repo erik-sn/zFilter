@@ -92,11 +92,15 @@ export default connect(mapStateToProps)(ItemList)
  */
 
 function isInteger(input) {
-    if (input == parseInt(input, 10)) {
-       return true;
-    }
-    return false;
+    if (input == parseInt(input, 10)) return true
+    return false
 }
+
+/**
+ * Check to see if there are no applied filters
+ * @param   {object}   props - container object properties
+ * @returns {Boolean} if there are any filters being applied
+ */
 
 function testNoFilter(props) {
       if(props.system_filter.length === 0 &&
@@ -107,6 +111,17 @@ function testNoFilter(props) {
       return false
 }
 
+/**
+ * Iterate over all system filters and see if the killmail matches one of the following:
+ *   1. In a system specified
+ *   2. Within the user specified LY distance (if specified)
+ *   3. Within the user specified jump distance (if specified)
+ * @param   {object}  systemFilter list of filter objects that contain systems and their jump ranges
+ * @param   {object}  killmail     killmail object from reducer
+ * @param   {object}  jumpFilter   object with all systems within the user specified systems and jump ranges
+ * @returns {Boolean} if the killmail matches the user specified system requirements
+ */
+
 function testSystemFilter(systemFilter, killmail, jumpFilter) {
     for(let i in systemFilter) {
       const filter = systemFilter[i]
@@ -114,10 +129,17 @@ function testSystemFilter(systemFilter, killmail, jumpFilter) {
       if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return true
       if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return true
     }
-
-    console.log('Testing system filter: ', false)
     return false
 }
+
+/**
+ * Iterate over all ship filters and test if the killmail matches any of them. The status
+ * can be used to further filter to show only victims, only attackers or both.
+ * @param   {object}   shipFilter object representing a collection of ships
+ * @param   {object}   killmail   killmail object from reducer
+ * @param   {String}   status     'both', 'victim', or 'attacker'
+ * @returns {Boolean} if the killmail matches a ship filter
+ */
 
 function testShipFilter(shipFilter, killmail, status) {
    for(let i in shipFilter) {
@@ -128,6 +150,18 @@ function testShipFilter(shipFilter, killmail, status) {
    }
    return false
 }
+
+/**
+ * Iterate over all group filters and test if the killmail matches any of them. The status
+ * can be used to further filter to show only victims, only attackers or both.
+ *
+ * -- Need to refactor this and testShipFilter into one method
+ *
+ * @param   {object}   groupFilter object representing a collection of ship groups
+ * @param   {object}   killmail    killmail object from reducer
+ * @param   {String}   status      'both, 'victim', or 'attacker'
+ * @returns {Boolean}   if the killmail matches a group filter
+ */
 
 function testGroupFilter(groupFilter, killmail, status) {
    for(let shipID in groupFilter.ships) {
