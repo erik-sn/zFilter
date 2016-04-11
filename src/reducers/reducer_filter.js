@@ -70,7 +70,6 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
                   groups: state.groups,
                   regions: state.regions
                 }
-                console.log(shipFilter)
                 return shipFilter
 
               case 'group':

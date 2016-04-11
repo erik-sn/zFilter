@@ -5,7 +5,6 @@ export default class Filter extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          type: props.type,
           status: 'both'
         }
         this.deleteFilter = this.deleteFilter.bind(this)
@@ -31,8 +30,8 @@ export default class Filter extends Component {
     render() {
         const filterClass = "tag-" + this.state.status + " label tag label-info"
         return (
-          <div onClick={ this.updateStatus } className={ filterClass }>
-              <div className="filter-label">{ this.props.name }</div>
+          <div className={ filterClass } key={ this.props.key }>
+              <div className="filter-label" onClick={ this.updateStatus } >{ this.props.name }</div>
               <div className="filter-button" onClick={ this.deleteFilter }>
                 <span className="glyphicon glyphicon-remove"></span>
               </div>

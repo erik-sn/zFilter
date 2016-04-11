@@ -6,7 +6,7 @@ import { getKillmails } from '../actions/actions'
 import { setInitialKillmails } from '../actions/actions'
 
 import FilterList from '../containers/filter_list'
-import ItemList from '../components/item_list'
+import ItemList from './item_list'
 
 class App extends Component {
 

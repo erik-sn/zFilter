@@ -9,7 +9,6 @@ export const RESET_OPTIONS = 'RESET_OPTIONS'
 export const FILTER_SYSTEM_CREATE = 'FILTER_SYSTEM_CREATE'
 export const FILTER_SYSTEM_DELETE = 'FILTER_SYSTEM_DELETE'
 export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
-export const FILTER_JUMPS = 'FILTER_JUMPS'
 export const FILTER_CREATE = 'FILTER_CREATE'
 export const FILTER_DELETE = 'FILTER_DELETE'
 
@@ -29,7 +28,7 @@ export function resetOptions() {
     }
 }
 
-export function getKillmails(maxId, system_filter) {
+export function getKillmails() {
     const request = axios.get(URL_LISTEN)
     return {
         type: GET_KILLMAIL,
@@ -54,7 +53,6 @@ export function createSystemFilter(system, systemId, jumps, ly, currentSystemFil
 
     const updatedState = currentSystemFilter.concat(filter)
     const request = axios.get(getJumpRangeUrl(updatedState))
-    console.log(updatedState)
     return {
         type: FILTER_SYSTEM_CREATE,
         payload: request,

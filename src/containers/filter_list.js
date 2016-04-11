@@ -7,15 +7,16 @@ import { deleteSystemFilter } from '../actions/actions'
 import { deleteFilter } from '../actions/actions'
 
 import Item from '../components/item'
-import Filter from '../containers/filter'
-import SystemFilter from '../containers/system_filter'
-import SearchFilter from '../components/search_filter'
+import Filter from '../components/filter'
+import SystemFilter from './system_filter'
+import SearchFilter from './search_filter'
 
 class FilterList extends Component {
 
     constructor(props) {
         super(props);
         this.editSystemFilter = this.editSystemFilter.bind(this)
+        this.createFilterObjects = this.createFilterObjects.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
         this.removeFilter = this.removeFilter.bind(this)
     }
@@ -24,13 +25,31 @@ class FilterList extends Component {
       this.props.modifySystemFilter(system, systemId, key, value, this.props.system_filter)
     }
 
-    removeSystemFilter(system, component) {
+    removeSystemFilter(system) {
       this.props.deleteSystemFilter(system, this.props.system_filter)
     }
 
     removeFilter(filterName, filterType) {
       console.log('Removing: ' + filterName)
       this.props.deleteFilter(filterName, filterType)
+    }
+
+    createFilterObjects(filter, type) {
+        if(this.props.filters) {
+            return filter.map((object, index) => {
+                console.log('Rendering: ', object)
+                return (
+                    <Filter
+                        type={ type }
+                        id={ object.id }
+                        key= { index }
+                        name={ object.name }
+                        removeFilter={ this.removeFilter }
+                    />
+                )
+            });
+        }
+        else return []
     }
 
     render() {
@@ -51,65 +70,6 @@ class FilterList extends Component {
             });
         }
 
-        let playerFilters = []
-        if(this.props.filters) {
-          playerFilters = this.props.filters.player.map((player, index) => {
-             return (
-                 <Filter
-                     type="player"
-                     key= { index }
-                     name={ player.name }
-                     removeFilter={ this.removeFilter }
-                  />
-             )
-          });
-        }
-
-        let shipFilters = []
-        if(this.props.filters) {
-          shipFilters = this.props.filters.ships.map((ship) => {
-             return (
-                 <Filter
-                     type="ship"
-                     key={ ship.id}
-                     name={ ship.name }
-                     id={ ship.id }
-                     removeFilter={ this.removeFilter }
-                  />
-             )
-          });
-        }
-
-        let groupFilters = []
-        if(this.props.filters) {
-          groupFilters = this.props.filters.groups.map((group) => {
-             return (
-                 <Filter
-                     type="group"
-                     key={ group.id }
-                     name={ group.name }
-                     id={ group.id }
-                     removeFilter={ this.removeFilter }
-                  />
-             )
-          });
-        }
-
-        let regionFilters = []
-        if(this.props.filters) {
-          regionFilters = this.props.filters.regions.map((regionFilter) => {
-             return (
-                 <Filter
-                     type="region"
-                     key={ regionFilter.id}
-                     name={ regionFilter.name }
-                     id={ regionFilter.id }
-                     removeFilter={ this.removeFilter }
-                  />
-             )
-          });
-        }
-
         return (
           <div className="filter-containers">
               <SearchFilter  />
@@ -118,10 +78,10 @@ class FilterList extends Component {
                   { systemFilters }
                   </tbody>
               </table>
-              <div className="player-filter">{ playerFilters }</div>
-              <div className="ship-filter"> { shipFilters } </div>
-              <div className="group-filter"> { groupFilters } </div>
-              <div className="region-filter"> { regionFilters } </div>
+              <div className="player-filter">{ this.createFilterObjects(this.props.filters.player, 'player') }</div>
+              <div className="ship-filter"> { this.createFilterObjects(this.props.filters.ships, 'ship') } </div>
+              <div className="group-filter"> { this.createFilterObjects(this.props.filters.groups, 'group') } </div>
+              <div className="region-filter"> { this.createFilterObjects(this.props.filters.regions, 'region') } </div>
           </div>
 
         )

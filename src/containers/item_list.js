@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux'
 import Item from '../components/item'
 
 import { inLyRange } from '../functions/system_functions'
-import { getSystemID } from '../functions/system_functions'
 import { systemExists } from '../functions/system_functions'
 
 // Returns generic table that holds a list of items. Items are customized at the item object level
@@ -56,11 +55,11 @@ class ItemList extends Component {
     }
 
     render() {
-        const items = this.props.killmail_list.map((item) => {
+        const items = this.props.killmail_list.map((item, index) => {
            const active = this.isActiveAny(item)
            if(active) {
              return (
-                 <Item key={ item.killID } item={ item } />
+                 <Item key={ index } item={ item } />
              )
            }
         })

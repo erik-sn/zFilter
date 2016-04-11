@@ -34,7 +34,6 @@ export function findOptions(input) {
    return false;
 }
 
-
 export function getJumpRangeUrl(filters) {
   let origins = ''
   let jumps = ''

@@ -15,7 +15,10 @@ export default function(state = [], action) {
             const systemID = kill.solarSystem.id
             const security = Math.round(systemData[systemID].security * 10) / 10
             const time = kill.killTime.substring(10,16)
-
+            let victimName = 'Unknown'
+            if(kill.victim.character) victimName = kill.victim.character.name
+            let victimGroup = kill.victim.corporation.name
+            if(kill.victim.alliance) victimGroup = kill.victim.alliance.name
 
             if(isValid(shipID, systemID)) {
                 const killmail = {
@@ -25,16 +28,17 @@ export default function(state = [], action) {
                     systemID: systemID,
                     system: systemData[systemID].name,
                     security: security,
-                    victimName: kill.victim.character.name,
-                    victimCorp: kill.victim.corporation.name,
+                    victimName: victimName,
+                    victimCorp: victimGroup,
                     attackerCount: kill.attackerCount,
                     attackerShips: getAttackerShips(kill.attackers),
                     attackerAlliance: getAttackerAlliance(kill.attackers),
                     time: time
                 }
-//                console.log(killmail)
+
                 killmails.push(killmail)
                 let localStore = JSON.parse(localStorage.getItem('killmails'))
+                console.log(localStore.length)
                 if(localStore == null) localStore = []
 
                 if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
@@ -57,7 +61,6 @@ export default function(state = [], action) {
  * @param   {integer} systemID - Type ID of the system
  * @returns {boolean}   - Whether or not the killmail is valid
  */
-
 function isValid(shipID, systemID) {
     if(shipID == 670 || shipID == 33328) return false // ignore pods
     if(groups.RookieShips.indexOf(shipID) != -1) return false // ignore rookie ships
@@ -71,7 +74,6 @@ function isValid(shipID, systemID) {
  * @param   {array} attackers [[Description]]
  * @returns {String} most occuring alliance on the killmail
  */
-
 function getAttackerAlliance(attackers) {
   let allianceCount = {}
   for(let i in attackers) {
@@ -81,7 +83,28 @@ function getAttackerAlliance(attackers) {
       else allianceCount[attacker.alliance.name] = 1
     }
   }
-  return _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
+  let alliance = _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
+  if(alliance == -Infinity) alliance = getAttackerCorporation(attackers)
+  return alliance
+}
+
+/**
+ * Given a list of attackers iterate through and find the most common corporation
+ * @param   {array} attackers [[Description]]
+ * @returns {String} most occuring corporation on the killmail
+ */
+function getAttackerCorporation(attackers) {
+    let corpCount = {}
+    for(let i in attackers) {
+        const attacker = attackers[i]
+        if(attacker.corporation) {
+            if(corpCount[attacker.corporation]) corpCount[attacker.corporation.name]++
+            else corpCount[attacker.corporation.name] = 1
+        }
+    }
+    let corporation = _.max(Object.keys(corpCount), function (o) { return corpCount[o]; })
+    if(corporation == -Infinity) corporation = 'Unknown'
+    return corporation
 }
 
 /**
@@ -89,7 +112,6 @@ function getAttackerAlliance(attackers) {
  * @param   {array} attackers array of attackers from the killmail object
  * @returns {array} list of type ids
  */
-
 function getAttackerShips(attackers) {
   let attackerShips = []
   for(let i in attackers) if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
