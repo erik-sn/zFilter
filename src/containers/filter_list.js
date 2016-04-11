@@ -19,6 +19,7 @@ class FilterList extends Component {
         this.editSystemFilter = this.editSystemFilter.bind(this)
         this.createFilterObjects = this.createFilterObjects.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
+        this.updateFilter = this.updateFilter.bind(this)
         this.removeFilter = this.removeFilter.bind(this)
     }
 
@@ -35,8 +36,11 @@ class FilterList extends Component {
       this.props.deleteFilter(filterName, filterType)
     }
 
+    updateFilter(filterName, filterType, filterStatus) {
+        this.props.updateFilter(filterName, filterType, filterStatus)
+    }
+
     createFilterObjects(filter, type) {
-        console.log(filter)
         if(filter) {
             return filter.map((object, index) => {
                 return (

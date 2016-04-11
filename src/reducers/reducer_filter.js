@@ -5,10 +5,10 @@ import { FILTER_UPDATE } from '../actions/actions'
 import { FILTER_DELETE } from '../actions/actions'
 
 export default function(state = { player:[], ships:[], groups:[], regions:[]}, action) {
-    console.log(action.type)
     switch (action.type) {
       case FILTER_CREATE:
-        switch (action.payload.group) {
+        console.log(action)
+        switch (action.payload.type) {
           case 'player':
             return {
               player: state.player.concat(action.payload),
@@ -40,8 +40,8 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
               groups: state.groups,
               regions: state.regions.concat(action.payload)
             }
-
         }
+
       case FILTER_UPDATE:
         const updateName = action.payload.name
         const status = action.payload.status
@@ -57,7 +57,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
           case 'ship':
             return {
               player: state.player,
-              ships: updateStatus(state.player, updateName, status),
+              ships: updateStatus(state.ships, updateName, status),
               groups: state.groups,
               regions: state.regions
             }
@@ -66,7 +66,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
             return {
               player: state.player,
               ships: state.ships,
-              groups: updateStatus(state.player, updateName, status),
+              groups: updateStatus(state.groups, updateName, status),
               regions: state.regions
             }
 
@@ -75,7 +75,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
               player: state.player,
               ships: state.ships,
               groups: state.groups,
-              regions: updateStatus(state.player, updateName, status)
+              regions: updateStatus(state.regions, updateName, status)
             }
 
         }
@@ -120,13 +120,6 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 }
 
 
-export function updateFilter(group, name, status) {
-  return {
-    type: FILTER_CREATE,
-    payload: { group: group, name: name, status: status }
-  }
-}
-
 function removeItem(array, search) {
     const indexes = array.map((object, index) => {
                 if(object.name === search) return index; else return 0
@@ -137,21 +130,14 @@ function removeItem(array, search) {
 
 
 function updateStatus(array, target, status) {
-  console.log(findTargetIndex(array, target))
-
-  switch(status) {
-    case 'both':
-      return 'attacker'
-    case 'attacker':
-      return 'victim'
-    case 'victim':
-      return 'both'
-  }
+  const index = findTargetIndex(array, target)
+  array[index].status = status
+  return array
 }
 
 function findTargetIndex(array, target) {
-  for(let object in array) {
-    if(object.name === target) return index
+  for(let i in array) {
+    if(array[i].name === target) return i
   }
   return -1
 }
