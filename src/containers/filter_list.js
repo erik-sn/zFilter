@@ -24,7 +24,7 @@ class FilterList extends Component {
     }
 
     editSystemFilter(system, systemId, key, value) {
-      this.props.modifySystemFilter(system, systemId, key, value, this.props.system_filter)
+      this.props.updateSystemFilter(system, systemId, key, value, this.props.system_filter)
     }
 
     removeSystemFilter(system) {
@@ -32,7 +32,6 @@ class FilterList extends Component {
     }
 
     removeFilter(filterName, filterType) {
-      console.log('Removing: ' + filterName)
       this.props.deleteFilter(filterName, filterType)
     }
 
