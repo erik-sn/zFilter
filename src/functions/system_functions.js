@@ -17,23 +17,6 @@ export function systemExists(input) {
    return false;
 }
 
-
-export function findOptions(input) {
-   let list = []
-   const formattedName = input.toLowerCase().trim()
-   for(let key in systemData){
-     if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase() == formattedName) {
-         list.push({ name: input, id: key, type: 'system' });
-     }
-   }
-   for(let key in systemData){
-     if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase() == formattedName) {
-         return [systemName, key, 'system'];
-     }
-   }
-   return false;
-}
-
 export function getJumpRangeUrl(filters) {
   let origins = ''
   let jumps = ''

@@ -44,8 +44,8 @@ class ItemList extends Component {
     isActiveAny(killmail) {
       if(!killmail) return false
       if(testNoFilter(this.props)) return true
-      if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail, 'both')) return true
-      if(this.props.filters.groups.length > 0 && testShipFilter(this.props.filters.groups, killmail, 'both')) return true
+      if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail)) return true
+      if(this.props.filters.groups.length > 0 && testGroupFilter(this.props.filters.groups, killmail)) return true
       if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail, this.props.jump_filter)) return true
       return false
     }
@@ -140,8 +140,9 @@ function testSystemFilter(systemFilter, killmail, jumpFilter) {
  * @returns {Boolean} if the killmail matches a ship filter
  */
 
-function testShipFilter(shipFilter, killmail, status) {
+function testShipFilter(shipFilter, killmail) {
    for(let i in shipFilter) {
+      const status = shipFilter[i].status
       if((status == 'both' || status == 'victim') && (killmail.shipID == shipFilter[i].id)) return true // victim match
       if(status == 'both' || status == 'attacker') {
         for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == shipFilter[i].id) return true // attacker match
@@ -162,11 +163,13 @@ function testShipFilter(shipFilter, killmail, status) {
  * @returns {Boolean}   if the killmail matches a group filter
  */
 
-function testGroupFilter(groupFilter, killmail, status) {
-   for(let shipID in groupFilter.ships) {
-      if((status == 'both' || status == 'victim') && (killmail.shipID == shipID)) return true // victim match
+function testGroupFilter(groupFilter, killmail) {
+   for(let i in groupFilter) {
+      const status = groupFilter[i].status
+      const shipID = groups[groupFilter[i].name]
+      if((status == 'both' || status == 'victim') && shipID.indexOf(killmail.shipID) !== -1) return true // victim match
       if(status == 'both' || status == 'attacker') {
-        for(let j in killmail.attackerShips) if(killmail.attackerShips[j] == shipID) return true // attacker match
+        for(let j in killmail.attackerShips) if(shipID.indexOf(killmail.attackerShips[j]) !== -1) return true // attacker match
       }
    }
    return false
