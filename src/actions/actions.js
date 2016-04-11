@@ -6,10 +6,11 @@ export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
 export const GET_OPTIONS = 'GET_OPTIONS'
 export const RESET_OPTIONS = 'RESET_OPTIONS'
-export const FILTER_SYSTEM_CREATE = 'FILTER_SYSTEM_CREATE'
-export const FILTER_SYSTEM_DELETE = 'FILTER_SYSTEM_DELETE'
-export const FILTER_SYSTEM_MODIFY = 'FILTER_SYSTEM_MODIFY'
+export const SYSTEM_FILTER_CREATE = 'SYSTEM_FILTER_CREATE'
+export const SYSTEM_FILTER_DELETE = 'SYSTEM_FILTER_DELETE'
+export const SYSTEM_FILTER_UPDATE = 'SYSTEM_FILTER_UPDATE'
 export const FILTER_CREATE = 'FILTER_CREATE'
+export const FILTER_UPDATE = 'FILTER_UPDATE'
 export const FILTER_DELETE = 'FILTER_DELETE'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
@@ -54,7 +55,7 @@ export function createSystemFilter(system, systemId, jumps, ly, currentSystemFil
     const updatedState = currentSystemFilter.concat(filter)
     const request = axios.get(getJumpRangeUrl(updatedState))
     return {
-        type: FILTER_SYSTEM_CREATE,
+        type: SYSTEM_FILTER_CREATE,
         payload: request,
         meta: {
           filter: updatedState
@@ -72,7 +73,7 @@ export function deleteSystemFilter(system, currentState) {
           request = axios.get(getJumpRangeUrl(updatedState))
         }
         return {
-          type: FILTER_SYSTEM_DELETE,
+          type: SYSTEM_FILTER_DELETE,
           payload: request,
           meta: {
             filter: updatedState
@@ -84,7 +85,7 @@ export function deleteSystemFilter(system, currentState) {
 
 }
 
-export function modifySystemFilter(system, systemId, key, value, currentState) {
+export function updateSystemFilter(system, systemId, key, value, currentState) {
 
     let updatedState = []
     for(let i = 0; i < currentState.length; i++) {
@@ -105,7 +106,7 @@ export function modifySystemFilter(system, systemId, key, value, currentState) {
 
     const request = axios.get(getJumpRangeUrl(updatedState))
     return {
-      type: FILTER_SYSTEM_MODIFY,
+      type: SYSTEM_FILTER_UPDATE,
       payload: request,
       meta: {
         filter: updatedState
@@ -113,10 +114,17 @@ export function modifySystemFilter(system, systemId, key, value, currentState) {
     }
 }
 
-export function createFilter(group, id, name) {
+export function createFilter(type, id, name) {
     return {
         type: FILTER_CREATE,
-        payload: { group: group, id: id, name: name }
+        payload: { type: type, id: id, name: name, status: 'both' }
+    }
+}
+
+export function updateFilter(name, type, status) {
+    return {
+        type: FILTER_UPDATE,
+        payload: { name: name, type: type, status: status }
     }
 }
 

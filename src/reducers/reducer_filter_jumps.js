@@ -1,23 +1,23 @@
 import axios from 'axios'
 
-import { FILTER_SYSTEM_CREATE } from '../actions/actions'
-import { FILTER_SYSTEM_MODIFY } from '../actions/actions'
-import { FILTER_SYSTEM_DELETE } from '../actions/actions'
+import { SYSTEM_FILTER_CREATE } from '../actions/actions'
+import { SYSTEM_FILTER_UPDATE } from '../actions/actions'
+import { SYSTEM_FILTER_DELETE } from '../actions/actions'
 
 
 export default function(state = [], action) {
 
     switch (action.type) {
-        case FILTER_SYSTEM_CREATE:
+        case SYSTEM_FILTER_CREATE:
             return action.payload.data.systems
 
-        case FILTER_SYSTEM_DELETE:
+        case SYSTEM_FILTER_DELETE:
             if(action.payload) {
               return action.payload.data.systems
             }
             return state
 
-         case FILTER_SYSTEM_MODIFY:
+         case SYSTEM_FILTER_UPDATE:
             return action.payload.data.systems
     }
     return state

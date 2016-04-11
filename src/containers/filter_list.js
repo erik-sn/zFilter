@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { createSystemFilter } from '../actions/actions'
-import { modifySystemFilter } from '../actions/actions'
+import { updateSystemFilter } from '../actions/actions'
 import { deleteSystemFilter } from '../actions/actions'
 import { deleteFilter } from '../actions/actions'
+import { updateFilter } from '../actions/actions'
 
 import Item from '../components/item'
 import Filter from '../components/filter'
@@ -35,16 +36,18 @@ class FilterList extends Component {
     }
 
     createFilterObjects(filter, type) {
-        if(this.props.filters) {
+        console.log(filter)
+        if(filter) {
             return filter.map((object, index) => {
-                console.log('Rendering: ', object)
                 return (
                     <Filter
                         type={ type }
                         id={ object.id }
                         key= { index }
                         name={ object.name }
+                        status={ object.status }
                         removeFilter={ this.removeFilter }
+                        updateFilter={ this.updateFilter }
                     />
                 )
             });
@@ -93,7 +96,7 @@ function mapStateToProps({ system_filter, filters }) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createSystemFilter, modifySystemFilter, deleteSystemFilter, deleteFilter }, dispatch)
+    return bindActionCreators({ createSystemFilter, updateSystemFilter, deleteSystemFilter, updateFilter, deleteFilter }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)

@@ -1,21 +1,21 @@
 import axios from 'axios'
 
-import { FILTER_SYSTEM_CREATE } from '../actions/actions'
-import { FILTER_SYSTEM_MODIFY } from '../actions/actions'
-import { FILTER_SYSTEM_DELETE } from '../actions/actions'
+import { SYSTEM_FILTER_CREATE } from '../actions/actions'
+import { SYSTEM_FILTER_UPDATE } from '../actions/actions'
+import { SYSTEM_FILTER_DELETE } from '../actions/actions'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export default function(state = [], action) {
 
     switch (action.type) {
-        case FILTER_SYSTEM_CREATE:
+        case SYSTEM_FILTER_CREATE:
             return action.meta.filter
 
-        case FILTER_SYSTEM_DELETE:
+        case SYSTEM_FILTER_DELETE:
             return action.meta.filter
 
-         case FILTER_SYSTEM_MODIFY:
+         case SYSTEM_FILTER_UPDATE:
             return action.meta.filter
     }
     return state

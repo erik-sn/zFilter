@@ -33,7 +33,6 @@ class SearchFilter extends Component {
     else if(item.type === 'region' || item.type == 'ship' || item.type == 'group') {
       this.props.createFilter(item.type, item.id, item.name)
     }
-
   }
 
   update(input) {
