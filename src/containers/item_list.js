@@ -44,6 +44,7 @@ class ItemList extends Component {
     isActiveAny(killmail) {
       if(!killmail) return false
       if(testNoFilter(this.props)) return true
+      if(this.props.filters.alliances.length > 0 && testAllianceFilter(this.props.filters.alliances, killmail)) return true
       if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail)) return true
       if(this.props.filters.groups.length > 0 && testGroupFilter(this.props.filters.groups, killmail)) return true
       if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail, this.props.jump_filter)) return true
@@ -173,4 +174,16 @@ function testGroupFilter(groupFilter, killmail) {
       }
    }
    return false
+}
+
+function testAllianceFilter(allianceFilter, killmail) {
+    for(let i in allianceFilter) {
+        const status = allianceFilter[i].status
+        if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == allianceFilter[i].id)) return true // victim match
+        if ((status == 'both' || status == 'attacker') && (killmail.attackerAllianceIDs.indexOf(allianceFilter[i].id) !== -1)) return true // attacker match
+    }
+}
+
+function testRegionFilter() {
+
 }

@@ -18,8 +18,13 @@ export default function(state = [], action) {
             let victimName = 'Unknown'
             if(kill.victim.character) victimName = kill.victim.character.name
             let victimGroup = kill.victim.corporation.name
-            if(kill.victim.alliance) victimGroup = kill.victim.alliance.name
-
+            let victimGroupID = kill.victim.corporation.id
+            if(kill.victim.alliance) {
+                victimGroup = kill.victim.alliance.name
+                victimGroupID = kill.victim.alliance.id
+            }
+            const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
+            console.log(attackerAllianceInfo)
             if(isValid(shipID, systemID)) {
                 const killmail = {
                     killID: kill.killID,
@@ -30,9 +35,11 @@ export default function(state = [], action) {
                     security: security,
                     victimName: victimName,
                     victimCorp: victimGroup,
+                    victimGroupID: victimGroupID,
                     attackerCount: kill.attackerCount,
                     attackerShips: getAttackerShips(kill.attackers),
-                    attackerAlliance: getAttackerAlliance(kill.attackers),
+                    attackerAlliance: attackerAllianceInfo[0],
+                    attackerAllianceIDs: attackerAllianceInfo[1],
                     time: time
                 }
 
@@ -75,16 +82,20 @@ function isValid(shipID, systemID) {
  */
 function getAttackerAlliance(attackers) {
   let allianceCount = {}
+  let allianceIDs = []
   for(let i in attackers) {
     const attacker = attackers[i]
     if(attacker.alliance) {
-      if(allianceCount[attacker.alliance]) allianceCount[attacker.alliance.name]++
-      else allianceCount[attacker.alliance.name] = 1
+      if(!(attacker.alliance.name in allianceCount)) {
+          allianceCount[attacker.alliance.name] = 1
+          allianceIDs.push(attacker.alliance.id)
+      } 
+      else allianceCount[attacker.alliance.name]++
     }
   }
   let alliance = _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
   if(alliance == -Infinity) alliance = getAttackerCorporation(attackers)
-  return alliance
+  return [alliance, allianceIDs]
 }
 
 /**

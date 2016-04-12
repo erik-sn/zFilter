@@ -8,7 +8,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
     switch (action.type) {
       case FILTER_CREATE:
         switch (action.payload.type) {
-          case 'alliances':
+          case 'alliance':
             return {
               alliances: state.alliances.concat(action.payload),
               ships: state.ships,
@@ -45,7 +45,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
         const updateName = action.payload.name
         const status = action.payload.status
         switch (action.payload.type) {
-          case 'alliances':
+          case 'alliance':
             return {
               alliances: updateStatus(state.alliances, updateName, status),
               ships: state.ships,
@@ -82,7 +82,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
         case FILTER_DELETE:
           const deleteName = action.payload.name
           switch(action.payload.type) {
-              case 'alliances':
+              case 'alliance':
                 return {
                   alliances: removeItem(state.alliances, deleteName),
                   ships: state.ships,

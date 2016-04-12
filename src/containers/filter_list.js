@@ -75,7 +75,7 @@ class FilterList extends Component {
                )
             });
         }
-
+        console.log(this.props.filters)
         return (
           <div className="filter-containers">
               <SearchFilter  />
