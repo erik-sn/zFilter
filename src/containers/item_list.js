@@ -45,6 +45,7 @@ class ItemList extends Component {
       if(!killmail) return false
       if(testNoFilter(this.props)) return true
       if(this.props.filters.alliances.length > 0 && testAllianceFilter(this.props.filters.alliances, killmail)) return true
+      if(this.props.filters.regions.length > 0 && testRegionFilter(this.props.filters.regions, killmail)) return true
       if(this.props.filters.ships.length > 0 && testShipFilter(this.props.filters.ships, killmail)) return true
       if(this.props.filters.groups.length > 0 && testGroupFilter(this.props.filters.groups, killmail)) return true
       if(this.props.system_filter.length > 0 && testSystemFilter(this.props.system_filter, killmail, this.props.jump_filter)) return true
@@ -188,8 +189,20 @@ function testAllianceFilter(allianceFilter, killmail) {
         if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == allianceFilter[i].id)) return true // victim match
         if ((status == 'both' || status == 'attacker') && (killmail.attackerAllianceIDs.indexOf(parseInt(allianceFilter[i].id)) !== -1)) return true
     }
+    return false
 }
 
-function testRegionFilter() {
-
+/**
+ * Iterate over all region filters and test if the killmail matches any of them.
+ * @param regionFilter - array of regions to filter against
+ * @param killmail - killmail object from reducer
+ * @returns {boolean} - if the killmail matches any region filter
+ */
+function testRegionFilter(regionFilter, killmail) {
+    for(let i in regionFilter) {
+        for(let j in systems) {
+            if(systems[j].typeID == killmail.systemID && systems[j].region == regionFilter[i].id)  return true
+        }
+    }
+    return false
 }

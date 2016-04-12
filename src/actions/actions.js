@@ -158,7 +158,7 @@ function findOptions(input) {
      }
      for(let key in regions){
        if (regions.hasOwnProperty(key) && regions[key].name.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: regions[key].name, id: regions[key].typeID, type: 'region' });
+           list.push({ name: regions[key].name, id: regions[key].id, type: 'region' });
        }
      }
      for(let group in groups){

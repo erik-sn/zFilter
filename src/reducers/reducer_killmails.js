@@ -9,56 +9,71 @@ export default function(state = [], action) {
         case GET_KILLMAIL:
             if(action.payload.data.package == null) return state
 
-            let killmails = []
             const kill = action.payload.data.package.killmail
             const shipID = kill.victim.shipType.id
             const systemID = kill.solarSystem.id
-            const security = Math.round(systemData[systemID].security * 10) / 10
-            const time = kill.killTime.substring(10,16)
-            let victimName = 'Unknown'
-            if(kill.victim.character) victimName = kill.victim.character.name
-            let victimGroup = kill.victim.corporation.name
-            let victimGroupID = kill.victim.corporation.id
-            if(kill.victim.alliance) {
-                victimGroup = kill.victim.alliance.name
-                victimGroupID = kill.victim.alliance.id
-            }
+            const victimInfo = getVictimInfo(kill.victim)
             const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
-            console.log(attackerAllianceInfo)
-            if(isValid(shipID, systemID)) {
-                const killmail = {
+            if(isValid(shipID,systemID)) {
+                const killmail = [{
                     killID: kill.killID,
                     shipID: shipID,
                     shipName: shipdata[shipID].shipname,
                     systemID: systemID,
                     system: systemData[systemID].name,
-                    security: security,
-                    victimName: victimName,
-                    victimCorp: victimGroup,
-                    victimGroupID: victimGroupID,
+                    security: Math.round(systemData[systemID].security * 10) / 10,
+                    victimName: victimInfo[0],
+                    victimCorp: victimInfo[1],
+                    victimGroupID: victimInfo[2],
                     attackerCount: kill.attackerCount,
                     attackerShips: getAttackerShips(kill.attackers),
                     attackerAlliance: attackerAllianceInfo[0],
                     attackerAllianceIDs: attackerAllianceInfo[1],
-                    time: time
-                }
-
-                killmails.push(killmail)
-                let localStore = JSON.parse(localStorage.getItem('killmails'))
-                if(localStore == null) localStore = []
-
-                if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
-                else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
-                localStorage.setItem('updateTime', new Date)
-
+                    time:  kill.killTime.substring(10,16)
+                }]
+                updateLocalStore(killmail)
+                return killmail.concat(state) // concatanate killmails to the beginning of array
             }
-            return killmails.concat(state) // concatanate killmails to the beginning of array
+            return state
 
         case INITIALIZE_KILLMAILS:
           return JSON.parse(action.payload)
 
     }
     return state
+}
+
+/**
+ * Generate victim information from killmail
+ * @param victim - victim object from killmail
+ * @returns {array} Index 0: Name of victim
+ *                Index 1: Victim's alliance if it exists, victim's corporation if not
+ *                Index 2: Type ID corresponding to the victimGroup
+ */
+function getVictimInfo(victim) {
+    let victimName = 'Unknown'
+    if(victim.character) victimName = victim.character.name
+    // victim group chooses alliance if it exists, corporation if not
+    let victimGroup = victim.corporation.name
+    let victimGroupID = victim.corporation.id
+    if(victim.alliance) {
+        victimGroup = victim.alliance.name
+        victimGroupID = victim.alliance.id
+    }
+    return [victimName, victimGroup, victimGroupID]
+}
+/**
+ * Update the local storage that holds processed killmails. If the store is over a specified amount of kills
+ * remove the last element to stay at that limit
+ * @param killmails {array} - array of killmail objects
+ */
+function updateLocalStore(killmails) {
+    let localStore = JSON.parse(localStorage.getItem('killmails'))
+    if(localStore == null) localStore = []
+
+    if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
+    else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
+    localStorage.setItem('updateTime', new Date)
 }
 
 /**
