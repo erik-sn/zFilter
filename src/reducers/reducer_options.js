@@ -6,7 +6,7 @@ import { RESET_OPTIONS } from '../actions/actions'
 export default function(state = [], action) {
     switch (action.type) {
         case GET_OPTIONS:
-          return action.payload.concat(state)
+          return action.payload.meta.concat(state)
         case RESET_OPTIONS:
           return []
     }

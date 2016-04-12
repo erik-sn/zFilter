@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const URL_LISTEN = 'http://redisq.zkillboard.com/listen.php'
+const URL_ALLIANCE = 'http://evewho.com/api.php?type=alliance&name='
 
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
@@ -16,9 +17,13 @@ export const FILTER_DELETE = 'FILTER_DELETE'
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
+    const request = axios.get(`URL_ALLIANCE${input}`)
     return {
         type: GET_OPTIONS,
-        payload: findOptions(input)
+        payload: request,
+        options: {
+            options: findOptions(input)
+        }
     }
 }
 

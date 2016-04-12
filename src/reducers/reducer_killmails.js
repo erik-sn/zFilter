@@ -38,7 +38,6 @@ export default function(state = [], action) {
 
                 killmails.push(killmail)
                 let localStore = JSON.parse(localStorage.getItem('killmails'))
-                console.log(localStore.length)
                 if(localStore == null) localStore = []
 
                 if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
