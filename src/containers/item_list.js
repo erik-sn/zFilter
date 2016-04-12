@@ -104,7 +104,7 @@ function isInteger(input) {
 function testNoFilter(props) {
       if(props.system_filter.length === 0 &&
          props.filters.ships.length === 0 &&
-         props.filters.player.length === 0 &&
+         props.filters.alliances.length === 0 &&
          props.filters.groups.length === 0 &&
          props.filters.regions.length === 0) return true
       return false

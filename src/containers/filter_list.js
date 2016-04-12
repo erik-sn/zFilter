@@ -84,7 +84,7 @@ class FilterList extends Component {
                   { systemFilters }
                   </tbody>
               </table>
-              <div className="player-filter">{ this.createFilterObjects(this.props.filters.player, 'player') }</div>
+              <div className="alliance-filter">{ this.createFilterObjects(this.props.filters.alliances, 'alliance') }</div>
               <div className="ship-filter"> { this.createFilterObjects(this.props.filters.ships, 'ship') } </div>
               <div className="group-filter"> { this.createFilterObjects(this.props.filters.groups, 'group') } </div>
               <div className="region-filter"> { this.createFilterObjects(this.props.filters.regions, 'region') } </div>

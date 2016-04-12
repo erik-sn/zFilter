@@ -4,14 +4,13 @@ import { FILTER_CREATE } from '../actions/actions'
 import { FILTER_UPDATE } from '../actions/actions'
 import { FILTER_DELETE } from '../actions/actions'
 
-export default function(state = { player:[], ships:[], groups:[], regions:[]}, action) {
+export default function(state = { alliances:[], ships:[], groups:[], regions:[]}, action) {
     switch (action.type) {
       case FILTER_CREATE:
-        console.log(action)
         switch (action.payload.type) {
-          case 'player':
+          case 'alliances':
             return {
-              player: state.player.concat(action.payload),
+              alliances: state.alliances.concat(action.payload),
               ships: state.ships,
               groups: state.groups,
               regions: state.regions
@@ -19,7 +18,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'ship':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: state.ships.concat(action.payload),
               groups: state.groups,
               regions: state.regions
@@ -27,7 +26,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'group':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: state.ships,
               groups: state.groups.concat(action.payload),
               regions: state.regions
@@ -35,7 +34,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'region':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: state.ships,
               groups: state.groups,
               regions: state.regions.concat(action.payload)
@@ -46,9 +45,9 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
         const updateName = action.payload.name
         const status = action.payload.status
         switch (action.payload.type) {
-          case 'player':
+          case 'alliances':
             return {
-              player: updateStatus(state.player, updateName, status),
+              alliances: updateStatus(state.alliances, updateName, status),
               ships: state.ships,
               groups: state.groups,
               regions: state.regions
@@ -56,7 +55,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'ship':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: updateStatus(state.ships, updateName, status),
               groups: state.groups,
               regions: state.regions
@@ -64,7 +63,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'group':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: state.ships,
               groups: updateStatus(state.groups, updateName, status),
               regions: state.regions
@@ -72,7 +71,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
           case 'region':
             return {
-              player: state.player,
+              alliances: state.alliances,
               ships: state.ships,
               groups: state.groups,
               regions: updateStatus(state.regions, updateName, status)
@@ -83,9 +82,9 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
         case FILTER_DELETE:
           const deleteName = action.payload.name
           switch(action.payload.type) {
-              case 'player':
+              case 'alliances':
                 return {
-                  player: removeItem(state.player, deleteName),
+                  alliances: removeItem(state.alliances, deleteName),
                   ships: state.ships,
                   groups: state.groups,
                   regions: state.regions
@@ -93,7 +92,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
               case 'ship':
                 return {
-                  player: state.player,
+                  alliances: state.alliances,
                   ships: removeItem(state.ships, deleteName),
                   groups: state.groups,
                   regions: state.regions
@@ -101,7 +100,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
               case 'group':
                 return {
-                  player: state.player,
+                  alliances: state.alliances,
                   ships: state.ships,
                   groups: removeItem(state.groups, deleteName),
                   regions: state.regions
@@ -109,7 +108,7 @@ export default function(state = { player:[], ships:[], groups:[], regions:[]}, a
 
               case 'region':
                 return {
-                  player: state.player,
+                  alliances: state.alliances,
                   ships: state.ships,
                   groups: state.groups,
                   regions: removeItem(state.regions, deleteName)

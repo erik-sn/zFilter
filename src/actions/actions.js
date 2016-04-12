@@ -17,11 +17,11 @@ export const FILTER_DELETE = 'FILTER_DELETE'
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
-    const request = axios.get(`URL_ALLIANCE${input}`)
+    const request = axios.get(URL_ALLIANCE + input)
     return {
         type: GET_OPTIONS,
         payload: request,
-        options: {
+        meta: {
             options: findOptions(input)
         }
     }

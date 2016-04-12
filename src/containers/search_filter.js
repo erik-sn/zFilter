@@ -30,7 +30,7 @@ class SearchFilter extends Component {
     if(item.type === 'system') {
       this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props.system_filter)
     }
-    else if(item.type === 'region' || item.type == 'ship' || item.type == 'group') {
+    else if(item.type === 'region' || item.type == 'ship' || item.type == 'group' || item.type == 'alliance') {
       this.props.createFilter(item.type, item.id, item.name)
     }
   }
@@ -61,6 +61,7 @@ class SearchFilter extends Component {
           let imgUrl = `https://image.eveonline.com/Type/${item.id}_64.png`
           if (item.type === 'system') imgUrl = 'http://evemaps.dotlan.net/images/celestials/star_128.png'
           if (item.type === 'region') imgUrl = 'http://evemaps.dotlan.net/images/celestials/lava.png'
+          if (item.type === 'alliance') imgUrl = `https://image.eveonline.com/Alliance/${item.id}_64.png`
           items.push(
               <div className="filter-list-item" key={ i } onClick={ this.select.bind(null, item) }>
                   <img src={ imgUrl } height="40" width="40"/>
