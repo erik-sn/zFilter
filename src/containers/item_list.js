@@ -161,7 +161,7 @@ function testShipFilter(shipFilter, killmail) {
  * @param   {object}   groupFilter object representing a collection of ship groups
  * @param   {object}   killmail    killmail object from reducer
  * @param   {String}   status      'both, 'victim', or 'attacker'
- * @returns {Boolean}   if the killmail matches a group filter
+ * @returns {Boolean}   if the killmail matches any group filter
  */
 
 function testGroupFilter(groupFilter, killmail) {
@@ -176,11 +176,17 @@ function testGroupFilter(groupFilter, killmail) {
    return false
 }
 
+/**
+ * Iterate over all alliance filters and test if the killmail matches any of them.
+ * @param allianceFilter
+ * @param killmail - killmail object from reducer
+ * @returns {boolean} - if the killmail matches any alliance filter
+ */
 function testAllianceFilter(allianceFilter, killmail) {
     for(let i in allianceFilter) {
         const status = allianceFilter[i].status
         if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == allianceFilter[i].id)) return true // victim match
-        if ((status == 'both' || status == 'attacker') && (killmail.attackerAllianceIDs.indexOf(allianceFilter[i].id) !== -1)) return true // attacker match
+        if ((status == 'both' || status == 'attacker') && (killmail.attackerAllianceIDs.indexOf(parseInt(allianceFilter[i].id)) !== -1)) return true
     }
 }
 

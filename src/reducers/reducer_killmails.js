@@ -77,8 +77,9 @@ function isValid(shipID, systemID) {
 
 /**
  * Given a list of attackers iterate through and find the most common alliance
- * @param   {array} attackers [[Description]]
- * @returns {String} most occuring alliance on the killmail
+ * @param   {array} attackers - attacker object from zkill killmail
+ * @returns {array} Index 0: most occuring alliance on the killmail
+ *                  Index 1: array of alliance type ids that were involved on the kill
  */
 function getAttackerAlliance(attackers) {
   let allianceCount = {}
@@ -89,7 +90,7 @@ function getAttackerAlliance(attackers) {
       if(!(attacker.alliance.name in allianceCount)) {
           allianceCount[attacker.alliance.name] = 1
           allianceIDs.push(attacker.alliance.id)
-      } 
+      }
       else allianceCount[attacker.alliance.name]++
     }
   }
@@ -100,7 +101,7 @@ function getAttackerAlliance(attackers) {
 
 /**
  * Given a list of attackers iterate through and find the most common corporation
- * @param   {array} attackers [[Description]]
+ * @param   {array} attackers - attacker object from zkill killmail
  * @returns {String} most occuring corporation on the killmail
  */
 function getAttackerCorporation(attackers) {
