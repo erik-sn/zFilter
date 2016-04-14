@@ -17,8 +17,8 @@ class ItemList extends Component {
     }
 
     render() {
-        const items = this.props.item_list.map((item, index) => {
-            return <Item key={ index } item={ item } />
+        const items = this.props.killmail_list.map((item, index) => {
+           if(item.active) return <Item key={ index } item={ item } />
         })
 
         return (
@@ -29,8 +29,8 @@ class ItemList extends Component {
     }
 }
 
-function mapStateToProps({ item_list }) {
-    return ({ item_list })
+function mapStateToProps({ killmail_list }) {
+    return ({ killmail_list })
 }
 
 export default connect(mapStateToProps)(ItemList)

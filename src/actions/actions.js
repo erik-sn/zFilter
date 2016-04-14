@@ -37,11 +37,14 @@ export function resetOptions() {
     }
 }
 
-export function getKillmails() {
+export function getKillmails(props) {
     const request = axios.get(URL_LISTEN)
     return {
         type: GET_KILLMAIL,
-        payload: request
+        payload: request,
+        meta: {
+            props: props
+        }
     }
 }
 
@@ -76,27 +79,30 @@ export function incrementFilterID() {
     }
 }
 
-export function createSystemFilter(system, systemId, jumps, ly, currentSystemFilter, filterID) {
+export function createSystemFilter(system, systemId, jumps, ly, props) {
     const filter = {
       system: system,
       systemId: systemId,
-      filterID: filterID,
+      filterID: props.filterID,
       jumps: jumps,
       ly: ly
     }
 
-    const updatedState = currentSystemFilter.concat(filter)
+    const updatedState = props.system_filter.concat(filter)
     const request = axios.get(getJumpRangeUrl(updatedState))
     return {
         type: SYSTEM_FILTER_CREATE,
         payload: request,
         meta: {
-          filter: updatedState
+          filter: updatedState,
+          props: props
+
         }
     }
 }
 
-export function deleteSystemFilter(system, currentState) {
+export function deleteSystemFilter(system, props) {
+    const currentState = props.system_filter
      for(let i = 0; i < currentState.length; i++) {
       if(currentState[i].system == system) {
         const updatedState = currentState.slice(0, i).concat(currentState.slice(i + 1))
@@ -109,7 +115,8 @@ export function deleteSystemFilter(system, currentState) {
           type: SYSTEM_FILTER_DELETE,
           payload: request,
           meta: {
-            filter: updatedState
+            filter: updatedState,
+            props: props
           }
         }
 
@@ -118,23 +125,23 @@ export function deleteSystemFilter(system, currentState) {
 
 }
 
-export function updateSystemFilter(system, systemId, key, value, currentState, filterID) {
-
+export function updateSystemFilter(system, systemId, key, value, props) {
+    const system_filter = props.system_filter
     let updatedState = []
-    for(let i = 0; i < currentState.length; i++) {
-      if(currentState[i].system == system) {
+    for(let i = 0; i < system_filter.length; i++) {
+      if(system_filter[i].system == system) {
         let filter = {
-          system: currentState[i].system,
-          systemId: currentState[i].systemId,
-          jumps: currentState[i].jumps,
-          ly: currentState[i].ly,
-          filterID: filterID
+          system: system_filter[i].system,
+          systemId: system_filter[i].systemId,
+          jumps: system_filter[i].jumps,
+          ly: system_filter[i].ly,
+          filterID: props.filterID
         }
         filter[key] = value
         updatedState.push(filter)
       }
       else {
-        updatedState.push(currentState[i])
+        updatedState.push(system_filter[i])
       }
     }
 
@@ -143,29 +150,39 @@ export function updateSystemFilter(system, systemId, key, value, currentState, f
       type: SYSTEM_FILTER_UPDATE,
       payload: request,
       meta: {
-        filter: updatedState
+        filter: updatedState,
+        props: props
       }
     }
 }
 
-export function createFilter(type, id, name, filterID) {
+export function createFilter(type, id, name, props) {
     return {
         type: FILTER_CREATE,
-        payload: { type: type, id: id, name: name, status: 'both', filterID: filterID }
+        payload: { type: type, id: id, name: name, status: 'both', filterID: props.filterID },
+        meta: {
+            props: props
+        }
     }
 }
 
-export function updateFilter(name, type, status, filterID) {
+export function updateFilter(name, type, status, props) {
     return {
         type: FILTER_UPDATE,
-        payload: { name: name, type: type, status: status, filterID: filterID }
+        payload: { name: name, type: type, status: status, filterID: props.filterID },
+        meta: {
+            props: props
+        }
     }
 }
 
-export function deleteFilter(name, type) {
+export function deleteFilter(name, type, props) {
     return {
         type: FILTER_DELETE,
-        payload: { name: name, type: type }
+        payload: { name: name, type: type },
+        meta: {
+            props: props
+        }
     }
 }
 

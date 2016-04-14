@@ -29,7 +29,6 @@ export default class Filter extends Component {
 
     updateFilter() {
         this.props.updateFilter(this.props.name, this.props.type, this.props.status)
-
     }
 
     deleteFilter() {

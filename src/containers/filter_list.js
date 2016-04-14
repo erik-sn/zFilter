@@ -27,23 +27,22 @@ class FilterList extends Component {
 
     editSystemFilter(system, systemId, key, value) {
         this.props.incrementFilterID()
-        this.props.updateSystemFilter(system, systemId, key, value, this.props.system_filter, this.props.filterID)
+        this.props.updateSystemFilter(system, systemId, key, value, this.props)
         this.props.filterKillmails(this.props)
     }
 
     removeSystemFilter(system) {
-        this.props.deleteSystemFilter(system, this.props.system_filter)
-        this.props.filterKillmails(this.props)
+        this.props.deleteSystemFilter(system, this.props)
     }
 
     removeFilter(filterName, filterType) {
-        this.props.deleteFilter(filterName, filterType)
+        this.props.deleteFilter(filterName, filterType, this.props)
         this.props.filterKillmails(this.props)
     }
 
     updateFilter(filterName, filterType, filterStatus) {
         this.props.incrementFilterID()
-        this.props.updateFilter(filterName, filterType, filterStatus, this.props.filterID)
+        this.props.updateFilter(filterName, filterType, filterStatus, this.props)
         this.props.filterKillmails(this.props)
     }
 

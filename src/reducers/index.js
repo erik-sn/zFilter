@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import ItemReducer from './reducer_items'
 import KillmailReducer from './reducer_killmails'
 import SystemFilterReducer from './reducer_filter_system'
 import JumpFilterReducer from './reducer_filter_jumps'
@@ -12,7 +11,6 @@ const rootReducer = combineReducers({
   jump_filter: JumpFilterReducer,
   filters: FilterReducer,
   filterID: FilterID,
-  item_list: ItemReducer,
   killmail_list: KillmailReducer,
   options: OptionReducer
 });

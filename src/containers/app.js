@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getKillmails } from '../actions/actions'
 import { setInitialKillmails } from '../actions/actions'
-import { filterKillmails } from '../actions/actions'
 
 import FilterList from '../containers/filter_list'
 import ItemList from './item_list'
@@ -26,8 +25,7 @@ class App extends Component {
     }
 
     refreshList() {
-        this.props.getKillmails()
-            .then(this.props.filterKillmails(this.props))
+        this.props.getKillmails(this.props)
     }
 
     componentDidMount() {
@@ -47,7 +45,7 @@ function mapStateToProps({ killmail_list, filters, system_filter, jump_filter })
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ setInitialKillmails, getKillmails, filterKillmails }, dispatch)
+    return bindActionCreators({ setInitialKillmails, getKillmails }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App) // do not need app state
