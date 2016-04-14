@@ -29,13 +29,9 @@ class ItemList extends Component {
     }
 }
 
-function mapStateToProps({ item_list, system_filter, jump_filter, filters }) {
-    return ({ item_list, system_filter, jump_filter, filters })
+function mapStateToProps({ item_list }) {
+    return ({ item_list })
 }
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ updateKillmail }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ItemList)
+export default connect(mapStateToProps)(ItemList)
 

@@ -1,8 +1,8 @@
 import { GET_KILLMAIL } from '../actions/actions'
+import { INITIALIZE_KILLMAILS } from '../actions/actions'
 import { SET_KILLMAIL_FILTERID } from '../actions/actions'
 import _ from 'lodash'
 
-import { getJumpRange } from '../functions/system_functions'
 
 export default function(state = [], action) {
     switch (action.type) {
@@ -37,6 +37,8 @@ export default function(state = [], action) {
             }
             return state
 
+        case INITIALIZE_KILLMAILS:
+          return JSON.parse(action.payload)
 
     }
     return state

@@ -28,11 +28,11 @@ class SearchFilter extends Component {
 
     select(item) {
         this.props.incrementFilterID()
-        this.props.resetOptions()
-        this.setState({ input: '' })
         if(item.type === 'system') this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props.system_filter, this.props.filterID)
         else if(item.type === 'region' || item.type == 'ship' || item.type == 'group' || item.type == 'alliance') {
             this.props.createFilter(item.type, item.id, item.name, this.props.filterID)
+        this.props.resetOptions()
+        this.setState({ input: '' })
         }
         this.props.filterKillmails(this.props)
     }
