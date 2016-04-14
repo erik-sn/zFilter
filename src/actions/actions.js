@@ -5,6 +5,8 @@ const URL_ALLIANCE = 'http://evewho.com/api.php?type=alliance&name='
 
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
+export const UPDATE_KILLMAIL = 'UPDATE_KILLMAIL'
+export const FILTER_KILLMAILS = 'FILTER_KILLMAILS'
 export const GET_OPTIONS = 'GET_OPTIONS'
 export const RESET_OPTIONS = 'RESET_OPTIONS'
 export const SYSTEM_FILTER_CREATE = 'SYSTEM_FILTER_CREATE'
@@ -13,6 +15,7 @@ export const SYSTEM_FILTER_UPDATE = 'SYSTEM_FILTER_UPDATE'
 export const FILTER_CREATE = 'FILTER_CREATE'
 export const FILTER_UPDATE = 'FILTER_UPDATE'
 export const FILTER_DELETE = 'FILTER_DELETE'
+export const INCREMENT_FILTERID = 'INCREMENT_FILTERID'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
 
@@ -42,6 +45,23 @@ export function getKillmails() {
     }
 }
 
+export function filterKillmails(props) {
+    return {
+        type: FILTER_KILLMAILS,
+        payload: {
+            killmails: props.killmail_list,
+            props: props
+        }
+    }
+}
+
+export function updateKillmail(killmail) {
+    return {
+        type: UPDATE_KILLMAIL,
+        payload: killmail
+    }
+}
+
 export function setInitialKillmails(killmails) {
     return {
         type: INITIALIZE_KILLMAILS,
@@ -49,10 +69,18 @@ export function setInitialKillmails(killmails) {
     }
 }
 
-export function createSystemFilter(system, systemId, jumps, ly, currentSystemFilter) {
+export function incrementFilterID() {
+    return {
+        type: INCREMENT_FILTERID,
+        payload: 'test'
+    }
+}
+
+export function createSystemFilter(system, systemId, jumps, ly, currentSystemFilter, filterID) {
     const filter = {
       system: system,
       systemId: systemId,
+      filterID: filterID,
       jumps: jumps,
       ly: ly
     }
@@ -90,7 +118,7 @@ export function deleteSystemFilter(system, currentState) {
 
 }
 
-export function updateSystemFilter(system, systemId, key, value, currentState) {
+export function updateSystemFilter(system, systemId, key, value, currentState, filterID) {
 
     let updatedState = []
     for(let i = 0; i < currentState.length; i++) {
@@ -99,7 +127,8 @@ export function updateSystemFilter(system, systemId, key, value, currentState) {
           system: currentState[i].system,
           systemId: currentState[i].systemId,
           jumps: currentState[i].jumps,
-          ly: currentState[i].ly
+          ly: currentState[i].ly,
+          filterID: filterID
         }
         filter[key] = value
         updatedState.push(filter)
@@ -119,17 +148,17 @@ export function updateSystemFilter(system, systemId, key, value, currentState) {
     }
 }
 
-export function createFilter(type, id, name) {
+export function createFilter(type, id, name, filterID) {
     return {
         type: FILTER_CREATE,
-        payload: { type: type, id: id, name: name, status: 'both' }
+        payload: { type: type, id: id, name: name, status: 'both', filterID: filterID }
     }
 }
 
-export function updateFilter(name, type, status) {
+export function updateFilter(name, type, status, filterID) {
     return {
         type: FILTER_UPDATE,
-        payload: { name: name, type: type, status: status }
+        payload: { name: name, type: type, status: status, filterID: filterID }
     }
 }
 

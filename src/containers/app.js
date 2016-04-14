@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getKillmails } from '../actions/actions'
 import { setInitialKillmails } from '../actions/actions'
+import { filterKillmails } from '../actions/actions'
 
 import FilterList from '../containers/filter_list'
 import ItemList from './item_list'
@@ -26,6 +27,7 @@ class App extends Component {
 
     refreshList() {
         this.props.getKillmails()
+            .then(this.props.filterKillmails(this.props))
     }
 
     componentDidMount() {
@@ -33,17 +35,21 @@ class App extends Component {
       // if local storage data is older than 4 hours reset it
       const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
       const timeDifference = (new Date().getTime() - lastUpdate)/1000
-      if(timeDifference < 10800) this.props.setInitialKillmails(localStorage.getItem('killmails'))
+      if(timeDifference < 10800) this.props.setInitialKillmails(localStorage.getItem('killmails')) // reset storage if time > 3 hours
       else localStorage.removeItem('killmails')
     }
 
 }
 
 
-function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ setInitialKillmails, getKillmails }, dispatch)
+function mapStateToProps({ killmail_list, filters, system_filter, jump_filter }) {
+    return ({ killmail_list, filters, system_filter, jump_filter })
 }
 
-export default connect(null, mapDispatchToProps)(App) // do not need app state
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ setInitialKillmails, getKillmails, filterKillmails }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App) // do not need app state
 
 

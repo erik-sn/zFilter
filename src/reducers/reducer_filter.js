@@ -44,10 +44,11 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
       case FILTER_UPDATE:
         const updateName = action.payload.name
         const status = action.payload.status
+        const filterID = action.payload.filterID
         switch (action.payload.type) {
           case 'alliance':
             return {
-              alliances: updateStatus(state.alliances, updateName, status),
+              alliances: updateFilter(state.alliances, updateName, status, filterID),
               ships: state.ships,
               groups: state.groups,
               regions: state.regions
@@ -56,7 +57,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'ship':
             return {
               alliances: state.alliances,
-              ships: updateStatus(state.ships, updateName, status),
+              ships: updateFilter(state.ships, updateName, status, filterID),
               groups: state.groups,
               regions: state.regions
             }
@@ -65,7 +66,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
             return {
               alliances: state.alliances,
               ships: state.ships,
-              groups: updateStatus(state.groups, updateName, status),
+              groups: updateFilter(state.groups, updateName, status, filterID),
               regions: state.regions
             }
 
@@ -74,7 +75,7 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
               alliances: state.alliances,
               ships: state.ships,
               groups: state.groups,
-              regions: updateStatus(state.regions, updateName, status)
+              regions: updateFilter(state.regions, updateName, status, filterID)
             }
 
         }
@@ -128,9 +129,10 @@ function removeItem(array, search) {
 }
 
 
-function updateStatus(array, target, status) {
+function updateFilter(array, target, status, filterID) {
   const index = findTargetIndex(array, target)
   array[index].status = status
+  array[index].filterID = filterID
   return array
 }
 

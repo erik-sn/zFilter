@@ -7,19 +7,19 @@ export default function(state = [], action) {
     switch (action.type) {
         case GET_OPTIONS:
           if(action.payload.data.info != null) {
-              const data = action.payload.data.info
+              const alliance = action.payload.data.info
               const option = [{
-                  name: data.name + ' [' + data.ticker + ']',
-                  id: data.alliance_id,
+                  name: alliance.name + ' [' + alliance.ticker + ']',
+                  id: alliance.alliance_id,
                   type: 'alliance'
               }]
               return option.concat(state)
           }
           return action.meta.options.concat(state)
+
         case RESET_OPTIONS:
           return []
     }
-
     return state
 }
 

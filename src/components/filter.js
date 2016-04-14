@@ -28,7 +28,6 @@ export default class Filter extends Component {
     }
 
     updateFilter() {
-        console.log('updating filter')
         this.props.updateFilter(this.props.name, this.props.type, this.props.status)
 
     }

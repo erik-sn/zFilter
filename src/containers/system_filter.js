@@ -20,22 +20,22 @@ export default class SystemFilter extends Component {
 
 
     updateJumps(event) {
-      const jumps = event.target.value
-      this.setState({ jumps: jumps }, function() {
-        this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
-      })
+        const jumps = event.target.value
+        this.setState({ jumps: jumps }, function() {
+            this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
+        })
     }
 
     updateLY(event) {
-      const ly = event.target.value
-      this.setState({ ly: event.target.value }, function() {
-        this.props.editSystemFilter(this.state.system, this.state.systemId, 'ly', ly)
-      })
+        const ly = event.target.value
+        this.setState({ ly: event.target.value }, function() {
+            this.props.editSystemFilter(this.state.system, this.state.systemId, 'ly', ly)
+        })
     }
 
-     deleteFilter() {
-       this.props.removeSystemFilter(this.props.systemName, this)
-     }
+    deleteFilter() {
+        this.props.removeSystemFilter(this.props.systemName, this)
+    }
 
     render() {
         return (

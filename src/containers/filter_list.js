@@ -6,6 +6,8 @@ import { updateSystemFilter } from '../actions/actions'
 import { deleteSystemFilter } from '../actions/actions'
 import { deleteFilter } from '../actions/actions'
 import { updateFilter } from '../actions/actions'
+import { incrementFilterID } from '../actions/actions'
+import { filterKillmails } from '../actions/actions'
 
 import Item from '../components/item'
 import Filter from '../components/filter'
@@ -24,19 +26,25 @@ class FilterList extends Component {
     }
 
     editSystemFilter(system, systemId, key, value) {
-      this.props.updateSystemFilter(system, systemId, key, value, this.props.system_filter)
+        this.props.incrementFilterID()
+        this.props.updateSystemFilter(system, systemId, key, value, this.props.system_filter, this.props.filterID)
+        this.props.filterKillmails(this.props)
     }
 
     removeSystemFilter(system) {
-      this.props.deleteSystemFilter(system, this.props.system_filter)
+        this.props.deleteSystemFilter(system, this.props.system_filter)
+        this.props.filterKillmails(this.props)
     }
 
     removeFilter(filterName, filterType) {
-      this.props.deleteFilter(filterName, filterType)
+        this.props.deleteFilter(filterName, filterType)
+        this.props.filterKillmails(this.props)
     }
 
     updateFilter(filterName, filterType, filterStatus) {
-        this.props.updateFilter(filterName, filterType, filterStatus)
+        this.props.incrementFilterID()
+        this.props.updateFilter(filterName, filterType, filterStatus, this.props.filterID)
+        this.props.filterKillmails(this.props)
     }
 
     createFilterObjects(filter, type) {
@@ -45,6 +53,7 @@ class FilterList extends Component {
                 return (
                     <Filter
                         type={ type }
+                        filterID={ object.filterID }
                         id={ object.id }
                         key= { index }
                         name={ object.name }
@@ -61,14 +70,15 @@ class FilterList extends Component {
     render() {
        let systemFilters = []
         if(this.props.system_filter) {
-          systemFilters = this.props.system_filter.map((item) => {
+          systemFilters = this.props.system_filter.map((object, index) => {
                return (
                    <SystemFilter
-                       key = { item.systemId}
-                       systemName={ item.system }
-                       systemId={ item.systemId }
-                       jumps={ item.jumps }
-                       ly={ item.ly }
+                       key = { index }
+                       systemName={ object.system }
+                       systemId={ object.systemId }
+                       filterID={ object.filterID }
+                       jumps={ object.jumps }
+                       ly={ object.ly }
                        editSystemFilter={ this.editSystemFilter }
                        removeSystemFilter={ this.removeSystemFilter }
                     />
@@ -89,17 +99,17 @@ class FilterList extends Component {
               <div className="group-filter"> { this.createFilterObjects(this.props.filters.groups, 'group') } </div>
               <div className="region-filter"> { this.createFilterObjects(this.props.filters.regions, 'region') } </div>
           </div>
-
         )
     }
 }
 
-function mapStateToProps({ system_filter, filters }) {
-    return { system_filter, filters }
+function mapStateToProps({ killmail_list, system_filter, filters, filterID }) {
+    return { killmail_list, system_filter, filters, filterID }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createSystemFilter, updateSystemFilter, deleteSystemFilter, updateFilter, deleteFilter }, dispatch)
+    return bindActionCreators({ createSystemFilter, updateSystemFilter, deleteSystemFilter, updateFilter, deleteFilter,
+        incrementFilterID, filterKillmails }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)

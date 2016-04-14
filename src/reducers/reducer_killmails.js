@@ -1,5 +1,5 @@
 import { GET_KILLMAIL } from '../actions/actions'
-import { INITIALIZE_KILLMAILS } from '../actions/actions'
+import { SET_KILLMAIL_FILTERID } from '../actions/actions'
 import _ from 'lodash'
 
 import { getJumpRange } from '../functions/system_functions'
@@ -7,7 +7,7 @@ import { getJumpRange } from '../functions/system_functions'
 export default function(state = [], action) {
     switch (action.type) {
         case GET_KILLMAIL:
-            if(action.payload.data.package == null) return state
+            if(action.payload.data.package == null) return state // see if any new killmails have arrived
 
             const kill = action.payload.data.package.killmail
             const shipID = kill.victim.shipType.id
@@ -29,15 +29,14 @@ export default function(state = [], action) {
                     attackerShips: getAttackerShips(kill.attackers),
                     attackerAlliance: attackerAllianceInfo[0],
                     attackerAllianceIDs: attackerAllianceInfo[1],
-                    time:  kill.killTime.substring(10,16)
+                    time:  kill.killTime.substring(10,16),
+                    passedFilters: []
                 }]
                 updateLocalStore(killmail)
                 return killmail.concat(state) // concatanate killmails to the beginning of array
             }
             return state
 
-        case INITIALIZE_KILLMAILS:
-          return JSON.parse(action.payload)
 
     }
     return state
@@ -143,7 +142,6 @@ function getAttackerShips(attackers) {
   for(let i in attackers) if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
   return attackerShips
 }
-
 
 
 
