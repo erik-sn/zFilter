@@ -44,7 +44,6 @@ export default function(state = [], action) {
         case FILTER_KILLMAILS:
             console.log('Filtering killmails')
             const props = action.payload.props
-            console.log(props)
             if(evaluateNoFilters(props)) {
                 console.log('No Filters')
                 return props.killmail_list.filter((killmail) => {

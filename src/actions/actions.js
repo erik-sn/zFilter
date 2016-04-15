@@ -74,8 +74,15 @@ export function setInitialKillmails(killmails) {
 
 export function incrementFilterID() {
     return {
-        type: INCREMENT_FILTERID,
-        payload: 'test'
+        type: INCREMENT_FILTERID
+    }
+}
+
+export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(createSystemFilter(system, systemId, jumps, ly, props)))
+            .then(dispatch(incrementFilterID()))
+            .then(dispatch(filterKillmails(getState())))
     }
 }
 
@@ -98,6 +105,52 @@ export function createSystemFilter(system, systemId, jumps, ly, props) {
           props: props
 
         }
+    }
+}
+
+export function updateSystemFilterAndEvaluate(system, systemId, key, value, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(updateSystemFilter(system, systemId, key, value, props)))
+            .then(dispatch(incrementFilterID()))
+            .then(dispatch(filterKillmails(getState())))
+    }
+}
+
+export function updateSystemFilter(system, systemId, key, value, props) {
+    const system_filter = props.system_filter
+    let updatedState = []
+    for(let i = 0; i < system_filter.length; i++) {
+        if(system_filter[i].system == system) {
+            let filter = {
+                system: system_filter[i].system,
+                systemId: system_filter[i].systemId,
+                jumps: system_filter[i].jumps,
+                ly: system_filter[i].ly,
+                filterID: props.filterID
+            }
+            filter[key] = value
+            updatedState.push(filter)
+        }
+        else {
+            updatedState.push(system_filter[i])
+        }
+    }
+
+    const request = axios.get(getJumpRangeUrl(updatedState))
+    return {
+        type: SYSTEM_FILTER_UPDATE,
+        payload: request,
+        meta: {
+            filter: updatedState,
+            props: props
+        }
+    }
+}
+
+export function deleteSystemFilterAndEvaluate(system, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(deleteSystemFilter(system, props)))
+            .then(dispatch(filterKillmails(getState())))
     }
 }
 
@@ -125,44 +178,30 @@ export function deleteSystemFilter(system, props) {
 
 }
 
-export function updateSystemFilter(system, systemId, key, value, props) {
-    const system_filter = props.system_filter
-    let updatedState = []
-    for(let i = 0; i < system_filter.length; i++) {
-      if(system_filter[i].system == system) {
-        let filter = {
-          system: system_filter[i].system,
-          systemId: system_filter[i].systemId,
-          jumps: system_filter[i].jumps,
-          ly: system_filter[i].ly,
-          filterID: props.filterID
-        }
-        filter[key] = value
-        updatedState.push(filter)
-      }
-      else {
-        updatedState.push(system_filter[i])
-      }
-    }
-
-    const request = axios.get(getJumpRangeUrl(updatedState))
-    return {
-      type: SYSTEM_FILTER_UPDATE,
-      payload: request,
-      meta: {
-        filter: updatedState,
-        props: props
-      }
+export function createFilterAndEvaluate(type, id, name, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(createFilter(type, id, name, props)))
+            .then(dispatch(incrementFilterID()))
+            .then(dispatch(filterKillmails(getState())))
     }
 }
 
 export function createFilter(type, id, name, props) {
+    console.log(props)
     return {
         type: FILTER_CREATE,
         payload: { type: type, id: id, name: name, status: 'both', filterID: props.filterID },
         meta: {
             props: props
         }
+    }
+}
+
+export function updateFilterAndEvaluate(name, type, status, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(updateFilter(name, type, status, props)))
+            .then(dispatch(incrementFilterID()))
+            .then(dispatch(filterKillmails(getState())))
     }
 }
 
@@ -173,6 +212,13 @@ export function updateFilter(name, type, status, props) {
         meta: {
             props: props
         }
+    }
+}
+
+export function deleteFilterAndEvaluate(name, type, props) {
+    return (dispatch, getState) => {
+        Promise.resolve(dispatch(deleteFilter(name, type, props)))
+            .then(dispatch(filterKillmails(getState())))
     }
 }
 

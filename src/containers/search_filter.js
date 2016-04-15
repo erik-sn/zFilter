@@ -4,10 +4,8 @@ import { bindActionCreators } from 'redux'
 
 import { getOptions } from '../actions/actions'
 import { resetOptions } from '../actions/actions'
-import { createSystemFilter } from '../actions/actions'
-import { createFilter } from '../actions/actions'
-import { incrementFilterID } from '../actions/actions'
-import { filterKillmails } from '../actions/actions'
+import { createSystemFilterAndEvaluate } from '../actions/actions'
+import { createFilterAndEvaluate } from '../actions/actions'
 
 class SearchFilter extends Component {
 
@@ -27,13 +25,12 @@ class SearchFilter extends Component {
     }
 
     select(item) {
-        this.props.incrementFilterID()
-        if(item.type === 'system') this.props.createSystemFilter(item.name, item.id, 0 ,0, this.props)
+        if(item.type === 'system') this.props.createSystemFilterAndEvaluate(item.name, item.id, 0 ,0, this.props)
         else if(item.type === 'region' || item.type == 'ship' || item.type == 'group' || item.type == 'alliance') {
-            this.props.createFilter(item.type, item.id, item.name, this.props)
+            this.props.createFilterAndEvaluate(item.type, item.id, item.name, this.props)
+        }
         this.props.resetOptions()
         this.setState({ input: '' })
-        }
     }
 
     update(input) {
@@ -103,7 +100,7 @@ function mapStateToProps({ killmail_list, options, system_filter, jump_filter, f
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getOptions, resetOptions, createSystemFilter, createFilter, filterKillmails, incrementFilterID }, dispatch)
+    return bindActionCreators({ getOptions, resetOptions, createSystemFilterAndEvaluate, createFilterAndEvaluate }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)

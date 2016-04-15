@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { createSystemFilter } from '../actions/actions'
-import { updateSystemFilter } from '../actions/actions'
-import { deleteSystemFilter } from '../actions/actions'
-import { deleteFilter } from '../actions/actions'
-import { updateFilter } from '../actions/actions'
+
 import { incrementFilterID } from '../actions/actions'
 import { filterKillmails } from '../actions/actions'
+import { updateSystemFilterAndEvaluate } from '../actions/actions'
+import { deleteSystemFilterAndEvaluate } from '../actions/actions'
+import { updateFilterAndEvaluate } from '../actions/actions'
+import { deleteFilterAndEvaluate } from '../actions/actions'
 
 import Item from '../components/item'
 import Filter from '../components/filter'
@@ -26,24 +26,19 @@ class FilterList extends Component {
     }
 
     editSystemFilter(system, systemId, key, value) {
-        this.props.incrementFilterID()
-        this.props.updateSystemFilter(system, systemId, key, value, this.props)
-        this.props.filterKillmails(this.props)
+        this.props.updateSystemFilterAndEvaluate(system, systemId, key, value, this.props)
     }
 
     removeSystemFilter(system) {
-        this.props.deleteSystemFilter(system, this.props)
+        this.props.deleteSystemFilterAndEvaluate(system, this.props)
     }
 
     removeFilter(filterName, filterType) {
-        this.props.deleteFilter(filterName, filterType, this.props)
-        this.props.filterKillmails(this.props)
+        this.props.deleteFilterAndEvaluate(filterName, filterType, this.props)
     }
 
     updateFilter(filterName, filterType, filterStatus) {
-        this.props.incrementFilterID()
-        this.props.updateFilter(filterName, filterType, filterStatus, this.props)
-        this.props.filterKillmails(this.props)
+        this.props.updateFilterAndEvaluate(filterName, filterType, filterStatus, this.props)
     }
 
     createFilterObjects(filter, type) {
@@ -107,8 +102,8 @@ function mapStateToProps({ killmail_list, system_filter, filters, filterID }) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ createSystemFilter, updateSystemFilter, deleteSystemFilter, updateFilter, deleteFilter,
-        incrementFilterID, filterKillmails }, dispatch)
+    return bindActionCreators({ updateSystemFilterAndEvaluate, deleteSystemFilterAndEvaluate,
+        incrementFilterID, filterKillmails, updateFilterAndEvaluate, deleteFilterAndEvaluate }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)
