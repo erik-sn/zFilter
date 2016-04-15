@@ -77,7 +77,7 @@ class FilterList extends Component {
                        removeSystemFilter={ this.removeSystemFilter }
                     />
                )
-            });
+            })
         }
 
         return (

@@ -6,16 +6,8 @@ import { RESET_OPTIONS } from '../actions/actions'
 export default function(state = [], action) {
     switch (action.type) {
         case GET_OPTIONS:
-          if(action.payload.data.info != null) {
-              const alliance = action.payload.data.info
-              const option = [{
-                  name: alliance.name + ' [' + alliance.ticker + ']',
-                  id: alliance.alliance_id,
-                  type: 'alliance'
-              }]
-              return option
-          }
-          return action.meta.options
+          console.log(action.payload.data)
+          return action.payload.data
 
         case RESET_OPTIONS:
           return []

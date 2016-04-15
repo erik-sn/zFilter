@@ -197,7 +197,8 @@ function isInteger(input) {
     return false
 }
 
-
+// gatecamps
+// time
 function isActiveAny(killmail, props, filterIDs) {
     //console.time('evaluateExistingFilter')
     if(evaluateExistingFilter(killmail, filterIDs)) return true

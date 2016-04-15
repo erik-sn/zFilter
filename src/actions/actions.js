@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const URL_LISTEN = 'http://redisq.zkillboard.com/listen.php'
 const URL_ALLIANCE = 'http://evewho.com/api.php?type=alliance&name='
+const AUTOCOMPLETE = 'https://zkillboard.com/autocomplete/'
 
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
@@ -21,7 +22,8 @@ import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
 
-    const request = axios.get(URL_ALLIANCE + input)
+    //const request = axios.get(URL_ALLIANCE + input)
+    const request = axios.get(AUTOCOMPLETE + input)
     return {
         type: GET_OPTIONS,
         payload: request,

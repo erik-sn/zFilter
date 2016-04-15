@@ -25,7 +25,11 @@ class SearchFilter extends Component {
     }
 
     select(item) {
-        if(item.type === 'system') this.props.createSystemFilterAndEvaluate(item.name, item.id, 0 ,0, this.props)
+
+        if(item.type === 'system') {
+            const name = item.name.substring(0, item.name.indexOf('('))
+            this.props.createSystemFilterAndEvaluate(name, item.id, 0 ,0, this.props)
+        }
         else if(item.type === 'region' || item.type == 'ship' || item.type == 'group' || item.type == 'alliance') {
             this.props.createFilterAndEvaluate(item.type, item.id, item.name, this.props)
         }
@@ -34,7 +38,6 @@ class SearchFilter extends Component {
     }
 
     update(input) {
-        this.props.resetOptions()
         this.props.getOptions(input)
     }
 
@@ -44,33 +47,24 @@ class SearchFilter extends Component {
     }
 
     hide() {
-        this.props.resetOptions()
         this.setState({ listVisible: false})
         document.removeEventListener("click", this.hide)
     }
 
     renderListItems() {
-        let items = []
-        for(var i = 0; i < this.props.options.length; i++) {
-            var item = this.props.options[i]
-            let label = item.name
-            if (label.length > 30) label = label.substring(0, 27) + '...'
-            let type = item.type.charAt(0).toUpperCase() + item.type.slice(1)
-            let imgUrl = `https://image.eveonline.com/Type/${item.id}_64.png`
-            if (item.type === 'system') imgUrl = 'http://evemaps.dotlan.net/images/celestials/star_128.png'
-            if (item.type === 'region') imgUrl = 'http://evemaps.dotlan.net/images/celestials/lava.png'
-            if (item.type === 'alliance') imgUrl = `https://image.eveonline.com/Alliance/${item.id}_64.png`
-            items.push(
-                <div className="filter-list-item" key={ i } onClick={ this.select.bind(null, item) }>
+        return this.props.options.map((option) => {
+            console.log(option)
+            const imgUrl = `https://image.eveonline.com/${option.image}`
+            return(
+                <div className="filter-list-item" key={ option.id } onClick={ this.select.bind(null, option) }>
                     <img src={ imgUrl } height="40" width="40"/>
                     <div >
-                        <span className="item-name">{ label }</span>
-                        <span className="item-type">{ type }</span>
+                        <span className="item-name">{ option.name }</span>
+                        <span className="item-type">{ option.type }</span>
                     </div>
                 </div>
             )
-        }
-        return items
+        })
     }
 
     render() {
@@ -81,7 +75,7 @@ class SearchFilter extends Component {
                     type="text"
                     className="dropdown-input"
                     onClick={ this.show }
-                    onChange={(e)=>{ this.setState({ input: e.target.value }); this.update(e.target.value) }}
+                    onChange={(e)=>{ this.setState({ input: e.target.value }); this.update(e.target.value); this.show }}
                     value={ this.state.input }
                 />
                 <div className={"filter-list" + (this.state.listVisible ? "-clicked": "")}>
