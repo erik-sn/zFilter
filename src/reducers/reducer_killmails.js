@@ -31,9 +31,9 @@ export default function(state = [], action) {
                     attackerAllianceIDs: attackerAllianceInfo[1],
                     time:  kill.killTime.substring(10,16),
                     passedFilters: [],
-                    active: isActiveAny(this, action.meta.props)
+                    active: isActiveAny(this, action.meta.props, [])
                 }]
-                updateLocalStore(killmail)
+                updateLocalStore(killmail) // this is a side effect, need to refactor
                 return killmail.concat(state) // concatanate killmails to the beginning of array
             }
             return state
@@ -47,12 +47,19 @@ export default function(state = [], action) {
                 return setAllActive(props.killmail_list)
             }
 
+            console.time('Total')
             const killmails = props.killmail_list.map((killmail) => {
-                let active = isActiveAny(killmail, props)
-                if(active) killmail.active = true
+                const filterIDs = getActiveFilterIDs(props)
+                let passedFilter = isActiveAny(killmail, props, filterIDs)
+                if(passedFilter) {
+                    killmail.active = true
+                    killmail.passedFilters.push(passedFilter)
+                }
                 else killmail.active = false
                 return killmail
             })
+
+            console.timeEnd('Total')
             return killmails
 
     }
@@ -187,19 +194,58 @@ function isInteger(input) {
     return false
 }
 
-function isActiveAny(killmail, props) {
+
+function isActiveAny(killmail, props, filterIDs) {
+    console.time('evaluateExistingFilter')
+    if(evaluateExistingFilter(killmail, filterIDs)) return true
+    console.timeEnd('evaluateExistingFilter')
+
     if(evaluateNoFilters(props)) return true
     if(!killmail) return false
-    const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
-    if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
+
+    console.time('evaluateGroupFilter')
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
+    console.timeEnd('evaluateGroupFilter')
     if(props.filters.groups.length > 0 && groupEvaluate) return groupEvaluate
+
+    console.time('evaluateShipFilter')
     const shipEvaluate = evaluateShipFilter(props.filters.ships, killmail)
+    console.timeEnd('evaluateShipFilter')
     if(props.filters.ships.length > 0 && shipEvaluate) return shipEvaluate
+
+    console.time('evaluateAllianceFilter')
     const allianceEvaluate = evaluateAllianceFilter(props.filters.alliances, killmail)
+    console.timeEnd('evaluateAllianceFilter')
     if(props.filters.alliances.length > 0 && allianceEvaluate) return allianceEvaluate
+
+    console.time('evaluateSystemFilter')
     const systemEvaluate = evaluateSystemFilter(props.system_filter, killmail, props.jump_filter)
+    console.timeEnd('evaluateSystemFilter')
     if(props.system_filter.length > 0 && systemEvaluate) return systemEvaluate
+
+    console.time('evaluateRegionFilter')
+    const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
+    console.timeEnd('evaluateRegionFilter')
+    if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
+    return false
+}
+
+/**
+ * Find the intersection between the passedFilters variable on a killmail and the
+ * list of filter ids in the Redux store. If an intersection exists then the killmail
+ * will be allowed to pass filters without re-checking it.
+ * @param killmail - killmail object
+ * @param filterIDs - filter IDs of all filters in the redux store
+ * @returns {boolean} - whether or not the killmail has already passed this filter
+ */
+function evaluateExistingFilter(killmail, filterIDs ) {
+    const intersection = filterIDs.filter((n) => {
+        return killmail.passedFilters.indexOf(n) != -1
+    })
+    if(intersection.length > 0 ) {
+        console.log('Bypassing - ')
+        return true
+    }
     return false
 }
 
@@ -309,4 +355,21 @@ function evaluateRegionFilter(regionFilter, killmail) {
     return false
 }
 
+/**
+ * Consolidate all filterIDs from the filter object into an array of integers
+ * @param props - Redux state
+ * @returns {Array} - Array of integers
+ */
+function getActiveFilterIDs(props) {
+    let filterIDs = []
+    filterIDs.concat(props.system_filter.map((system_filter) => {
+        return system_filter.filterID
+    }))
+    for (let filter in props.filters) {
+        filterIDs = props.filters[filter].map((filter) => {
+            return filter.filterID
+        }).concat(filterIDs)
+    }
+    return filterIDs
+}
 
