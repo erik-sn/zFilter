@@ -9,6 +9,7 @@ export default function(state = [], action) {
 
     switch (action.type) {
         case SYSTEM_FILTER_CREATE:
+            console.timeEnd('test1')
             return action.payload.data.systems
 
         case SYSTEM_FILTER_DELETE:

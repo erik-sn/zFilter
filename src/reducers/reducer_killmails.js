@@ -1,7 +1,10 @@
+import _ from 'lodash'
+
 import { GET_KILLMAIL } from '../actions/actions'
 import { INITIALIZE_KILLMAILS } from '../actions/actions'
 import { FILTER_KILLMAILS } from '../actions/actions'
-import _ from 'lodash'
+
+import { inLyRange } from '../functions/system_functions'
 
 export default function(state = [], action) {
     switch (action.type) {
@@ -196,36 +199,36 @@ function isInteger(input) {
 
 
 function isActiveAny(killmail, props, filterIDs) {
-    console.time('evaluateExistingFilter')
+    //console.time('evaluateExistingFilter')
     if(evaluateExistingFilter(killmail, filterIDs)) return true
-    console.timeEnd('evaluateExistingFilter')
+    //console.timeEnd('evaluateExistingFilter')
 
     if(evaluateNoFilters(props)) return true
     if(!killmail) return false
 
-    console.time('evaluateGroupFilter')
+    //console.time('evaluateGroupFilter')
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
-    console.timeEnd('evaluateGroupFilter')
+    //console.timeEnd('evaluateGroupFilter')
     if(props.filters.groups.length > 0 && groupEvaluate) return groupEvaluate
 
-    console.time('evaluateShipFilter')
+    //console.time('evaluateShipFilter')
     const shipEvaluate = evaluateShipFilter(props.filters.ships, killmail)
-    console.timeEnd('evaluateShipFilter')
+    //console.timeEnd('evaluateShipFilter')
     if(props.filters.ships.length > 0 && shipEvaluate) return shipEvaluate
 
-    console.time('evaluateAllianceFilter')
+    //console.time('evaluateAllianceFilter')
     const allianceEvaluate = evaluateAllianceFilter(props.filters.alliances, killmail)
-    console.timeEnd('evaluateAllianceFilter')
+    //console.timeEnd('evaluateAllianceFilter')
     if(props.filters.alliances.length > 0 && allianceEvaluate) return allianceEvaluate
 
-    console.time('evaluateSystemFilter')
+    //console.time('evaluateSystemFilter')
     const systemEvaluate = evaluateSystemFilter(props.system_filter, killmail, props.jump_filter)
-    console.timeEnd('evaluateSystemFilter')
+    //console.timeEnd('evaluateSystemFilter')
     if(props.system_filter.length > 0 && systemEvaluate) return systemEvaluate
 
-    console.time('evaluateRegionFilter')
+    //console.time('evaluateRegionFilter')
     const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
-    console.timeEnd('evaluateRegionFilter')
+    //console.timeEnd('evaluateRegionFilter')
     if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
     return false
 }
@@ -276,7 +279,8 @@ function evaluateNoFilters(props) {
 function evaluateSystemFilter(systemFilter, killmail, jumpFilter) {
     for(let i in systemFilter) {
         const filter = systemFilter[i]
-        if(filter.jumps === 0 && killmail.system == filter.system) return filter.filterID
+        console.log(filter.jumps)
+        if((filter.jumps === 0 || filter.jumps == '') && killmail.system == filter.system) return filter.filterID
         if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return filter.filterID
         if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return filter.filterID
     }
