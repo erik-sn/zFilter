@@ -20,6 +20,7 @@ export const INCREMENT_FILTERID = 'INCREMENT_FILTERID'
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
+
     const request = axios.get(URL_ALLIANCE + input)
     return {
         type: GET_OPTIONS,
@@ -229,6 +230,7 @@ export function deleteFilter(name, type, props) {
 
 
 function findOptions(input) {
+    console.log('Searching: ', input)
    let list = []
    const formattedName = input.toLowerCase().trim()
    if(formattedName.length > 2) {

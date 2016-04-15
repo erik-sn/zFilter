@@ -13,9 +13,9 @@ export default function(state = [], action) {
                   id: alliance.alliance_id,
                   type: 'alliance'
               }]
-              return option.concat(state)
+              return option
           }
-          return action.meta.options.concat(state)
+          return action.meta.options
 
         case RESET_OPTIONS:
           return []
