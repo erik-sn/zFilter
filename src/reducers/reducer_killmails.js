@@ -13,6 +13,7 @@ export default function(state = [], action) {
             const systemID = kill.solarSystem.id
             const victimInfo = getVictimInfo(kill.victim)
             const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
+
             if(isValid(shipID,systemID)) {
                 const killmail = [{
                     killID: kill.killID,
@@ -38,18 +39,12 @@ export default function(state = [], action) {
             return state
 
         case INITIALIZE_KILLMAILS:
-          return JSON.parse(action.payload)
-
+            return setAllActive(JSON.parse(action.payload))
 
         case FILTER_KILLMAILS:
-            console.log('Filtering killmails')
             const props = action.payload.props
             if(evaluateNoFilters(props)) {
-                console.log('No Filters')
-                return props.killmail_list.filter((killmail) => {
-                    killmail.active = true
-                    return killmail
-                })
+                return setAllActive(props.killmail_list)
             }
 
             const killmails = props.killmail_list.map((killmail) => {
@@ -83,6 +78,7 @@ function getVictimInfo(victim) {
     }
     return [victimName, victimGroup, victimGroupID]
 }
+
 /**
  * Update the local storage that holds processed killmails. If the store is over a specified amount of kills
  * remove the last element to stay at that limit
@@ -92,9 +88,23 @@ function updateLocalStore(killmails) {
     let localStore = JSON.parse(localStorage.getItem('killmails'))
     if(localStore == null) localStore = []
 
-    if(localStore.length >= 1000) localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
+    if(localStore.length >= 1000) {
+        localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
+    }
     else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
     localStorage.setItem('updateTime', new Date)
+}
+
+/**
+ * Take in a list of killmails and set all of them active
+ * @param killmails - array of killmail objects
+ * @returns {*}
+ */
+function setAllActive(killmails) {
+    return killmails.map((killmail) => {
+        killmail.active = true
+        return killmail
+    })
 }
 
 /**
@@ -166,8 +176,6 @@ function getAttackerShips(attackers) {
 }
 
 
-
-
 /**
  * Determine if the input is an integer - used to test user inputs
  * @param   {Unknown} input field being tested
@@ -180,6 +188,7 @@ function isInteger(input) {
 }
 
 function isActiveAny(killmail, props) {
+    if(evaluateNoFilters(props)) return true
     if(!killmail) return false
     const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
     if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
