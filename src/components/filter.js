@@ -16,19 +16,19 @@ export default class Filter extends Component {
       if(this.props.type == 'region') return
       switch(this.state.status) {
         case 'both':
-          this.props.updateFilter(this.props.name, this.props.type, 'attacker')
+          this.props.updateFilter(this.props.name, this.props.type, 'attacker', this.props.id)
           this.setState({ status: 'attacker' }); break
         case 'attacker':
-          this.props.updateFilter(this.props.name, this.props.type, 'victim')
+          this.props.updateFilter(this.props.name, this.props.type, 'victim', this.props.id)
           this.setState({ status: 'victim' }); break
         case 'victim':
-          this.props.updateFilter(this.props.name, this.props.type, 'both')
+          this.props.updateFilter(this.props.name, this.props.type, 'both', this.props.id)
           this.setState({ status: 'both' }); break
       }
     }
 
     updateFilter() {
-        this.props.updateFilter(this.props.name, this.props.type, this.props.status)
+        this.props.updateFilter(this.props.name, this.props.type, this.props.status, this.props.id)
     }
 
     deleteFilter() {

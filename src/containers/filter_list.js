@@ -37,8 +37,8 @@ class FilterList extends Component {
         this.props.deleteFilterAndEvaluate(filterName, filterType, this.props)
     }
 
-    updateFilter(filterName, filterType, filterStatus) {
-        this.props.updateFilterAndEvaluate(filterName, filterType, filterStatus, this.props)
+    updateFilter(filterName, filterType, filterStatus, filterId) {
+        this.props.updateFilterAndEvaluate(filterName, filterType, filterStatus, filterId, this.props)
     }
 
     createFilterObjects(filter, type) {

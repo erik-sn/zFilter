@@ -21,7 +21,7 @@ export default class SystemFilter extends Component {
 
     updateJumps(event) {
         const jumps = event.target.value
-        if(jumps == '' || jumps.match(/^\d+$/)) {
+        if(jumps == '' || jumps.match(/^\d+$/)) { // sanatize input
             this.setState({jumps: jumps}, function () {
                 this.props.editSystemFilter(this.state.system, this.state.systemId, 'jumps', jumps)
             })
@@ -30,7 +30,7 @@ export default class SystemFilter extends Component {
 
     updateLY(event) {
         const ly = event.target.value
-        if(ly == '' || ly.match(/^\d+$/)) {
+        if(ly == '' || ly.match(/^\d+$/)) { // sanatize input
             this.setState({ly: event.target.value}, function () {
                 this.props.editSystemFilter(this.state.system, this.state.systemId, 'ly', ly)
             })

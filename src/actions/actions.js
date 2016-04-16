@@ -86,7 +86,7 @@ export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props
     const filter = {
         system: system,
         systemId: systemId,
-        filterID: props.filterID,
+        filterID: `${systemId}-${jumps}-${ly}`,
         jumps: jumps,
         ly: ly
     }
@@ -116,14 +116,18 @@ export function updateSystemFilterAndEvaluate(system, systemId, key, value, prop
     let updatedState = []
     for(let i = 0; i < system_filter.length; i++) {
         if(system_filter[i].system == system) {
+            if(system_filter[i].jumps === '') system_filter[i].jumps = 0
+            if(system_filter[i].ly === '') system_filter[i].ly = 0
             let filter = {
                 system: system_filter[i].system,
                 systemId: system_filter[i].systemId,
                 jumps: system_filter[i].jumps,
                 ly: system_filter[i].ly,
-                filterID: props.filterID
+                filterID: system_filter[i].filterID
             }
-            filter[key] = value
+            if(value === '') filter[key] = 0
+            else filter[key] = value
+            filter.filterID = `${filter.systemId}-${filter.jumps}-${filter.ly}`
             updatedState.push(filter)
         }
         else {
@@ -187,25 +191,26 @@ export function createFilterAndEvaluate(type, id, name, props) {
 export function createFilter(type, id, name, props) {
     return {
         type: FILTER_CREATE,
-        payload: { type: type, id: id, name: name, status: 'both', filterID: props.filterID },
+        payload: { type: type, id: id, name: name, status: 'both', filterID: `${id}-both` },
         meta: {
             props: props
         }
     }
 }
 
-export function updateFilterAndEvaluate(name, type, status, props) {
+export function updateFilterAndEvaluate(name, type, status, id, props) {
     return (dispatch, getState) => {
-        Promise.resolve(dispatch(updateFilter(name, type, status, props)))
+        Promise.resolve(dispatch(updateFilter(name, type, status, id, props)))
             .then(dispatch(incrementFilterID()))
             .then(dispatch(filterKillmails(getState())))
     }
 }
 
-export function updateFilter(name, type, status, props) {
+export function updateFilter(name, type, status, id, props) {
+    console.log(id)
     return {
         type: FILTER_UPDATE,
-        payload: { name: name, type: type, status: status, filterID: props.filterID },
+        payload: { name: name, type: type, status: status, filterID: `${id}-${status}` },
         meta: {
             props: props
         }

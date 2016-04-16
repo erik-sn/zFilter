@@ -51,8 +51,9 @@ export default function(state = [], action) {
             }
 
             console.time('Total')
+            const filterIDs = getActiveFilterIDs(props)
+            console.log(filterIDs)
             const killmails = props.killmail_list.map((killmail) => {
-                const filterIDs = getActiveFilterIDs(props)
                 let passedFilter = isActiveAny(killmail, props, filterIDs)
                 if(passedFilter) {
                     killmail.active = true
@@ -243,11 +244,12 @@ function isActiveAny(killmail, props, filterIDs) {
  * @returns {boolean} - whether or not the killmail has already passed this filter
  */
 function evaluateExistingFilter(killmail, filterIDs ) {
+    //if(killmail.passedFilters.length > 0) console.log(killmail.passedFilters)
     const intersection = filterIDs.filter((n) => {
         return killmail.passedFilters.indexOf(n) != -1
     })
     if(intersection.length > 0 ) {
-        console.log('Bypassing - ')
+        console.log('Bypassing ')
         return true
     }
     return false
@@ -280,7 +282,6 @@ function evaluateNoFilters(props) {
 function evaluateSystemFilter(systemFilter, killmail, jumpFilter) {
     for(let i in systemFilter) {
         const filter = systemFilter[i]
-        console.log(filter.jumps)
         if((filter.jumps === 0 || filter.jumps == '') && killmail.system == filter.system) return filter.filterID
         if(isInteger(filter.ly) && inLyRange(killmail.systemID, filter.systemId, filter.ly )) return filter.filterID
         if(isInteger(filter.jumps) && jumpFilter.indexOf(killmail.systemID) !== -1) return filter.filterID
@@ -367,9 +368,10 @@ function evaluateRegionFilter(regionFilter, killmail) {
  */
 function getActiveFilterIDs(props) {
     let filterIDs = []
-    filterIDs.concat(props.system_filter.map((system_filter) => {
+    filterIDs = props.system_filter.map((system_filter) => {
         return system_filter.filterID
-    }))
+    }).concat(filterIDs)
+
     for (let filter in props.filters) {
         filterIDs = props.filters[filter].map((filter) => {
             return filter.filterID

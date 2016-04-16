@@ -54,6 +54,7 @@ class SearchFilter extends Component {
     renderListItems() {
         return this.props.options.map((option, index) => {
             const imgUrl = `https://image.eveonline.com/${option.image}`
+            if(option.name && option.name.length > 33) option.name = `${option.name.substring(0, 30)}...`
             return(
                 <div className="filter-list-item" key={ index } onClick={ this.select.bind(null, option) }>
                     <img src={ imgUrl } height="40" width="40"/>
@@ -65,7 +66,6 @@ class SearchFilter extends Component {
             )
         })
     }
-
 
     render() {
         return (
