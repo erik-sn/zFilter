@@ -33,7 +33,7 @@ class App extends Component {
       // if local storage data is older than 4 hours reset it
       const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
       const timeDifference = (new Date().getTime() - lastUpdate)/1000
-      if(timeDifference < 10800) this.props.setInitialKillmails(localStorage.getItem('killmails')) // reset storage if time > 3 hours
+      if(timeDifference < 10800) this.props.setInitialKillmails(JSON.parse(localStorage.getItem('killmails'))) // reset storage if time > 3 hours
       else localStorage.removeItem('killmails')
     }
 

@@ -2,6 +2,7 @@ import _ from 'lodash'
 
 import { GET_KILLMAIL } from '../actions/actions'
 import { INITIALIZE_KILLMAILS } from '../actions/actions'
+import { INITIALIZE_ZKILL_KILLMAILS } from '../actions/actions'
 import { FILTER_KILLMAILS } from '../actions/actions'
 
 import { inLyRange } from '../functions/system_functions'
@@ -18,7 +19,7 @@ export default function(state = [], action) {
             const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
 
             if(isValid(shipID,systemID)) {
-                const killmail = [{
+                const killmail = {
                     killID: kill.killID,
                     shipID: shipID,
                     shipName: shipdata[shipID].shipname,
@@ -34,40 +35,72 @@ export default function(state = [], action) {
                     attackerAllianceIDs: attackerAllianceInfo[1],
                     time:  kill.killTime.substring(10,16),
                     passedFilters: [],
-                    active: isActiveAny(this, action.meta.props, [])
-                }]
-                updateLocalStore(killmail) // this is a side effect, need to refactor
-                return killmail.concat(state) // concatanate killmails to the beginning of array
+                    active: false
+                }
+                killmail.active = isActiveAny(killmail, action.meta.props, [])
+                if(state.length > 3000) return [killmail].concat(state.slice(0, -1))
+                return [killmail].concat(state) // concatanate killmails to the beginning of array
             }
             return state
 
         case INITIALIZE_KILLMAILS:
-            return setAllActive(JSON.parse(action.payload))
+            return setAllActive(action.payload)
+
+        case INITIALIZE_ZKILL_KILLMAILS:
+            return action.payload.filter((killmail) => {
+                return isValid(killmail.victim.shipTypeID, killmail.solarSystemID)
+            })
+            .map((killmail) => {
+                return transformZkillKillmail(killmail)
+            })
+            return state
 
         case FILTER_KILLMAILS:
             const props = action.payload.props
-            if(evaluateNoFilters(props)) {
-                return setAllActive(props.killmail_list)
-            }
+            if(evaluateNoFilters(props)) return setAllActive(props.killmail_list)
 
-            console.time('Total')
             const filterIDs = getActiveFilterIDs(props)
-            console.log(filterIDs)
-            const killmails = props.killmail_list.map((killmail) => {
+            return props.killmail_list.map((killmail) => {
                 let passedFilter = isActiveAny(killmail, props, filterIDs)
                 if(passedFilter) {
                     killmail.active = true
-                    killmail.passedFilters.push(passedFilter)
+                    if(passedFilter !== true) killmail.passedFilters.push(passedFilter)
                 }
                 else killmail.active = false
                 return killmail
             })
 
-            console.timeEnd('Total')
-            return killmails
-
     }
     return state
+}
+
+function transformZkillKillmail(kill) {
+    const attackerAllianceInfo = getZkillAttackerAlliance(kill.attackers)
+    let groupID = kill.victim.corporationID
+    let groupName = kill.victim.corporationName
+    if(kill.victim.allianceID) {
+        groupID = kill.victim.allianceID
+        groupName = kill.victim.allianceName
+    }
+    const killmail = {
+        killID: kill.killID,
+        shipID: kill.victim.shipTypeID,
+        shipName: shipdata[kill.victim.shipTypeID].shipname,
+        systemID: kill.solarSystemID,
+        system: systemData[kill.solarSystemID].name,
+        security: Math.round(systemData[kill.solarSystemID].security * 10) / 10,
+        victimName: kill.victim.characterName,
+        victimCorp: groupName,
+        victimGroupID: groupID,
+        attackerCount: kill.attackers.length,
+        attackerShips: getAttackerShips(kill.attackers),
+        attackerAlliance: attackerAllianceInfo[0],
+        attackerAllianceIDs: attackerAllianceInfo[1],
+        time: kill.killTime.substring(10,16),
+        passedFilters: [],
+        active: true
+    }
+    return killmail
 }
 
 /**
@@ -88,22 +121,6 @@ function getVictimInfo(victim) {
         victimGroupID = victim.alliance.id
     }
     return [victimName, victimGroup, victimGroupID]
-}
-
-/**
- * Update the local storage that holds processed killmails. If the store is over a specified amount of kills
- * remove the last element to stay at that limit
- * @param killmails {array} - array of killmail objects
- */
-function updateLocalStore(killmails) {
-    let localStore = JSON.parse(localStorage.getItem('killmails'))
-    if(localStore == null) localStore = []
-
-    if(localStore.length >= 1000) {
-        localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore.slice(0, -1))))
-    }
-    else localStorage.setItem('killmails', JSON.stringify(killmails.concat(localStore)))
-    localStorage.setItem('updateTime', new Date)
 }
 
 /**
@@ -135,6 +152,34 @@ function isValid(shipID, systemID) {
 /**
  * Given a list of attackers iterate through and find the most common alliance
  * @param   {array} attackers - attacker object from zkill killmail
+ * @returns {array} Index 0: most occuring alliance on the killmail
+ *                  Index 1: array of alliance type ids that were involved on the kill
+ */
+function getZkillAttackerAlliance(attackers) {
+    let allianceCount = {}
+    let allianceIDs = []
+    for(let i in attackers) {
+        const attacker = attackers[i]
+        let attackerGroup = attacker.corporationName
+        let attackerGroupID = attacker.corporationID
+        if(attacker.allianceName.trim().length > 0) {
+            attackerGroup = attacker.allianceName
+            attackerGroupID = attacker.allianceID
+        }
+        if(!(attackerGroup in allianceCount)) {
+            allianceCount[attackerGroup] = 1
+            allianceIDs.push(attackerGroupID)
+        }
+        else allianceCount[attackerGroup]++
+    }
+    let alliance = _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
+    if(alliance == -Infinity) alliance = getAttackerCorporation(attackers)
+    return [alliance, allianceIDs]
+}
+
+/**
+ * Given a list of attackers iterate through and find the most common alliance
+ * @param   {array} attackers - attacker object from redis killmail
  * @returns {array} Index 0: most occuring alliance on the killmail
  *                  Index 1: array of alliance type ids that were involved on the kill
  */
@@ -182,7 +227,10 @@ function getAttackerCorporation(attackers) {
  */
 function getAttackerShips(attackers) {
   let attackerShips = []
-  for(let i in attackers) if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
+  for(let i in attackers) {
+      if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
+      else if(attackers[i].shipTypeID) attackerShips.push(attackers[i].shipTypeID)
+  }
   return attackerShips
 }
 
@@ -201,12 +249,12 @@ function isInteger(input) {
 // gatecamps
 // time
 function isActiveAny(killmail, props, filterIDs) {
+    if(!killmail) return false
     //console.time('evaluateExistingFilter')
     if(evaluateExistingFilter(killmail, filterIDs)) return true
     //console.timeEnd('evaluateExistingFilter')
 
     if(evaluateNoFilters(props)) return true
-    if(!killmail) return false
 
     //console.time('evaluateGroupFilter')
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
@@ -244,7 +292,7 @@ function isActiveAny(killmail, props, filterIDs) {
  * @returns {boolean} - whether or not the killmail has already passed this filter
  */
 function evaluateExistingFilter(killmail, filterIDs ) {
-    //if(killmail.passedFilters.length > 0) console.log(killmail.passedFilters)
+    if(killmail.passedFilters.length > 0) console.log(killmail.passedFilters)
     const intersection = filterIDs.filter((n) => {
         return killmail.passedFilters.indexOf(n) != -1
     })

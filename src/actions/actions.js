@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const URL_LISTEN = 'http://redisq.zkillboard.com/listen.php'
-const URL_ALLIANCE = 'http://evewho.com/api.php?type=alliance&name='
 const AUTOCOMPLETE = 'https://zkillboard.com/autocomplete/'
 
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
+export const INITIALIZE_ZKILL_KILLMAILS = 'INITIALIZE_ZKILL_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
 export const UPDATE_KILLMAIL = 'UPDATE_KILLMAIL'
 export const FILTER_KILLMAILS = 'FILTER_KILLMAILS'
@@ -21,8 +21,6 @@ export const INCREMENT_FILTERID = 'INCREMENT_FILTERID'
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getOptions(input) {
-
-    //const request = axios.get(URL_ALLIANCE + input)
     const request = axios.get(AUTOCOMPLETE + input)
     return {
         type: GET_OPTIONS,
@@ -69,10 +67,31 @@ export function updateKillmail(killmail) {
 }
 
 export function setInitialKillmails(killmails) {
-    return {
-        type: INITIALIZE_KILLMAILS,
-        payload: killmails
+
+    return (dispatch) => {
+        console.log(killmails.length)
+        if (!killmails || killmails.length < 400) {
+            let killStore = []
+            axios.get('https://zkillboard.com/api/page/1/desc').then((response) => {
+                killStore = response.data.concat(response.data)
+                axios.get(`https://zkillboard.com/api/afterKillID/${response.data[199].killID}/desc`).then((response) => {
+                    killStore = response.data.concat(response.data)
+                    dispatch({
+                        type: INITIALIZE_ZKILL_KILLMAILS,
+                        payload: killStore
+                    })
+                })
+            })
+        }
+        else {
+            dispatch({
+                type: INITIALIZE_KILLMAILS,
+                payload: killmails
+            })
+        }
+
     }
+
 }
 
 export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props) {
