@@ -6,6 +6,9 @@ Currently Functioning Filters:
   - Light Year distance from multiple systems
   - Stargate jump distance from multiple systems
   - Region
-  - Player Alliances
+  - Player Names
+  - Corporation Names
+  - Alliance Names
   - Ship groups (Frigates, Destroyers, etc.)
   - Ship types (Caracal, Rupture, Thorax, Moa, etc.)
+  - Time Frame
