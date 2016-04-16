@@ -232,28 +232,12 @@ export function deleteFilter(name, type, props) {
 
 
 function findOptions(input) {
-    console.log('Searching: ', input)
    let list = []
    const formattedName = input.toLowerCase().trim()
    if(formattedName.length > 2) {
-     for(let key in systemData){
-       if (systemData.hasOwnProperty(key) && systemData[key].name.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: systemData[key].name, id: key, type: 'system' });
-       }
-     }
-     for(let key in ships){
-       if (ships.hasOwnProperty(key) && ships[key].name.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: ships[key].name, id: ships[key].typeID, type: 'ship' });
-       }
-     }
-     for(let key in regions){
-       if (regions.hasOwnProperty(key) && regions[key].name.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: regions[key].name, id: regions[key].id, type: 'region' });
-       }
-     }
      for(let group in groups){
        if (group.toLowerCase().indexOf(formattedName) !== -1) {
-           list.push({ name: group, id: groups[group][0], ships: groups[group], type: 'group' });
+           list.push({ name: group, id: groups[group][0], ships: groups[group], type: 'group', image: 'Type/' + groups[group][0] + '_32.png'});
        }
      }
    }

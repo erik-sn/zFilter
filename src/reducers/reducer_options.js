@@ -7,7 +7,7 @@ export default function(state = [], action) {
     switch (action.type) {
         case GET_OPTIONS:
           console.log(action.payload.data)
-          return action.payload.data
+          return action.meta.options.concat(action.payload.data)
 
         case RESET_OPTIONS:
           return []
