@@ -66,27 +66,45 @@ export function updateKillmail(killmail) {
     }
 }
 
+/**
+ * If the local storage contains 500 or more killmails, initialize the list with those. If it does not,
+ * chain Zkill api queries to obtain an initial dataset
+ * @param killmails - array of killmail objects from local storage
+ * @returns {Function}
+ */
 export function setInitialKillmails(killmails) {
 
     return (dispatch) => {
         console.log(killmails.length)
-        if (!killmails || killmails.length < 400) {
-            let killStore = []
-            axios.get('https://zkillboard.com/api/page/1/desc').then((response) => {
-                killStore = response.data.concat(response.data)
-                axios.get(`https://zkillboard.com/api/afterKillID/${response.data[199].killID}/desc`).then((response) => {
-                    killStore = response.data.concat(response.data)
-                    dispatch({
-                        type: INITIALIZE_ZKILL_KILLMAILS,
-                        payload: killStore
-                    })
-                })
-            })
-        }
-        else {
+        if(killmails && killmails.length > 500) {
             dispatch({
                 type: INITIALIZE_KILLMAILS,
                 payload: killmails
+            })
+        }
+        else {
+            let killStore = []
+            axios.get('https://zkillboard.com/api/kills/limit/200/orderDirection/desc').then((response) => {
+                killStore = response.data
+
+                axios.get(getZkillQuery(response.data)).then((response2) => {
+                    killStore = killStore.concat(response2.data)
+
+                    axios.get(getZkillQuery(response2.data)).then((response3) => {
+                        killStore = killStore.concat(response3.data)
+
+                        axios.get(getZkillQuery(response3.data)).then((response4) => {
+                            killStore.concat(response4.data)
+
+                            axios.get(getZkillQuery(response4.data)).then((response5) => {
+                                dispatch({
+                                    type: INITIALIZE_ZKILL_KILLMAILS,
+                                    payload: killStore.concat(response5.data)
+                                })
+                            })
+                        })
+                    })
+                })
             })
         }
 
@@ -260,3 +278,11 @@ function findOptions(input) {
    return list
 }
 
+function getZkillQuery(data) {
+    let lowest
+    for(let i in data) {
+        if(lowest === undefined || data[i].killID < lowest) lowest = data[i].killID
+    }
+    console.log(lowest)
+    return `https://zkillboard.com/api/kills/beforeKillID/${lowest}/orderDirection/desc`
+}

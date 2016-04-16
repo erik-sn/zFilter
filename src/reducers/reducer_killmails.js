@@ -15,28 +15,9 @@ export default function(state = [], action) {
             const kill = action.payload.data.package.killmail
             const shipID = kill.victim.shipType.id
             const systemID = kill.solarSystem.id
-            const victimInfo = getVictimInfo(kill.victim)
-            const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
 
             if(isValid(shipID,systemID)) {
-                const killmail = {
-                    killID: kill.killID,
-                    shipID: shipID,
-                    shipName: shipdata[shipID].shipname,
-                    systemID: systemID,
-                    system: systemData[systemID].name,
-                    security: Math.round(systemData[systemID].security * 10) / 10,
-                    victimName: victimInfo[0],
-                    victimCorp: victimInfo[1],
-                    victimGroupID: victimInfo[2],
-                    attackerCount: kill.attackerCount,
-                    attackerShips: getAttackerShips(kill.attackers),
-                    attackerAlliance: attackerAllianceInfo[0],
-                    attackerAllianceIDs: attackerAllianceInfo[1],
-                    time:  kill.killTime.substring(10,16),
-                    passedFilters: [],
-                    active: false
-                }
+                const killmail = transformRedisKillmail(kill)
                 killmail.active = isActiveAny(killmail, action.meta.props, [])
                 if(state.length > 3000) return [killmail].concat(state.slice(0, -1))
                 return [killmail].concat(state) // concatanate killmails to the beginning of array
@@ -47,6 +28,7 @@ export default function(state = [], action) {
             return setAllActive(action.payload)
 
         case INITIALIZE_ZKILL_KILLMAILS:
+            console.log('Initializing with zkill')
             return action.payload.filter((killmail) => {
                 return isValid(killmail.victim.shipTypeID, killmail.solarSystemID)
             })
@@ -74,6 +56,45 @@ export default function(state = [], action) {
     return state
 }
 
+/**
+ * Convert a killmail object retrieved from zkillboards Redis queue (https://github.com/zKillboard/RedisQ)
+ * into a killmail suited to this application.
+ * @param kill - redis killmail object
+ * @returns {object} killmail
+ */
+function transformRedisKillmail(kill) {
+    const shipID = kill.victim.shipType.id
+    const systemID = kill.solarSystem.id
+    const victimInfo = getVictimInfo(kill.victim)
+    const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
+
+    return  {
+        killID: kill.killID,
+        shipID: shipID,
+        shipName: shipdata[shipID].shipname,
+        systemID: systemID,
+        system: systemData[systemID].name,
+        security: Math.round(systemData[systemID].security * 10) / 10,
+        victimName: victimInfo[0],
+        victimCorp: victimInfo[1],
+        victimGroupID: victimInfo[2],
+        attackerCount: kill.attackerCount,
+        attackerShips: getAttackerShips(kill.attackers),
+        attackerAlliance: attackerAllianceInfo[0],
+        attackerAllianceIDs: attackerAllianceInfo[1],
+        time: kill.killTime.substring(10, 16),
+        passedFilters: [],
+        active: false
+    }
+
+}
+
+/**
+ * Convert a killmail object retrieved from zkillboards api (https://github.com/zKillboard/zKillboard/wiki/API-(Killmails))
+ * into a killmail suited to this application.
+ * @param kill - redis killmail object
+ * @returns {object} killmail
+ */
 function transformZkillKillmail(kill) {
     const attackerAllianceInfo = getZkillAttackerAlliance(kill.attackers)
     let groupID = kill.victim.corporationID
@@ -292,7 +313,6 @@ function isActiveAny(killmail, props, filterIDs) {
  * @returns {boolean} - whether or not the killmail has already passed this filter
  */
 function evaluateExistingFilter(killmail, filterIDs ) {
-    if(killmail.passedFilters.length > 0) console.log(killmail.passedFilters)
     const intersection = filterIDs.filter((n) => {
         return killmail.passedFilters.indexOf(n) != -1
     })
