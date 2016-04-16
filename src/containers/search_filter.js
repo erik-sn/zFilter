@@ -89,8 +89,8 @@ class SearchFilter extends Component {
 
 }
 
-function mapStateToProps({ killmail_list, options, system_filter, jump_filter, filters, filterID }) {
-    return { killmail_list, options, system_filter, jump_filter, filters, filterID }
+function mapStateToProps({ killmail_list, options, system_filter, jump_filter, filters }) {
+    return { killmail_list, options, system_filter, jump_filter, filters }
 }
 
 function mapDispatchToProps(dispatch) {

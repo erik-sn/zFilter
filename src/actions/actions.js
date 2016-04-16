@@ -75,12 +75,6 @@ export function setInitialKillmails(killmails) {
     }
 }
 
-export function incrementFilterID() {
-    return {
-        type: INCREMENT_FILTERID
-    }
-}
-
 export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props) {
 
     const filter = {
@@ -103,7 +97,7 @@ export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props
                     props: props
 
                 }
-            })).then(dispatch(incrementFilterID())).then(dispatch(filterKillmails(getState())))
+            })).then(dispatch(filterKillmails(getState())))
         })
     }
 }
@@ -144,7 +138,7 @@ export function updateSystemFilterAndEvaluate(system, systemId, key, value, prop
                     filter: updatedState,
                     props: props
                 }
-            })).then(dispatch(incrementFilterID())).then(dispatch(filterKillmails(getState())))
+            })).then(dispatch(filterKillmails(getState())))
         })
     }
 }
@@ -183,7 +177,6 @@ export function deleteSystemFilter(system, props) {
 export function createFilterAndEvaluate(type, id, name, props) {
     return (dispatch, getState) => {
         Promise.resolve(dispatch(createFilter(type, id, name, props)))
-            .then(dispatch(incrementFilterID()))
             .then(dispatch(filterKillmails(getState())))
     }
 }
@@ -201,7 +194,6 @@ export function createFilter(type, id, name, props) {
 export function updateFilterAndEvaluate(name, type, status, id, props) {
     return (dispatch, getState) => {
         Promise.resolve(dispatch(updateFilter(name, type, status, id, props)))
-            .then(dispatch(incrementFilterID()))
             .then(dispatch(filterKillmails(getState())))
     }
 }

@@ -97,8 +97,8 @@ class FilterList extends Component {
     }
 }
 
-function mapStateToProps({ killmail_list, system_filter, filters, filterID }) {
-    return { killmail_list, system_filter, filters, filterID }
+function mapStateToProps({ killmail_list, system_filter, filters }) {
+    return { killmail_list, system_filter, filters }
 }
 
 function mapDispatchToProps(dispatch) {
