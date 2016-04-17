@@ -21,19 +21,23 @@ class Item extends Component {
       let attackerGroup = killmail.attackerCorporation
       if(killmail.attackerAlliance !== '') attackerGroup = killmail.attackerAlliance
       return (
-        <tr className="item-row" key={ this.props.key }>
-          <td onClick={ this.onClick }><img src={ imgUrl } height="40" width="40" /></td>
-          <td onClick={ this.onClick }>
-              <span className="victim-name">{ killmail.victimName }</span>
-              <span className="victim-group">{ victimGroup }</span>
-          </td>
-          <td>{ attackerGroup } ({ killmail.attackerCount })</td>
-          <td>
-              <span className="system-name">{ killmail.system }</span>
-              <span className="system-sec"> ({ killmail.security })</span>
-          </td>
-          <td>{ killmail.time }</td>
-        </tr>
+          <div>
+              <table>
+            <tr className="item-row" key={ this.props.key }>
+              <td onClick={ this.onClick }><img src={ imgUrl } height="40" width="40" /></td>
+              <td onClick={ this.onClick }>
+                  <span className="victim-name">{ killmail.victimName }</span>
+                  <span className="victim-group">{ victimGroup }</span>
+              </td>
+              <td>{ attackerGroup } ({ killmail.attackerCount })</td>
+              <td>
+                  <span className="system-name">{ killmail.system }</span>
+                  <span className="system-sec"> ({ killmail.security })</span>
+              </td>
+              <td>{ killmail.time }</td>
+            </tr>
+                  </table>
+          </div>
       )
     }
 }

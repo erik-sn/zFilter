@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Infinite from 'react-infinite'
 
 import Item from '../components/item'
 
@@ -32,14 +33,17 @@ class ItemList extends Component {
 
     render() {
         if(this.props.killmail_list.length > 0) this.updateLocalStore(this.props.killmail_list)
-        const items = this.props.killmail_list.map((item, index) => {
-           if(item.active) return <Item key={ index } item={ item } />
+        const items = this.props.killmail_list.filter((item) => {
+           if(item.active) return true
+        })
+        .map((item, index) => {
+            return <Item key={ index } item={ item } />
         })
 
         return (
-            <table className={ this.props.name }>
-                <tbody>{ items }</tbody>
-            </table>
+            <Infinite className={ this.props.name } containerHeight={ 800 } elementHeight={ 50 }>
+                { items }
+            </Infinite>
         )
     }
 }

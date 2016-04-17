@@ -67,7 +67,7 @@ function transformRedisKillmail(kill) {
     const victimInfo = getVictimInfo(kill.victim)
     const attackerCorporationInfo = getAttackerCorporation(kill.attackers)
     const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
-    const killmail =  {
+    return {
         killID: kill.killID,
         shipID: shipID,
         shipName: shipdata[shipID].shipname,
@@ -91,7 +91,6 @@ function transformRedisKillmail(kill) {
         passedFilters: [],
         active: false
     }
-    return killmail
 }
 
 /**
