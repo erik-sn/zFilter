@@ -4,13 +4,36 @@ import { FILTER_CREATE } from '../actions/actions'
 import { FILTER_UPDATE } from '../actions/actions'
 import { FILTER_DELETE } from '../actions/actions'
 
-export default function(state = { alliances:[], ships:[], groups:[], regions:[]}, action) {
+export default function(state = { alliances:[], corporations:[], characters:[], ships:[], groups:[], regions:[]}, action) {
     switch (action.type) {
       case FILTER_CREATE:
+        console.log(action.payload)
         switch (action.payload.type) {
           case 'alliance':
             return {
               alliances: state.alliances.concat(action.payload),
+              corporations: state.corporations,
+              characters: state.characters,
+              ships: state.ships,
+              groups: state.groups,
+              regions: state.regions
+            }
+
+          case 'corporation':
+            return {
+              alliances: state.alliances,
+              corporations: state.corporations.concat(action.payload),
+              characters: state.characters,
+              ships: state.ships,
+              groups: state.groups,
+              regions: state.regions
+            }
+
+          case 'character':
+            return {
+              alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters.concat(action.payload),
               ships: state.ships,
               groups: state.groups,
               regions: state.regions
@@ -19,6 +42,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'ship':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: state.ships.concat(action.payload),
               groups: state.groups,
               regions: state.regions
@@ -27,6 +52,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'group':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: state.ships,
               groups: state.groups.concat(action.payload),
               regions: state.regions
@@ -35,6 +62,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'region':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: state.ships,
               groups: state.groups,
               regions: state.regions.concat(action.payload)
@@ -49,6 +78,28 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'alliance':
             return {
               alliances: updateFilter(state.alliances, updateName, status, filterID),
+              corporations: state.corporations,
+              characters: state.characters,
+              ships: state.ships,
+              groups: state.groups,
+              regions: state.regions
+            }
+
+          case 'corporation':
+            return {
+              alliances: state.alliances,
+              corporations: updateFilter(state.corporations, updateName, status, filterID),
+              characters: state.characters,
+              ships: state.ships,
+              groups: state.groups,
+              regions: state.regions
+            }
+
+          case 'character':
+            return {
+              alliances: state.alliances,
+              corporations: state.corporations,
+              characters: updateFilter(state.characters, updateName, status, filterID),
               ships: state.ships,
               groups: state.groups,
               regions: state.regions
@@ -57,6 +108,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'ship':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: updateFilter(state.ships, updateName, status, filterID),
               groups: state.groups,
               regions: state.regions
@@ -65,6 +118,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'group':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: state.ships,
               groups: updateFilter(state.groups, updateName, status, filterID),
               regions: state.regions
@@ -73,6 +128,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
           case 'region':
             return {
               alliances: state.alliances,
+              corporations: state.corporations,
+              characters: state.characters,
               ships: state.ships,
               groups: state.groups,
               regions: updateFilter(state.regions, updateName, status, filterID)
@@ -86,6 +143,28 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
               case 'alliance':
                 return {
                   alliances: removeItem(state.alliances, deleteName),
+                  corporations: state.corporations,
+                  characters: state.characters,
+                  ships: state.ships,
+                  groups: state.groups,
+                  regions: state.regions
+                }
+
+              case 'corporation':
+                return {
+                  alliances: state.alliances,
+                  corporations:  removeItem(state.alliances, deleteName),
+                  characters: state.characters,
+                  ships: state.ships,
+                  groups: state.groups,
+                  regions: state.regions
+                }
+
+              case 'character':
+                return {
+                  alliances: state.alliances,
+                  corporations: state.corporations,
+                  characters: removeItem(state.characters, deleteName),
                   ships: state.ships,
                   groups: state.groups,
                   regions: state.regions
@@ -94,6 +173,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
               case 'ship':
                 return {
                   alliances: state.alliances,
+                  corporations: state.corporations,
+                  characters: state.characters,
                   ships: removeItem(state.ships, deleteName),
                   groups: state.groups,
                   regions: state.regions
@@ -102,6 +183,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
               case 'group':
                 return {
                   alliances: state.alliances,
+                  corporations: state.corporations,
+                  characters: state.characters,
                   ships: state.ships,
                   groups: removeItem(state.groups, deleteName),
                   regions: state.regions
@@ -110,6 +193,8 @@ export default function(state = { alliances:[], ships:[], groups:[], regions:[]}
               case 'region':
                 return {
                   alliances: state.alliances,
+                  corporations: state.corporations,
+                  characters: state.characters,
                   ships: state.ships,
                   groups: state.groups,
                   regions: removeItem(state.regions, deleteName)

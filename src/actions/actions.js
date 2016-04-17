@@ -75,38 +75,37 @@ export function updateKillmail(killmail) {
 export function setInitialKillmails(killmails) {
 
     return (dispatch) => {
-        console.log(killmails.length)
-        if(killmails && killmails.length > 500) {
+        //if(killmails && killmails.length > 500) {
             dispatch({
                 type: INITIALIZE_KILLMAILS,
                 payload: killmails
             })
-        }
-        else {
-            let killStore = []
-            axios.get('https://zkillboard.com/api/kills/limit/200/orderDirection/desc').then((response) => {
-                killStore = response.data
-
-                axios.get(getZkillQuery(response.data)).then((response2) => {
-                    killStore = killStore.concat(response2.data)
-
-                    axios.get(getZkillQuery(response2.data)).then((response3) => {
-                        killStore = killStore.concat(response3.data)
-
-                        axios.get(getZkillQuery(response3.data)).then((response4) => {
-                            killStore.concat(response4.data)
-
-                            axios.get(getZkillQuery(response4.data)).then((response5) => {
-                                dispatch({
-                                    type: INITIALIZE_ZKILL_KILLMAILS,
-                                    payload: killStore.concat(response5.data)
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        }
+        //}
+        //else {
+        //    let killStore = []
+        //    axios.get('https://zkillboard.com/api/kills/limit/200/orderDirection/desc').then((response) => {
+        //        killStore = response.data
+        //
+        //        axios.get(getZkillQuery(response.data)).then((response2) => {
+        //            killStore = killStore.concat(response2.data)
+        //
+        //            axios.get(getZkillQuery(response2.data)).then((response3) => {
+        //                killStore = killStore.concat(response3.data)
+        //
+        //                axios.get(getZkillQuery(response3.data)).then((response4) => {
+        //                    killStore.concat(response4.data)
+        //
+        //                    axios.get(getZkillQuery(response4.data)).then((response5) => {
+        //                        dispatch({
+        //                            type: INITIALIZE_ZKILL_KILLMAILS,
+        //                            payload: killStore.concat(response5.data)
+        //                        })
+        //                    })
+        //                })
+        //            })
+        //        })
+        //    })
+        //}
 
     }
 
@@ -236,7 +235,6 @@ export function updateFilterAndEvaluate(name, type, status, id, props) {
 }
 
 export function updateFilter(name, type, status, id, props) {
-    console.log(id)
     return {
         type: FILTER_UPDATE,
         payload: { name: name, type: type, status: status, filterID: `${id}-${status}` },

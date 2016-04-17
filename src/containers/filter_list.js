@@ -19,6 +19,7 @@ class FilterList extends Component {
     constructor(props) {
         super(props);
         this.editSystemFilter = this.editSystemFilter.bind(this)
+        this.consolidateFilters = this.consolidateFilters.bind(this)
         this.createFilterObjects = this.createFilterObjects.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
         this.updateFilter = this.updateFilter.bind(this)
@@ -61,6 +62,13 @@ class FilterList extends Component {
         else return []
     }
 
+    consolidateFilters(filters) {
+
+        for(let i in this.props.filters) {
+
+        }
+    }
+
     render() {
        let systemFilters = []
         if(this.props.system_filter) {
@@ -89,6 +97,8 @@ class FilterList extends Component {
                   </tbody>
               </table>
               <div className="alliance-filter">{ this.createFilterObjects(this.props.filters.alliances, 'alliance') }</div>
+              <div className="corporation-filter">{ this.createFilterObjects(this.props.filters.corporations, 'corporation') }</div>
+              <div className="character-filter">{ this.createFilterObjects(this.props.filters.characters, 'character') }</div>
               <div className="ship-filter"> { this.createFilterObjects(this.props.filters.ships, 'ship') } </div>
               <div className="group-filter"> { this.createFilterObjects(this.props.filters.groups, 'group') } </div>
               <div className="region-filter"> { this.createFilterObjects(this.props.filters.regions, 'region') } </div>

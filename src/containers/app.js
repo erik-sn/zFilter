@@ -29,6 +29,7 @@ class App extends Component {
     }
 
     componentDidMount() {
+        //localStorage.removeItem('killmails')
       setInterval(this.refreshList, 2500)
       // if local storage data is older than 4 hours reset it
       const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()

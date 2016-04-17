@@ -25,12 +25,17 @@ class SearchFilter extends Component {
     }
 
     select(item) {
-
+        console.log(item)
         if(item.type === 'system') {
             const name = item.name.substring(0, item.name.indexOf('('))
             this.props.createSystemFilterAndEvaluate(name, item.id, 0 ,0, this.props)
         }
-        else if(item.type === 'region' || item.type == 'ship' || item.type == 'group' || item.type == 'alliance') {
+        else if(item.type === 'region' ||
+            item.type == 'ship' ||
+            item.type == 'group' ||
+            item.type == 'alliance' ||
+            item.type == 'corporation' ||
+            item.type == 'character') {
             this.props.createFilterAndEvaluate(item.type, item.id, item.name, this.props)
         }
         this.props.resetOptions()

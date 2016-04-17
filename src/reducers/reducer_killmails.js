@@ -19,7 +19,7 @@ export default function(state = [], action) {
             if(isValid(shipID,systemID)) {
                 const killmail = transformRedisKillmail(kill)
                 killmail.active = isActiveAny(killmail, action.meta.props, [])
-                if(state.length > 3000) return [killmail].concat(state.slice(0, -1))
+                if(state.length > 2000) return [killmail].concat(state.slice(0, -1))
                 return [killmail].concat(state) // concatanate killmails to the beginning of array
             }
             return state
@@ -28,7 +28,6 @@ export default function(state = [], action) {
             return setAllActive(action.payload)
 
         case INITIALIZE_ZKILL_KILLMAILS:
-            console.log('Initializing with zkill')
             return action.payload.filter((killmail) => {
                 return isValid(killmail.victim.shipTypeID, killmail.solarSystemID)
             })
@@ -66,9 +65,9 @@ function transformRedisKillmail(kill) {
     const shipID = kill.victim.shipType.id
     const systemID = kill.solarSystem.id
     const victimInfo = getVictimInfo(kill.victim)
+    const attackerCorporationInfo = getAttackerCorporation(kill.attackers)
     const attackerAllianceInfo = getAttackerAlliance(kill.attackers)
-
-    return  {
+    const killmail =  {
         killID: kill.killID,
         shipID: shipID,
         shipName: shipdata[shipID].shipname,
@@ -76,17 +75,23 @@ function transformRedisKillmail(kill) {
         system: systemData[systemID].name,
         security: Math.round(systemData[systemID].security * 10) / 10,
         victimName: victimInfo[0],
-        victimCorp: victimInfo[1],
-        victimGroupID: victimInfo[2],
+        victimID: victimInfo[1],
+        victimCorp: victimInfo[2],
+        victimCorpID: victimInfo[3],
+        victimAlliance: victimInfo[4],
+        victimAllianceID: victimInfo[5],
         attackerCount: kill.attackerCount,
+        attackerIDs: getAttackerIDs(kill.attackers),
         attackerShips: getAttackerShips(kill.attackers),
+        attackerCorporation: attackerCorporationInfo[0],
+        attackerCorporationIDs: attackerCorporationInfo[1],
         attackerAlliance: attackerAllianceInfo[0],
         attackerAllianceIDs: attackerAllianceInfo[1],
         time: kill.killTime.substring(10, 16),
         passedFilters: [],
         active: false
     }
-
+    return killmail
 }
 
 /**
@@ -128,20 +133,19 @@ function transformZkillKillmail(kill) {
  * Generate victim information from killmail
  * @param victim - victim object from killmail
  * @returns {array} Index 0: Name of victim
- *                Index 1: Victim's alliance if it exists, victim's corporation if not
- *                Index 2: Type ID corresponding to the victimGroup
+ *                Index 1: Victim's corporation name
+ *                Index 2: Victim's corporation ID
+ *                Index 3: Victim's alliance name
+ *                Index 4: Victim's alliance ID
  */
 function getVictimInfo(victim) {
-    let victimName = 'Unknown'
-    if(victim.character) victimName = victim.character.name
-    // victim group chooses alliance if it exists, corporation if not
-    let victimGroup = victim.corporation.name
-    let victimGroupID = victim.corporation.id
+    let victimAlliance = ''
+    let victimAllianceID = ''
     if(victim.alliance) {
-        victimGroup = victim.alliance.name
-        victimGroupID = victim.alliance.id
+        victimAlliance = victim.alliance.name
+        victimAllianceID = victim.alliance.id
     }
-    return [victimName, victimGroup, victimGroupID]
+    return [victim.character.name, victim.character.id, victim.corporation.name, victim.corporation.id, victimAlliance, victimAllianceID]
 }
 
 /**
@@ -218,7 +222,7 @@ function getAttackerAlliance(attackers) {
     }
   }
   let alliance = _.max(Object.keys(allianceCount), function (o) { return allianceCount[o]; });
-  if(alliance == -Infinity) alliance = getAttackerCorporation(attackers)
+  if(alliance == -Infinity) alliance = ''
   return [alliance, allianceIDs]
 }
 
@@ -229,16 +233,20 @@ function getAttackerAlliance(attackers) {
  */
 function getAttackerCorporation(attackers) {
     let corpCount = {}
+    let corpIDs = []
     for(let i in attackers) {
         const attacker = attackers[i]
         if(attacker.corporation) {
-            if(corpCount[attacker.corporation]) corpCount[attacker.corporation.name]++
-            else corpCount[attacker.corporation.name] = 1
+            if(!(attacker.corporation.name in corpCount)) {
+                corpCount[attacker.corporation.name] = 1
+                corpIDs.push(attacker.corporation.id)
+            }
+            else corpCount[attacker.corporation.name]++
         }
     }
     let corporation = _.max(Object.keys(corpCount), function (o) { return corpCount[o]; })
-    if(corporation == -Infinity) corporation = 'Unknown'
-    return corporation
+    if(corporation == -Infinity) corporation = ''
+    return [corporation, corpIDs]
 }
 
 /**
@@ -247,14 +255,29 @@ function getAttackerCorporation(attackers) {
  * @returns {array} list of type ids
  */
 function getAttackerShips(attackers) {
-  let attackerShips = []
-  for(let i in attackers) {
-      if(attackers[i].shipType) attackerShips.push(attackers[i].shipType.id)
-      else if(attackers[i].shipTypeID) attackerShips.push(attackers[i].shipTypeID)
-  }
-  return attackerShips
+  return attackers.filter((attacker) => {
+      if(attacker.shipType || attacker.shipTypeID) return true
+  })
+  .map((attacker) => {
+      if(attacker.shipType) return attacker.shipType.id
+      else if(attacker.shipTypeID) return attacker.shipTypeID
+  })
 }
 
+/**
+ * Return an array of type IDs corresponding to all the characters who were an attacker
+ * on a killmail
+ * @param attackers array of attacker objects from the parent killmail object
+ * @returns {Array} list of type IDs
+ */
+function getAttackerIDs(attackers) {
+    return attackers.filter((attacker) => {
+        if(attacker.character) return true
+    })
+    .map((attacker) => {
+        return attacker.character.id
+    })
+}
 
 /**
  * Determine if the input is an integer - used to test user inputs
@@ -271,35 +294,29 @@ function isInteger(input) {
 // time
 function isActiveAny(killmail, props, filterIDs) {
     if(!killmail) return false
-    //console.time('evaluateExistingFilter')
     if(evaluateExistingFilter(killmail, filterIDs)) return true
-    //console.timeEnd('evaluateExistingFilter')
 
     if(evaluateNoFilters(props)) return true
 
-    //console.time('evaluateGroupFilter')
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
-    //console.timeEnd('evaluateGroupFilter')
     if(props.filters.groups.length > 0 && groupEvaluate) return groupEvaluate
 
-    //console.time('evaluateShipFilter')
     const shipEvaluate = evaluateShipFilter(props.filters.ships, killmail)
-    //console.timeEnd('evaluateShipFilter')
     if(props.filters.ships.length > 0 && shipEvaluate) return shipEvaluate
 
-    //console.time('evaluateAllianceFilter')
     const allianceEvaluate = evaluateAllianceFilter(props.filters.alliances, killmail)
-    //console.timeEnd('evaluateAllianceFilter')
     if(props.filters.alliances.length > 0 && allianceEvaluate) return allianceEvaluate
 
-    //console.time('evaluateSystemFilter')
+    const corporationEvaluate = evaluateCorporationFilter(props.filters.corporations, killmail)
+    if(props.filters.corporations.length > 0 && corporationEvaluate) return corporationEvaluate
+
+    const characterEvaluate = evaluateCharacterFilter(props.filters.characters, killmail)
+    if(props.filters.characters.length > 0 && characterEvaluate) return characterEvaluate
+
     const systemEvaluate = evaluateSystemFilter(props.system_filter, killmail, props.jump_filter)
-    //console.timeEnd('evaluateSystemFilter')
     if(props.system_filter.length > 0 && systemEvaluate) return systemEvaluate
 
-    //console.time('evaluateRegionFilter')
     const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
-    //console.timeEnd('evaluateRegionFilter')
     if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
     return false
 }
@@ -332,6 +349,8 @@ function evaluateNoFilters(props) {
     if(props.system_filter.length === 0 &&
         props.filters.ships.length === 0 &&
         props.filters.alliances.length === 0 &&
+        props.filters.corporations.length === 0 &&
+        props.filters.characters.length === 0 &&
         props.filters.groups.length === 0 &&
         props.filters.regions.length === 0) return true
     return false
@@ -408,12 +427,41 @@ function evaluateGroupFilter(groupFilter, killmail) {
 function evaluateAllianceFilter(allianceFilter, killmail) {
     for(let i in allianceFilter) {
         const status = allianceFilter[i].status
-        if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == allianceFilter[i].id)) return allianceFilter[i].filterID // victim match
+        if ((status == 'both' || status == 'victim') && (killmail.victimAllianceID == allianceFilter[i].id)) return allianceFilter[i].filterID // victim match
         if ((status == 'both' || status == 'attacker') && (killmail.attackerAllianceIDs.indexOf(parseInt(allianceFilter[i].id)) !== -1)) return allianceFilter[i].filterID
     }
     return false
 }
 
+/**
+ * Iterate over all alliance filters and test if the killmail matches any of them.
+ * @param allianceFilter
+ * @param killmail - killmail object from reducer
+ * @returns {boolean} - if the killmail matches any alliance filter
+ */
+function evaluateCorporationFilter(corporationFilter, killmail) {
+    for(let i in corporationFilter) {
+        const status = corporationFilter[i].status
+        if ((status == 'both' || status == 'victim') && (killmail.victimCorpID == corporationFilter[i].id)) return corporationFilter[i].filterID // victim match
+        if ((status == 'both' || status == 'attacker') && (killmail.attackerCorporationIDs.indexOf(parseInt(corporationFilter[i].id)) !== -1)) return corporationFilter[i].filterID
+    }
+    return false
+}
+
+/**
+ * Iterate over all alliance filters and test if the killmail matches any of them.
+ * @param allianceFilter
+ * @param killmail - killmail object from reducer
+ * @returns {boolean} - if the killmail matches any alliance filter
+ */
+function evaluateCharacterFilter(characterFilter, killmail) {
+    for(let i in characterFilter) {
+        const status = characterFilter[i].status
+        if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == characterFilter[i].id)) return characterFilter[i].filterID // victim match
+        if ((status == 'both' || status == 'attacker') && (killmail.attackerIDs.indexOf(parseInt(characterFilter[i].id)) !== -1)) return characterFilter[i].filterID
+    }
+    return false
+}
 /**
  * Iterate over all region filters and test if the killmail matches any of them.
  * @param regionFilter - array of regions to filter against

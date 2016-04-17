@@ -25,7 +25,7 @@ class ItemList extends Component {
     updateLocalStore(killmails) {
         let localStore = JSON.parse(localStorage.getItem('killmails'))
         if(localStore == null) localStore = []
-        if(localStore.length >= 3000)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
+        if(localStore.length >= 2000)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
         else localStorage.setItem('killmails', JSON.stringify(killmails))
         localStorage.setItem('updateTime', new Date)
     }
@@ -45,7 +45,6 @@ class ItemList extends Component {
 }
 
 function mapStateToProps({ killmail_list }) {
-    console.log(killmail_list.length)
     return ({ killmail_list })
 }
 
