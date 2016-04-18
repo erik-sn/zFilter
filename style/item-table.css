@@ -12,11 +12,13 @@
 
 .item-row {
   width: 780px;
+  display: flex;
 }
 
 .victim-img {
   width: 40px;
-  float: left
+  float: left;
+  cursor: pointer;
 }
 
 .victim-info {
@@ -51,11 +53,31 @@
 }
 
 .system-name {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .system-sec {
-  font-size: 16px;
+  font-size: 14px;
+}
+
+.high {
+  font-weight: 900;
+  color: yellow;
+}
+
+.low {
+  font-weight: 900;
+  color: orange;
+}
+
+.null {
+  font-weight: 900;
+  color: red;
+}
+
+.system-region {
+  font-size: 14px;
+  display: block;
 }
 
 .kill-time {

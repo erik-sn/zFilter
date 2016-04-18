@@ -91,6 +91,7 @@ function transformRedisKillmail(kill) {
         shipName: shipdata[shipID].shipname,
         systemID: systemID,
         system: systemData[systemID].name,
+        region: getRegionName(systemData[systemID].region),
         security: Math.round(systemData[systemID].security * 10) / 10,
         victimName: victimInfo[0],
         victimID: victimInfo[1],
@@ -297,6 +298,17 @@ function getAttackerIDs(attackers) {
 }
 
 /**
+ * Given a region type ID return the region name
+ * @param id - type ID
+ * @returns {*} region name if it exists, 'Unkown' otherwise
+ */
+function getRegionName(id) {
+    for(let i in regions) {
+        if(regions[i].id === id) return regions[i].name
+    }
+    return 'Unknown'
+}
+/**
  * Determine if the input is an integer - used to test user inputs
  * @param   {Unknown} input field being tested
  * @returns {Boolean}  if the input is an integer or can be converted
@@ -487,9 +499,7 @@ function evaluateCharacterFilter(characterFilter, killmail) {
  */
 function evaluateRegionFilter(regionFilter, killmail) {
     for(let i in regionFilter) {
-        for(let j in systems) {
-            if(systems[j].typeID == killmail.systemID && systems[j].region == regionFilter[i].id)  return regionFilter[i].filterID
-        }
+        if(regionFilter[i].name == killmail.region)  return regionFilter[i].filterID
     }
     return false
 }

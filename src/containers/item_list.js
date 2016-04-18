@@ -17,21 +17,12 @@ class ItemList extends Component {
         this.updateLocalStore = this.updateLocalStore.bind(this)
     }
 
-    /**
-     * Update the local storage that holds processed killmails. If the store is over a specified amount of kills
-     * remove the last element to stay at that limit
-     * @param killmails {array} - array of killmail objects
-     */
-    updateLocalStore(killmails) {
-        let localStore = JSON.parse(localStorage.getItem('killmails'))
-        if(localStore == null) localStore = []
-        if(localStore.length >= 5000)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
-        else localStorage.setItem('killmails', JSON.stringify(killmails))
+    updateLocalStore() {
         localStorage.setItem('updateTime', new Date)
     }
 
     render() {
-        if(this.props.killmail_list.length > 0) this.updateLocalStore(this.props.killmail_list)
+        this.updateLocalStore()
         const items = this.props.killmail_list.filter((item) => {
            if(item.active) return true
         })

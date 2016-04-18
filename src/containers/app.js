@@ -66,24 +66,25 @@ function getAllItems(props, callback) {
     var request = window.indexedDB.open("killmails", 1)
     let db
     request.onsuccess = function(event) {
-        db = request.result;var trans = db.transaction('killmails', IDBTransaction.READ_ONLY);
-        var store = trans.objectStore('killmails');
-        var items = [];
+        db = request.result
+        var trans = db.transaction('killmails', IDBTransaction.READ_ONLY)
+        var store = trans.objectStore('killmails')
+        var items = []
 
         trans.oncomplete = function(evt) {
             callback(props, items);
         };
 
-        var cursorRequest = store.openCursor();
+        var cursorRequest = store.openCursor(null, 'prev')
 
         cursorRequest.onerror = function(error) {
             console.log(error);
         };
 
         cursorRequest.onsuccess = function(evt) {
-            var cursor = evt.target.result;
+            var cursor = evt.target.result
             if (cursor) {
-                items.push(cursor.value);
+                items.push(cursor.value)
                 cursor.continue();
             }
         };

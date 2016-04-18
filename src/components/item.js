@@ -30,6 +30,11 @@ class Item extends Component {
       let attackerGroup = killmail.attackerCorporation
       if(killmail.attackerAlliance !== '') attackerGroup = killmail.attackerAlliance
       if(attackerGroup.length > 35) attackerGroup = `${victimGroup.substring(0, 32)}...`
+
+      let secClass
+      if(killmail.security > 0.4) secClass = 'high'
+      else if(killmail.security > 0) secClass = 'low'
+      else secClass = 'null'
       return (
             <div className="item-row" key={ this.props.key }>
               <div onClick={ this.onClick } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>
@@ -40,7 +45,8 @@ class Item extends Component {
               <div className="attacker-group">{ attackerGroup } ({ killmail.attackerCount })</div>
               <div className="system-info"  onClick={ this.showSystemDotlan }>
                   <span className="system-name" >{ killmail.system }</span>
-                  <span className="system-sec"> ({ killmail.security })</span>
+                  <span className="system-sec"> (<span className={ secClass }>{ killmail.security }</span>)</span>
+                  <span className="system-region"> { killmail.region }</span>
               </div>
               <div className="kill-time">{ killmail.time }</div>
             </div>
