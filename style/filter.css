@@ -16,6 +16,11 @@
   height: 40px;
 }
 
+.render-list {
+  border: 2px solid #333;
+}
+
+
 .filter-list {
   display: none;
 }
@@ -32,24 +37,31 @@
   color: black;
 }
 
+
+.filter-list-item:nth-child(even) {
+  background-color: #ededed;
+}
+
 .filter-list-item img {
+  /*border-style: ridge;*/
+  /*border-width: 0px 2px 0px 0px;*/
   float: left;
   margin-right: 5px;
 }
 
 .item-name {
-  font-size: 16px;
+  font-size: 18px;
   text-align: left;
   display: block;
   vertical-align: bottom;
 }
 
 .item-type {
-  margin-top: -5px;
+  margin-top: -2px;
   vertical-align: top;
   text-align: left;
   display: block;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .tag-both {

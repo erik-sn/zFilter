@@ -18,16 +18,17 @@ export default function(state = [], action) {
 
             if(isValid(shipID,systemID)) {
                 const killmail = transformRedisKillmail(kill)
+                addToDatabase(killmail) // add killmail with true status, need to develop middleware to remove side effect
                 const passedFilter = isActiveAny(killmail, action.meta.props, [])
-                console.log(passedFilter, killmail)
-                if(passedFilter) killmail.active = true
-                if(state.length > 7500) return [killmail].concat(state.slice(0, -1))
-                return [killmail].concat(state) // concatanate killmails to the beginning of array
+
+                if(!passedFilter) killmail.active = false
+                if(state.length > 5000) return [killmail].concat(state.slice(0, -1))
+                return [killmail].concat(state) // concatenate killmails to the beginning of array
             }
             return state
 
         case INITIALIZE_KILLMAILS:
-            return setAllActive(action.payload)
+            return action.payload
 
         case INITIALIZE_ZKILL_KILLMAILS:
             return action.payload.filter((killmail) => {
@@ -55,6 +56,21 @@ export default function(state = [], action) {
 
     }
     return state
+}
+
+
+function addToDatabase(killmail) {
+    var request = db.transaction(["killmails"], "readwrite")
+        .objectStore("killmails")
+        .put(killmail)
+
+    request.onsuccess = function(event) {
+        //console.log("Killmail has been added to your database.")
+    };
+
+    request.onerror = function(event) {
+        console.log('Unable to add data', killmail)
+    }
 }
 
 /**
@@ -91,7 +107,7 @@ function transformRedisKillmail(kill) {
         attackerAllianceIDs: attackerAllianceInfo[1],
         time: kill.killTime.substring(10, 16),
         passedFilters: [],
-        active: false
+        active: true
     }
 }
 

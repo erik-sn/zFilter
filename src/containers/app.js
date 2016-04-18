@@ -36,12 +36,17 @@ class App extends Component {
 
     componentDidMount() {
         //localStorage.removeItem('killmails')
-      setInterval(this.refreshList, 2500)
-      // if local storage data is older than 4 hours reset it
-      const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
-      const timeDifference = (new Date().getTime() - lastUpdate)/1000
-     this.props.setInitialKillmails(JSON.parse(localStorage.getItem('killmails'))) // reset storage if time > 3 hours
-      //else localStorage.removeItem('killmails')
+        setInterval(this.refreshList, 2500)
+        const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
+        const timeDifference = (new Date().getTime() - lastUpdate)/1000
+        if(timeDifference > 3600) {
+          const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
+          window.indexedDB.deleteDatabase("killmails")
+        }
+
+        getAllItems(this.props, function(props, items) {
+          props.setInitialKillmails(items) // reset storage if time > 3 hours
+        })
     }
 
 }
@@ -57,4 +62,32 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(App) // do not need app state
 
+function getAllItems(props, callback) {
+    var request = window.indexedDB.open("killmails", 1)
+    let db
+    request.onsuccess = function(event) {
+        db = request.result;var trans = db.transaction('killmails', IDBTransaction.READ_ONLY);
+        var store = trans.objectStore('killmails');
+        var items = [];
 
+        trans.oncomplete = function(evt) {
+            callback(props, items);
+        };
+
+        var cursorRequest = store.openCursor();
+
+        cursorRequest.onerror = function(error) {
+            console.log(error);
+        };
+
+        cursorRequest.onsuccess = function(evt) {
+            var cursor = evt.target.result;
+            if (cursor) {
+                items.push(cursor.value);
+                cursor.continue();
+            }
+        };
+        return items
+    };
+
+}

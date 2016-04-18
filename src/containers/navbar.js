@@ -31,6 +31,7 @@ class Navbar extends Component {
                 </div>
                 <div className="kill-counter">Active Killmails: { items }</div>
                 <div className="search-container"><SearchFilter /></div>
+
                 <div className="github-logo" onClick={ this.showGithub }>
                     <img src="../../style/img/github-mark.png" width="30"/>
                 </div>

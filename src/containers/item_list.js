@@ -25,7 +25,7 @@ class ItemList extends Component {
     updateLocalStore(killmails) {
         let localStore = JSON.parse(localStorage.getItem('killmails'))
         if(localStore == null) localStore = []
-        if(localStore.length >= 7500)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
+        if(localStore.length >= 5000)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
         else localStorage.setItem('killmails', JSON.stringify(killmails))
         localStorage.setItem('updateTime', new Date)
     }
