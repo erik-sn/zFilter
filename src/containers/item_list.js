@@ -6,7 +6,6 @@ import Infinite from 'react-infinite'
 
 import Item from '../components/item'
 
-import { updateKillmail } from '../actions/actions'
 import { inLyRange } from '../functions/system_functions'
 import { systemExists } from '../functions/system_functions'
 
@@ -26,7 +25,7 @@ class ItemList extends Component {
     updateLocalStore(killmails) {
         let localStore = JSON.parse(localStorage.getItem('killmails'))
         if(localStore == null) localStore = []
-        if(localStore.length >= 10000)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
+        if(localStore.length >= 7500)  localStorage.setItem('killmails', JSON.stringify(killmails.slice(0, -1)))
         else localStorage.setItem('killmails', JSON.stringify(killmails))
         localStorage.setItem('updateTime', new Date)
     }
@@ -42,7 +41,7 @@ class ItemList extends Component {
 
         return (
             <div>
-                <Infinite className={ this.props.name } containerHeight={ window.innerHeight - 50 } elementHeight={ 50 }>
+                <Infinite className={ this.props.name } containerHeight={ window.innerHeight - 55 } elementHeight={ 50 }>
                    { items }
                 </Infinite>
             </div>

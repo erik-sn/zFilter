@@ -6,7 +6,6 @@ const AUTOCOMPLETE = 'https://zkillboard.com/autocomplete/'
 export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const INITIALIZE_ZKILL_KILLMAILS = 'INITIALIZE_ZKILL_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
-export const UPDATE_KILLMAIL = 'UPDATE_KILLMAIL'
 export const FILTER_KILLMAILS = 'FILTER_KILLMAILS'
 export const GET_OPTIONS = 'GET_OPTIONS'
 export const RESET_OPTIONS = 'RESET_OPTIONS'
@@ -16,7 +15,7 @@ export const SYSTEM_FILTER_UPDATE = 'SYSTEM_FILTER_UPDATE'
 export const FILTER_CREATE = 'FILTER_CREATE'
 export const FILTER_UPDATE = 'FILTER_UPDATE'
 export const FILTER_DELETE = 'FILTER_DELETE'
-export const INCREMENT_FILTERID = 'INCREMENT_FILTERID'
+export const FILTER_COUNT = 'FILTER_COUNT'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
 
@@ -59,12 +58,6 @@ export function filterKillmails(props) {
     }
 }
 
-export function updateKillmail(killmail) {
-    return {
-        type: UPDATE_KILLMAIL,
-        payload: killmail
-    }
-}
 
 /**
  * If the local storage contains 500 or more killmails, initialize the list with those. If it does not,
