@@ -1,50 +1,48 @@
 #list-container {
   height: 100vh;
-  width: 750px;
+  width: 780px;
   overflow-y: auto;
 }
 
-.item-table {
-  float: left;
+
+.item-row {
+  width: 780px;
 }
 
-::-webkit-scrollbar {
-    display: none;
-}
-
-.item-table tr td:nth-child(1) {
-  cursor: pointer;
+.victim-img {
   width: 40px;
+  float: left
 }
 
-.item-table tr td:nth-child(2) {
-  cursor: pointer;
-  padding-left: 10px;
+.victim-info {
+  padding-left: 5px;
   width: 200px;
-}
-
-.item-table tr td:nth-child(3) {
-  padding-left: 10px;
-  width: 350;
-}
-
-.item-table tr td:nth-child(4) {
-  padding-left: 10px;
-  width: 150px;
-}
-
-.item-table tr td:nth-child(5) {
-  padding-left: 10px;
-  width: 60px;
+  float: left;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .victim-name {
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .victim-group {
   display: block;
-  font-size: 12px;;
+  font-size: 14px;
+}
+
+.attacker-group {
+  display: inline-block;
+  width: 300px;
+  height: 40px;
+  font-size: 14px;
+}
+
+.system-info {
+  display: inline-block;
+  width: 170px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .system-name {
@@ -53,4 +51,12 @@
 
 .system-sec {
   font-size: 16px;
+}
+
+.kill-time {
+  font-size: 16px;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  text-align: left;
 }
