@@ -24,18 +24,12 @@ class Item extends Component {
     render() {
       const killmail = this.props.item
       const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
-      if(killmail.victimName.length > 20) killmail.victimName = `${killmail.victimName.substring(0, 17)}...`
-      let victimGroup = killmail.victimCorp
-      if(killmail.victimAlliance !== '') victimGroup = killmail.victimAlliance
-      if(victimGroup.length > 23) victimGroup = `${victimGroup.substring(0, 20)}...`
-      let attackerGroup = killmail.attackerCorporation
-      if(killmail.attackerAlliance !== '') attackerGroup = killmail.attackerAlliance
-      if(attackerGroup.length > 35) attackerGroup = `${victimGroup.substring(0, 32)}...`
 
-      let secClass
-      if(killmail.security > 0.4) secClass = 'high'
-      else if(killmail.security > 0) secClass = 'low'
-      else secClass = 'null'
+      killmail.victimName = formatLabel(killmail.victimName, 20)
+      let victimGroup = formatLabel(chooseName(killmail.victimCorp, killmail.victimAlliance), 28)
+      let attackerGroup = formatLabel(chooseName(killmail.attackerCorporation, killmail.attackerAlliance), 33)
+      let secClass = getSecurityClass(killmail.security)
+
       return (
             <div className="item-row" key={ this.props.key }>
               <div onClick={ this.onClick } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>
@@ -43,7 +37,9 @@ class Item extends Component {
                   <span className="victim-name">{ killmail.victimName }</span>
                   <span className="victim-group">{ victimGroup }</span>
               </div>
-              <div className="attacker-group">{ attackerGroup } ({ killmail.attackerCount })</div>
+              <div className="attacker-group">
+                  <span className="attacker-label"> { attackerGroup } ({ killmail.attackerCount })</span>
+              </div>
               <div className="system-info"  onClick={ this.showSystemDotlan }>
                   <span className="system-name" >{ killmail.system }</span>
                   <span className="system-sec"> (<span className={ secClass }>{ killmail.security }</span>)</span>
@@ -56,3 +52,19 @@ class Item extends Component {
 }
 
 export default Item
+
+function getSecurityClass(security) {
+    if(security > 0.4) return 'high'
+    else if(security > 0) return 'low'
+    else return 'null'
+}
+
+function chooseName(initial, preferred) {
+    if(preferred !== '') return preferred
+    return initial
+}
+
+function formatLabel(label, maxChars) {
+    if(label.length > maxChars) return `${label.substring(0, maxChars - 3)}...`
+    return label
+}

@@ -319,6 +319,11 @@ function isInteger(input) {
     return false
 }
 
+function formatLabel(label, maxChars) {
+    if(label.length > maxChars) return `${label.substring(0, maxChars - 3)}...`
+    return label
+}
+
 // gatecamps
 // time
 function isActiveAny(killmail, props, filterIDs) {
