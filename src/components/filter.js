@@ -13,33 +13,37 @@ export default class Filter extends Component {
     }
 
     updateStatus() {
-      if(this.props.type == 'region') return
+      const { type, name, id, updateFilter } = this.props
+      if(type == 'region') return
       switch(this.state.status) {
         case 'both':
-          this.props.updateFilter(this.props.name, this.props.type, 'attacker', this.props.id)
+          updateFilter(name, type, 'attacker', id)
           this.setState({ status: 'attacker' }); break
         case 'attacker':
-          this.props.updateFilter(this.props.name, this.props.type, 'victim', this.props.id)
+          updateFilter(name, type, 'victim', id)
           this.setState({ status: 'victim' }); break
         case 'victim':
-          this.props.updateFilter(this.props.name, this.props.type, 'both', this.props.id)
+          updateFilter(name, type, 'both', id)
           this.setState({ status: 'both' }); break
       }
     }
 
     updateFilter() {
-        this.props.updateFilter(this.props.name, this.props.type, this.props.status, this.props.id)
+        const { type, name, id, updateFilter } = this.props
+        updateFilter(name, type, status, id)
     }
 
     deleteFilter() {
-       this.props.removeFilter(this.props.name, this.props.type)
+        const { type, name, removeFilter } = this.props
+       removeFilter(name, type)
     }
 
     render() {
+        const { name, key } = this.props
         const filterClass = "tag-" + this.state.status + " label tag label-info"
         return (
-          <div className={ filterClass } key={ this.props.key }>
-              <div className="filter-label" onClick={ this.updateStatus } >{ this.props.name }</div>
+          <div className={ filterClass } key={ key }>
+              <div className="filter-label" onClick={ this.updateStatus } >{ name }</div>
               <div className="filter-button" onClick={ this.deleteFilter }>
                 <span className="glyphicon glyphicon-remove"></span>
               </div>

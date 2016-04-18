@@ -23,7 +23,8 @@ class ItemList extends Component {
 
     render() {
         this.updateLocalStore()
-        const items = this.props.killmail_list.filter((item) => {
+        const { killmail_list, name } = this.props
+        const items = killmail_list.filter((item) => {
            if(item.active) return true
         })
         .map((item, index) => {
@@ -32,7 +33,7 @@ class ItemList extends Component {
 
         return (
             <div>
-                <Infinite className={ this.props.name } containerHeight={ window.innerHeight - 55 } elementHeight={ 50 }>
+                <Infinite className={ name } containerHeight={ window.innerHeight - 55 } elementHeight={ 50 }>
                    { items }
                 </Infinite>
             </div>

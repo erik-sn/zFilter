@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { incrementFilterID } from '../actions/actions'
 import { filterKillmails } from '../actions/actions'
 import { updateSystemFilterAndEvaluate } from '../actions/actions'
 import { deleteSystemFilterAndEvaluate } from '../actions/actions'
@@ -19,7 +18,6 @@ class FilterList extends Component {
     constructor(props) {
         super(props);
         this.editSystemFilter = this.editSystemFilter.bind(this)
-        this.consolidateFilters = this.consolidateFilters.bind(this)
         this.createFilterObjects = this.createFilterObjects.bind(this)
         this.removeSystemFilter = this.removeSystemFilter.bind(this)
         this.updateFilter = this.updateFilter.bind(this)
@@ -62,12 +60,6 @@ class FilterList extends Component {
         else return []
     }
 
-    consolidateFilters(filters) {
-
-        for(let i in this.props.filters) {
-
-        }
-    }
 
     render() {
        let systemFilters = []
@@ -88,6 +80,7 @@ class FilterList extends Component {
             })
         }
 
+        const { alliances, corporations, characters, ships, groups, regions } = this.props.filters
         return (
           <div className="filter-containers">
               <table className={ this.props.name }>
@@ -95,12 +88,12 @@ class FilterList extends Component {
                   { systemFilters }
                   </tbody>
               </table>
-              <div className="alliance-filter">{ this.createFilterObjects(this.props.filters.alliances, 'alliance') }</div>
-              <div className="corporation-filter">{ this.createFilterObjects(this.props.filters.corporations, 'corporation') }</div>
-              <div className="character-filter">{ this.createFilterObjects(this.props.filters.characters, 'character') }</div>
-              <div className="ship-filter"> { this.createFilterObjects(this.props.filters.ships, 'ship') } </div>
-              <div className="group-filter"> { this.createFilterObjects(this.props.filters.groups, 'group') } </div>
-              <div className="region-filter"> { this.createFilterObjects(this.props.filters.regions, 'region') } </div>
+              <div className="alliance-filter">{ this.createFilterObjects(alliances, 'alliance') }</div>
+              <div className="corporation-filter">{ this.createFilterObjects(corporations, 'corporation') }</div>
+              <div className="character-filter">{ this.createFilterObjects(characters, 'character') }</div>
+              <div className="ship-filter"> { this.createFilterObjects(ships, 'ship') } </div>
+              <div className="group-filter"> { this.createFilterObjects(groups, 'group') } </div>
+              <div className="region-filter"> { this.createFilterObjects(regions, 'region') } </div>
           </div>
         )
     }
@@ -112,7 +105,7 @@ function mapStateToProps({ killmail_list, system_filter, filters }) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({ updateSystemFilterAndEvaluate, deleteSystemFilterAndEvaluate,
-        incrementFilterID, filterKillmails, updateFilterAndEvaluate, deleteFilterAndEvaluate }, dispatch)
+        filterKillmails, updateFilterAndEvaluate, deleteFilterAndEvaluate }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)

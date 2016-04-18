@@ -4,13 +4,13 @@ class Item extends Component {
 
     constructor(props) {
       super(props);
-       this.onClick = this.onClick.bind(this)
+       this.showZkill = this.showZkill.bind(this)
        this.showSystemDotlan = this.showSystemDotlan.bind(this)
     }
 
-    onClick() {
+    showZkill() {
       const killUrl = `https://zkillboard.com/kill/${this.props.item.killID}/`
-      const redirectWindow = window.open(killUrl, '_blank');
+      const redirectWindow = window.open(killUrl, '_blank')
       redirectWindow.location
     }
 
@@ -22,30 +22,30 @@ class Item extends Component {
     }
 
     render() {
-      const killmail = this.props.item
-      const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
+      const { item, key } = this.props
+      const imgUrl = `https://image.eveonline.com/Type/${item.shipID}_64.png`
 
-      killmail.victimName = formatLabel(killmail.victimName, 20)
-      let victimGroup = formatLabel(chooseName(killmail.victimCorp, killmail.victimAlliance), 28)
-      let attackerGroup = formatLabel(chooseName(killmail.attackerCorporation, killmail.attackerAlliance), 33)
-      let secClass = getSecurityClass(killmail.security)
+        item.victimName = formatLabel(item.victimName, 20)
+      let victimGroup = formatLabel(chooseName(item.victimCorp, item.victimAlliance), 28)
+      let attackerGroup = formatLabel(chooseName(item.attackerCorporation, item.attackerAlliance), 33)
+      let secClass = getSecurityClass(item.security)
 
       return (
-            <div className="item-row" key={ this.props.key }>
+            <div className="item-row" key={ key }>
               <div onClick={ this.onClick } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>
-              <div className="victim-info" onClick={ this.onClick }>
-                  <span className="victim-name">{ killmail.victimName }</span>
+              <div className="victim-info" onClick={ this.showZkill }>
+                  <span className="victim-name">{ item.victimName }</span>
                   <span className="victim-group">{ victimGroup }</span>
               </div>
               <div className="attacker-group">
-                  <span className="attacker-label"> { attackerGroup } ({ killmail.attackerCount })</span>
+                  <span className="attacker-label"> { attackerGroup } ({ item.attackerCount })</span>
               </div>
               <div className="system-info"  onClick={ this.showSystemDotlan }>
-                  <span className="system-name" >{ killmail.system }</span>
-                  <span className="system-sec"> (<span className={ secClass }>{ killmail.security }</span>)</span>
-                  <span className="system-region"> { killmail.region }</span>
+                  <span className="system-name" >{ item.system }</span>
+                  <span className="system-sec"> (<span className={ secClass }>{ item.security }</span>)</span>
+                  <span className="system-region"> { item.region }</span>
               </div>
-              <div className="kill-time">{ killmail.time }</div>
+              <div className="kill-time">{ item.time }</div>
             </div>
       )
     }
