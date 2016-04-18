@@ -1,9 +1,14 @@
 #list-container {
-  height: 100vh;
+  margin-top: 55px;
+  margin-left: 15px;
   width: 780px;
   overflow-y: auto;
 }
 
+.list-info {
+  height: 50px;
+  font-size: 24px;
+}
 
 .item-row {
   width: 780px;

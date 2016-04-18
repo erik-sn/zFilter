@@ -25,7 +25,6 @@ class SearchFilter extends Component {
     }
 
     select(item) {
-        console.log(item)
         if(item.type === 'system') {
             const name = item.name.substring(0, item.name.indexOf('('))
             this.props.createSystemFilterAndEvaluate(name, item.id, 0 ,0, this.props)

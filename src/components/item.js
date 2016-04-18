@@ -23,13 +23,13 @@ class Item extends Component {
     render() {
       const killmail = this.props.item
       const imgUrl = `https://image.eveonline.com/Type/${killmail.shipID}_64.png`
-      if(killmail.victimName.length > 20) killmail.victimName = killmail.victimName.substring(0, 17) +  '...'
+      if(killmail.victimName.length > 20) killmail.victimName = `${killmail.victimName.substring(0, 17)}...`
       let victimGroup = killmail.victimCorp
       if(killmail.victimAlliance !== '') victimGroup = killmail.victimAlliance
-      if(victimGroup.length > 25) victimGroup = victimGroup.substring(0, 22) + '...'
+      if(victimGroup.length > 23) victimGroup = `${victimGroup.substring(0, 20)}...`
       let attackerGroup = killmail.attackerCorporation
       if(killmail.attackerAlliance !== '') attackerGroup = killmail.attackerAlliance
-      if(attackerGroup.length > 35) attackerGroup = victimGroup.substring(0, 32) + '...'
+      if(attackerGroup.length > 35) attackerGroup = `${victimGroup.substring(0, 32)}...`
       return (
             <div className="item-row" key={ this.props.key }>
               <div onClick={ this.onClick } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>

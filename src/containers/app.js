@@ -7,6 +7,7 @@ import { setInitialKillmails } from '../actions/actions'
 
 import FilterList from '../containers/filter_list'
 import ItemList from './item_list'
+import Navbar from './navbar'
 
 class App extends Component {
 
@@ -17,9 +18,14 @@ class App extends Component {
 
     render() {
         return (
-            <div className="app-container">
-              <div id="list-container"><ItemList name="item-table" /></div>
-              <div id="filter-container"><FilterList name="filter-table"/></div>
+            <div>
+                <Navbar/>
+                <div className="app-container">
+                  <div>
+                      <div id="list-container"><ItemList name="item-table" /></div>
+                      <div id="filter-container"><FilterList name="filter-table"/></div>
+                  </div>
+                </div>
             </div>
         );
     }
