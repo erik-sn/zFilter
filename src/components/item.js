@@ -15,7 +15,8 @@ class Item extends Component {
     }
 
     showSystemDotlan() {
-        const systemURL = `http://evemaps.dotlan.net/system/${this.props.item.system}`
+        let region = this.props.item.region.replace(/\s/g, '_')
+        const systemURL = `http://evemaps.dotlan.net/map/${region}/${this.props.item.system}`
         const redirectWindow = window.open(systemURL, '_blank')
         redirectWindow.location
     }

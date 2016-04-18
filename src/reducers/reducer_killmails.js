@@ -92,7 +92,7 @@ function transformRedisKillmail(kill) {
         systemID: systemID,
         system: systemData[systemID].name,
         region: getRegionName(systemData[systemID].region),
-        security: Math.round(systemData[systemID].security * 10) / 10,
+        security: systemData[systemID].security.toFixed(1),
         victimName: victimInfo[0],
         victimID: victimInfo[1],
         victimCorp: victimInfo[2],

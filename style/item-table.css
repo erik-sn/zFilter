@@ -40,14 +40,14 @@
 
 .attacker-group {
   display: inline-block;
-  width: 300px;
+  width: 325px;
   height: 40px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .system-info {
   display: inline-block;
-  width: 170px;
+  width: 140px;
   height: 40px;
   cursor: pointer;
 }
