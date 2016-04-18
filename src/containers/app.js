@@ -35,22 +35,18 @@ class App extends Component {
     }
 
     componentDidMount() {
-        //localStorage.removeItem('killmails')
         setInterval(this.refreshList, 2500)
-        const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
-        const timeDifference = (new Date().getTime() - lastUpdate)/1000
-        if(timeDifference > 3600) {
-          const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
-          window.indexedDB.deleteDatabase("killmails")
-        }
 
+        if(getTimeDifference() > 3600) {
+          const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
+          if(empty) window.indexedDB.deleteDatabase("killmails")
+        }
         getAllItems(this.props, function(props, items) {
           props.setInitialKillmails(items) // reset storage if time > 3 hours
         })
     }
 
 }
-
 
 function mapStateToProps({ killmail_list, filters, system_filter, jump_filter }) {
     return ({ killmail_list, filters, system_filter, jump_filter })
@@ -61,6 +57,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App) // do not need app state
+
+function getTimeDifference() {
+    const lastUpdate = new Date(localStorage.getItem('updateTime')).getTime()
+    return (new Date().getTime() - lastUpdate)/1000
+}
 
 function getAllItems(props, callback) {
     var request = window.indexedDB.open("killmails", 1)

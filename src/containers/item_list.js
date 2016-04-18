@@ -24,6 +24,11 @@ class ItemList extends Component {
     render() {
         this.updateLocalStore()
         const { killmail_list, name } = this.props
+
+        if(killmail_list.length > 7500) {
+            deleteLast()
+        }
+
         const items = killmail_list.filter((item) => {
            if(item.active) return true
         })
@@ -47,3 +52,22 @@ function mapStateToProps({ killmail_list }) {
 
 export default connect(mapStateToProps)(ItemList)
 
+
+function deleteLast() {
+    var request = window.indexedDB.open("killmails", 1)
+    let db
+    request.onsuccess = function(event) {
+        db = request.result
+        var trans = db.transaction('killmails', 'readwrite')
+        var store = trans.objectStore('killmails')
+
+        var pdestroy = store.openCursor()
+        pdestroy.onsuccess = function (event) {
+            var cursor = pdestroy.result;
+            if (cursor) {
+                console.log(cursor)
+                store.delete(cursor.primaryKey);
+            }
+        }
+    }
+}
