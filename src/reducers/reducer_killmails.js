@@ -18,7 +18,9 @@ export default function(state = [], action) {
 
             if(isValid(shipID,systemID)) {
                 const killmail = transformRedisKillmail(kill)
-                killmail.active = isActiveAny(killmail, action.meta.props, [])
+                const passedFilter = isActiveAny(killmail, action.meta.props, [])
+                console.log(passedFilter, killmail)
+                if(passedFilter) killmail.active = true
                 if(state.length > 7500) return [killmail].concat(state.slice(0, -1))
                 return [killmail].concat(state) // concatanate killmails to the beginning of array
             }
