@@ -87,6 +87,10 @@
   padding-left: 15px;
 }
 
+.filter-match {
+  margin-left: 100px;
+}
+
 .isk-label {
   margin-left: -15px;
 }
@@ -102,6 +106,12 @@
 
 .isk-input-right {
   margin-left: 10px;
+}
+
+.killmail-input {
+  padding-left: 10px;
+  text-align: center;
+  width: 190px;
 }
 
 button {

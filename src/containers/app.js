@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+
 import { getKillmails } from '../actions/actions'
 import { setInitialKillmails } from '../actions/actions'
 
@@ -36,7 +37,6 @@ class App extends Component {
 
     componentDidMount() {
         setInterval(this.refreshList, 2500)
-
         if(getTimeDifference() > 3600) {
           const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
           if(empty) window.indexedDB.deleteDatabase("killmails")

@@ -11,7 +11,7 @@ class Options extends Component {
 
     constructor(props) {
         super(props)
-        const { ignorePods, ignoreShuttles, ignoreRookieShips, showHighsec, showLowsec, showNullsec, minIsk, maxIsk } = this.props.options
+        const { ignorePods, ignoreShuttles, ignoreRookieShips, showHighsec, showLowsec, showNullsec, matchAny, minIsk, maxIsk, maxKillmails } = this.props.options
         this.state = {
             showOptions: false,
             ignorePods: ignorePods,
@@ -20,9 +20,13 @@ class Options extends Component {
             showHighsec: showHighsec,
             showLowsec: showLowsec,
             showNullsec: showNullsec,
+            matchAny: matchAny,
             minIsk: minIsk,
-            maxIsk: maxIsk
+            maxIsk: maxIsk,
+            maxKillmails: maxKillmails
+
         }
+
         this.toggleOptions = this.toggleOptions.bind(this)
         this.updateIgnorePods = this.updateIgnorePods.bind(this)
         this.updateIgnoreShuttles = this.updateIgnoreShuttles.bind(this)
@@ -30,8 +34,10 @@ class Options extends Component {
         this.updateShowHighsec = this.updateShowHighsec.bind(this)
         this.updateShowLowsec = this.updateShowLowsec.bind(this)
         this.updateShowNullsec = this.updateShowNullsec.bind(this)
+        this.updateFilterMatch = this.updateFilterMatch.bind(this)
         this.updateMinIsk = this.updateMinIsk.bind(this)
         this.updateMaxIsk = this.updateMaxIsk.bind(this)
+        this.updateMaxKillmails = this.updateMaxKillmails.bind(this)
     }
 
     toggleOptions() {
@@ -42,36 +48,49 @@ class Options extends Component {
     updateIgnorePods() {
         this.setState({ ignorePods: !this.state.ignorePods }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
     updateIgnoreShuttles() {
         this.setState({ ignoreShuttles: !this.state.ignoreShuttles }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
     updateIgnoreRookieShips() {
         this.setState({ ignoreRookieShips: !this.state.ignoreRookieShips }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
     updateShowHighsec() {
         this.setState({ showHighsec: !this.state.showHighsec }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
     updateShowLowsec() {
         this.setState({ showLowsec: !this.state.showLowsec }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
     updateShowNullsec() {
         this.setState({ showNullsec: !this.state.showNullsec }, () => {
             this.props.setOptions(this.state)
+            storeOptions(this.state)
+        })
+    }
+
+    updateFilterMatch() {
+        this.setState({ matchAny: !this.state.matchAny }, () => {
+            this.props.setOptions(this.state)
+            storeOptions(this.state)
         })
     }
 
@@ -80,6 +99,7 @@ class Options extends Component {
         if(input === '' || input.match(/^\d+$/)) {
             this.setState({ minIsk: input }, () => {
                 this.props.setOptions(this.state)
+                storeOptions(this.state)
             })
         }
     }
@@ -89,10 +109,20 @@ class Options extends Component {
         if(input === '' || input.match(/^\d+$/)) {
             this.setState({ maxIsk: input }, () => {
                 this.props.setOptions(this.state)
+                storeOptions(this.state)
             })
         }
     }
 
+    updateMaxKillmails(event) {
+        let input = event.target.value
+        if((input === '' || input.match(/^\d+$/) && input < 20000)) {
+            this.setState({ maxKillmails: input }, () => {
+                this.props.setOptions(this.state)
+                storeOptions(this.state)
+            })
+        }
+    }
 
     render() {
         let dropdownClass = 'dropdown-menu-hide'
@@ -111,6 +141,12 @@ class Options extends Component {
                               <li><input type="checkbox" onChange={ this.updateShowHighsec }  checked={ this.state.showHighsec }/><span>Highsec</span></li>
                               <li><input type="checkbox" onChange={ this.updateShowLowsec }  checked={ this.state.showLowsec }/><span>Lowsec</span></li>
                               <li><input type="checkbox" onChange={ this.updateShowNullsec }  checked={ this.state.showNullsec }/><span>Nullsec</span></li>
+                              <li className="dropdown-spacer"></li>
+                              <li>
+                                  <span className="isk-label">Match Filters:</span>
+                                  <div className="filter-match" ><input onChange={ this.updateFilterMatch }  type="radio" name="type" value="Any" checked={ this.state.matchAny } /><span>Any</span></div>
+                              </li>
+                              <li><div className="filter-match"><input onChange={ this.updateFilterMatch } type="radio" name="type" value="All" checked={ !this.state.matchAny } /><span>All</span></div></li>
                               <li>
                                 <span className="isk-label">ISK Value (Millions):</span>
                                 <div className="isk-input-container">
@@ -118,6 +154,12 @@ class Options extends Component {
                                   <span>to</span>
                                   <input value={ this.state.maxIsk } onChange={ this.updateMaxIsk } className="isk-input isk-input-right" placeholder="Max.." type="text"/>
                                 </div>
+                              </li>
+                              <li>
+                                  <span className="isk-label">Maximum Killmails:</span>
+                                  <div className="isk-input-container">
+                                      <input value={ this.state.maxKillmails } onChange={ this.updateMaxKillmails } className="killmail-input" placeholder="Default is 5000" type="text" />
+                                  </div>
                               </li>
                               <li className="dropdown-spacer"></li>
                           </ul>
@@ -141,3 +183,6 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Options)
 
+function storeOptions(options) {
+    localStorage.setItem('options', JSON.stringify(options))
+}

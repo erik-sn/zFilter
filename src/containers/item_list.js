@@ -25,7 +25,7 @@ class ItemList extends Component {
         this.updateLocalStore()
         const { killmail_list, name } = this.props
 
-        if(killmail_list.length > 7500) {
+        if(killmail_list.length > 10000) {
             deleteLast()
         }
 
