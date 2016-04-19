@@ -11,4 +11,10 @@ Currently Functioning Filters:
   - Alliance Names
   - Ship groups (Frigates, Destroyers, etc.)
   - Ship types (Caracal, Rupture, Thorax, Moa, etc.)
-  - Time Frame
+
+Functioning Options:
+  - Ignore Pods
+  - Ignore Shuttles
+  - Ignore Rookie Ships
+  - System Security (High, Low, Null)
+  - ISK Value
