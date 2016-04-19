@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { filterKillmails } from '../actions/actions'
 import { updateSystemFilterAndEvaluate } from '../actions/actions'
 import { deleteSystemFilterAndEvaluate } from '../actions/actions'
 import { updateFilterAndEvaluate } from '../actions/actions'
@@ -99,13 +98,13 @@ class FilterList extends Component {
     }
 }
 
-function mapStateToProps({ killmail_list, system_filter, filters }) {
-    return { killmail_list, system_filter, filters }
+function mapStateToProps({ killmail_list, system_filter, filters, options }) {
+    return { killmail_list, system_filter, filters, options }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ updateSystemFilterAndEvaluate, deleteSystemFilterAndEvaluate,
-        filterKillmails, updateFilterAndEvaluate, deleteFilterAndEvaluate }, dispatch)
+    return bindActionCreators({ updateSystemFilterAndEvaluate, deleteSystemFilterAndEvaluate, updateFilterAndEvaluate,
+        deleteFilterAndEvaluate }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterList)

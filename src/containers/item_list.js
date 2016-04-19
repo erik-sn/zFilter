@@ -14,18 +14,12 @@ class ItemList extends Component {
 
     constructor(props) {
         super(props)
-        this.updateLocalStore = this.updateLocalStore.bind(this)
-    }
-
-    updateLocalStore() {
-        localStorage.setItem('updateTime', new Date)
     }
 
     render() {
-        this.updateLocalStore()
-        const { killmail_list, name } = this.props
-
-        if(killmail_list.length > 10000) {
+        localStorage.setItem('updateTime', new Date)
+        const { killmail_list, name, options } = this.props
+        if(killmail_list.length >= parseInt(options.maxKillmails)) {
             deleteLast()
         }
 
@@ -46,13 +40,15 @@ class ItemList extends Component {
     }
 }
 
-function mapStateToProps({ killmail_list }) {
-    return ({ killmail_list })
+function mapStateToProps({ killmail_list, options }) {
+    return ({ killmail_list, options })
 }
 
 export default connect(mapStateToProps)(ItemList)
 
-
+/**
+ *  Delete the killmail object corresponding to the lowest KillID (i.e. oldest) in indexddb
+ */
 function deleteLast() {
     var request = window.indexedDB.open("killmails", 1)
     let db
@@ -65,7 +61,6 @@ function deleteLast() {
         pdestroy.onsuccess = function (event) {
             var cursor = pdestroy.result;
             if (cursor) {
-                console.log(cursor)
                 store.delete(cursor.primaryKey);
             }
         }

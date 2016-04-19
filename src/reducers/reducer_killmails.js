@@ -16,13 +16,13 @@ export default function(state = [], action) {
             const shipID = kill.victim.shipType.id
             const systemID = kill.solarSystem.id
 
-            if(isValid(shipID,systemID)) {
+            if(isValid(shipID, systemID, action.meta.props.options)) {
                 const killmail = transformRedisKillmail(kill)
                 addToDatabase(killmail) // add killmail with true status, need to develop middleware to remove side effect
                 const passedFilter = isActiveAny(killmail, action.meta.props, [])
 
                 if(!passedFilter) killmail.active = false
-                if(state.length > 10000) return [killmail].concat(state.slice(0, -1))
+                if(state.length >= parseInt(action.meta.props.options.maxKillmails)) return [killmail].concat(state.slice(0, -1))
                 return [killmail].concat(state) // concatenate killmails to the beginning of array
             }
             return state
@@ -32,7 +32,7 @@ export default function(state = [], action) {
 
         case INITIALIZE_ZKILL_KILLMAILS:
             return action.payload.filter((killmail) => {
-                return isValid(killmail.victim.shipTypeID, killmail.solarSystemID)
+                return isValid(killmail.victim.shipTypeID, killmail.solarSystemID, action.meta.props.options)
             })
             .map((killmail) => {
                 return transformZkillKillmail(killmail)
@@ -184,11 +184,14 @@ function setAllActive(killmails) {
  * @param   {integer} systemID - Type ID of the system
  * @returns {boolean}   - Whether or not the killmail is valid
  */
-function isValid(shipID, systemID) {
-    if(shipID == 670 || shipID == 33328) return false // ignore pods
-    if(groups.RookieShips.indexOf(shipID) != -1) return false // ignore rookie ships
-    if(groups.Shuttles.indexOf(shipID) != -1) return false // ignore shuttles
+function isValid(shipID, systemID, options) {
+    if(options.ignorePods && (shipID == 670 || shipID == 33328)) return false // ignore pods
+    if(options.ignoreRookieShips && (groups.RookieShips.indexOf(shipID) != -1)) return false // ignore rookie ships
+    if(options.ignoreShuttles && (groups.Shuttles.indexOf(shipID) != -1)) return false // ignore shuttles
     if(!shipdata[shipID] || !systemData[systemID]) return false // if we do not have the system on record
+    if(!options.showHighsec && (systemData[systemID].security >= 0.5)) return false
+    if(!options.showLowsec && (systemData[systemID].security < 0.5 || systemData[systemID] > 0)) return false
+    if(!options.showNullsec && (systemData[systemID].security <= 0)) return false
     return true
 }
 

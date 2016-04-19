@@ -25,7 +25,7 @@ class SearchFilter extends Component {
     }
 
     select(item) {
-        const { createSystemFilterAndEvaluate, createFilterAndEvaluate, resetOptions } = this.props
+        const { createSystemFilterAndEvaluate, createFilterAndEvaluate, resetFilterOptions } = this.props
         if(item.type === 'system') {
             const name = item.name.substring(0, item.name.indexOf('('))
             createSystemFilterAndEvaluate(name, item.id, 0 ,0, this.props)
@@ -38,12 +38,12 @@ class SearchFilter extends Component {
             item.type == 'character') {
             createFilterAndEvaluate(item.type, item.id, item.name, this.props)
         }
-        resetOptions()
+        resetFilterOptions()
         this.setState({ input: '' })
     }
 
     update(input) {
-        this.props.getOptions(input)
+        this.props.getFilterOptions(input)
     }
 
     show() {
@@ -94,8 +94,8 @@ class SearchFilter extends Component {
 
 }
 
-function mapStateToProps({ killmail_list, filterOptions, system_filter, jump_filter, filters }) {
-    return { killmail_list, filterOptions, system_filter, jump_filter, filters }
+function mapStateToProps({ killmail_list, filterOptions, system_filter, jump_filter, filters, options }) {
+    return { killmail_list, filterOptions, system_filter, jump_filter, filters, options }
 }
 
 function mapDispatchToProps(dispatch) {

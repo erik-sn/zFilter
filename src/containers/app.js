@@ -42,14 +42,14 @@ class App extends Component {
           if(empty) window.indexedDB.deleteDatabase("killmails")
         }
         getAllItems(this.props, function(props, items) {
-          props.setInitialKillmails(items) // reset storage if time > 3 hours
+          props.setInitialKillmails(items, props) // reset storage if time > 3 hours
         })
     }
 
 }
 
-function mapStateToProps({ killmail_list, filters, system_filter, jump_filter }) {
-    return ({ killmail_list, filters, system_filter, jump_filter })
+function mapStateToProps({ killmail_list, filters, options, system_filter, jump_filter }) {
+    return ({ killmail_list, filters, options, system_filter, jump_filter })
 }
 
 function mapDispatchToProps(dispatch) {

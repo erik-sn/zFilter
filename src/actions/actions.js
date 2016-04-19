@@ -65,13 +65,16 @@ export function filterKillmails(props) {
  * @param killmails - array of killmail objects from local storage
  * @returns {Function}
  */
-export function setInitialKillmails(killmails) {
+export function setInitialKillmails(killmails, props) {
 
     return (dispatch) => {
         //if(killmails && killmails.length > 500) {
             dispatch({
                 type: INITIALIZE_KILLMAILS,
-                payload: killmails
+                payload: killmails,
+                meta: {
+                    props: props
+                }
             })
         //}
         //else {
@@ -105,7 +108,6 @@ export function setInitialKillmails(killmails) {
 }
 
 export function setOptions(options) {
-    console.log(options)
     return {
         type: SET_OPTIONS,
         payload: options
