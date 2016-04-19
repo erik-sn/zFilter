@@ -189,8 +189,10 @@ function isValid(shipID, systemID, options) {
     if(options.ignoreRookieShips && (groups.RookieShips.indexOf(shipID) != -1)) return false // ignore rookie ships
     if(options.ignoreShuttles && (groups.Shuttles.indexOf(shipID) != -1)) return false // ignore shuttles
     if(!shipdata[shipID] || !systemData[systemID]) return false // if we do not have the system on record
+
+    console.log(systemData[systemID].security)
     if(!options.showHighsec && (systemData[systemID].security >= 0.5)) return false
-    if(!options.showLowsec && (systemData[systemID].security < 0.5 || systemData[systemID] > 0)) return false
+    if(!options.showLowsec && (systemData[systemID].security < 0.5 && systemData[systemID].security > 0)) return false
     if(!options.showNullsec && (systemData[systemID].security <= 0)) return false
     return true
 }
