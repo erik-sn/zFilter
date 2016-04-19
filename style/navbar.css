@@ -1,46 +1,128 @@
 .navbar-container {
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    height: 50px;
-    opacity: 1;
-    color: white;
-    font: normal 24px 'Lato';
-    background: #333;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
-    -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
-    -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  display: flexbox;
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  opacity: 1;
+  color: white;
+  font: normal 24px 'Lato';
+  background: #333;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+}
+
+.left-container {
+  float: left;
+  width: 90%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+}
+
+.right-container {
+  width: 10%;
+  position: relative;
+  float: right;
 }
 
 .logo-container {
     margin-left: 15%;
-    display: inline-block;
 }
 
 .kill-counter {
-    display: inline-block;
-    margin-left: 25px;
-    margin-top: 7px;
+    height: 40px;
+    margin-left: 40px;
+    margin-top: 10px;
     margin-right: 25px;
     font-size: 24px;
 }
 
 .search-container {
     margin-left: 25px;
+    margin-top: 5px;
     display: inline-block;
     color: #333;
+    height: 40px;
 }
 
 .search-container input {
+    height: 40px;
     top: -5px;
+  border-radius: 0px !important;
+}
+
+.option-container {
+  height: 40px;
+  margin-top: 5px;
+}
+
+.dropdown-menu-hide {
+  display: none;
+}
+
+.dropdown-menu-visible {
+  list-style-type: none;
+  background-color: white;
+  width: 250px;
+  color: #333;
+  font-size: 18px;
+  border: 2px solid #333;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.8);
+}
+
+.dropdown-spacer {
+  height: 10px;
+}
+
+.dropdown-menu-visible li {
+  padding-bottom: 5px;
+}
+.dropdown-menu-visible span {
+  padding-left: 15px;
+}
+
+.isk-label {
+  margin-left: -15px;
+}
+
+.isk-input-container {
+
+}
+
+.isk-input {
+  width: 75px;
+}
+
+.isk-input-right {
+  margin-left: 10px;
+}
+
+button {
+  height: 40px !important;
+  width: 60px !important;
+  border-radius: 0px !important;
+}
+
+button .glyphicon .glyphicon-cog {
+  height: 20px;
+  width: 20px;
 }
 
 .github-logo {
-    cursor: pointer;
-    margin-left: 75px;
-    display: inline-block;
+  float: right;
+  position: relative;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 25px;
 }
 
-.github-logo img {
-    margin-top: -5px;
+.reddit-logo {
+  width: 40px;
+  float: right;
+  margin-right: 15px;
+  margin-top: 5px;
 }

@@ -22,7 +22,7 @@ export default function(state = [], action) {
                 const passedFilter = isActiveAny(killmail, action.meta.props, [])
 
                 if(!passedFilter) killmail.active = false
-                if(state.length > 5000) return [killmail].concat(state.slice(0, -1))
+                if(state.length > 7500) return [killmail].concat(state.slice(0, -1))
                 return [killmail].concat(state) // concatenate killmails to the beginning of array
             }
             return state
