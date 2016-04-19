@@ -10,7 +10,7 @@ import { deleteFilterAndEvaluate } from '../actions/actions'
 
 import Item from '../components/item'
 import Filter from '../components/filter'
-import SystemFilter from './system_filter'
+import SystemFilter from './../components/system_filter'
 import SearchFilter from './search_filter'
 
 class FilterList extends Component {

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
-import { getOptions } from '../actions/actions'
-import { resetOptions } from '../actions/actions'
+import { getFilterOptions } from '../actions/actions'
+import { resetFilterOptions } from '../actions/actions'
 import { createSystemFilterAndEvaluate } from '../actions/actions'
 import { createFilterAndEvaluate } from '../actions/actions'
 
@@ -57,7 +57,7 @@ class SearchFilter extends Component {
     }
 
     renderListItems() {
-        return this.props.options.map((option, index) => {
+        return this.props.filterOptions.map((option, index) => {
             const imgUrl = `https://image.eveonline.com/${option.image}`
             if(option.name && option.name.length > 33) option.name = `${option.name.substring(0, 30)}...`
             return(
@@ -94,12 +94,12 @@ class SearchFilter extends Component {
 
 }
 
-function mapStateToProps({ killmail_list, options, system_filter, jump_filter, filters }) {
-    return { killmail_list, options, system_filter, jump_filter, filters }
+function mapStateToProps({ killmail_list, filterOptions, system_filter, jump_filter, filters }) {
+    return { killmail_list, filterOptions, system_filter, jump_filter, filters }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getOptions, resetOptions, createSystemFilterAndEvaluate, createFilterAndEvaluate }, dispatch)
+    return bindActionCreators({ getFilterOptions, resetFilterOptions, createSystemFilterAndEvaluate, createFilterAndEvaluate }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchFilter)

@@ -7,22 +7,22 @@ export const INITIALIZE_KILLMAILS = 'INITIALIZE_KILLMAILS'
 export const INITIALIZE_ZKILL_KILLMAILS = 'INITIALIZE_ZKILL_KILLMAILS'
 export const GET_KILLMAIL = 'GET_KILLMAIL'
 export const FILTER_KILLMAILS = 'FILTER_KILLMAILS'
-export const GET_OPTIONS = 'GET_OPTIONS'
-export const RESET_OPTIONS = 'RESET_OPTIONS'
+export const GET_FILTER_OPTIONS = 'GET_FILTER_OPTIONS'
+export const RESET_FILTER_OPTIONS = 'RESET_FILTER_OPTIONS'
+export const SET_OPTIONS = 'SET_OPTIONS'
 export const SYSTEM_FILTER_CREATE = 'SYSTEM_FILTER_CREATE'
 export const SYSTEM_FILTER_DELETE = 'SYSTEM_FILTER_DELETE'
 export const SYSTEM_FILTER_UPDATE = 'SYSTEM_FILTER_UPDATE'
 export const FILTER_CREATE = 'FILTER_CREATE'
 export const FILTER_UPDATE = 'FILTER_UPDATE'
 export const FILTER_DELETE = 'FILTER_DELETE'
-export const FILTER_COUNT = 'FILTER_COUNT'
 
 import { getJumpRangeUrl } from '../functions/system_functions'
 
-export function getOptions(input) {
+export function getFilterOptions(input) {
     const request = axios.get(AUTOCOMPLETE + input)
     return {
-        type: GET_OPTIONS,
+        type: GET_FILTER_OPTIONS,
         payload: request,
         meta: {
             options: findOptions(input)
@@ -30,9 +30,9 @@ export function getOptions(input) {
     }
 }
 
-export function resetOptions() {
+export function resetFilterOptions() {
     return {
-        type: RESET_OPTIONS,
+        type: RESET_FILTER_OPTIONS,
         payload: []
     }
 }
@@ -102,6 +102,14 @@ export function setInitialKillmails(killmails) {
 
     }
 
+}
+
+export function setOptions(options) {
+    console.log(options)
+    return {
+        type: SET_OPTIONS,
+        payload: options
+    }
 }
 
 export function createSystemFilterAndEvaluate(system, systemId, jumps, ly, props) {

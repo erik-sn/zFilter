@@ -26,7 +26,7 @@ class Item extends Component {
       const imgUrl = `https://image.eveonline.com/Type/${item.shipID}_64.png`
 
         item.victimName = formatLabel(item.victimName, 20)
-      let victimGroup = formatLabel(chooseName(item.victimCorp, item.victimAlliance), 28)
+      let victimGroup = formatLabel(chooseName(item.victimCorp, item.victimAlliance), 26)
       let attackerGroup = formatLabel(chooseName(item.attackerCorporation, item.attackerAlliance), 33)
       let secClass = getSecurityClass(item.security)
 

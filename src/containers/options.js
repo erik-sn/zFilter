@@ -5,20 +5,23 @@ import { bindActionCreators } from 'redux'
 
 import SearchFilter from './search_filter'
 
+import { setOptions } from '../actions/actions'
+
 class Options extends Component {
 
     constructor(props) {
         super(props)
+        const { ignorePods, ignoreShuttles, ignoreRookieShips, showHighsec, showLowsec, showNullsec, minIsk, maxIsk } = this.props.options
         this.state = {
             showOptions: false,
-            ignorePods: true,
-            ignoreShuttles: true,
-            ignoreRookieShips: true,
-            showHighsec: false,
-            showLowsec: true,
-            showNullsec: true,
-            minIsk: '',
-            maxIsk: ''
+            ignorePods: ignorePods,
+            ignoreShuttles: ignoreShuttles,
+            ignoreRookieShips: ignoreRookieShips,
+            showHighsec: showHighsec,
+            showLowsec: showLowsec,
+            showNullsec: showNullsec,
+            minIsk: minIsk,
+            maxIsk: maxIsk
         }
         this.toggleOptions = this.toggleOptions.bind(this)
         this.updateIgnorePods = this.updateIgnorePods.bind(this)
@@ -32,45 +35,61 @@ class Options extends Component {
     }
 
     toggleOptions() {
-      if(this.state.showOptions) this.setState({ showOptions: false})
-      else this.setState({ showOptions: true })
+        if(this.state.showOptions) this.setState({ showOptions: false})
+        else this.setState({ showOptions: true })
     }
 
     updateIgnorePods() {
-        this.setState({ ignorePods: !this.state.ignorePods })
+        this.setState({ ignorePods: !this.state.ignorePods }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateIgnoreShuttles() {
-        this.setState({ ignoreShuttles: !this.state.ignoreShuttles })
+        this.setState({ ignoreShuttles: !this.state.ignoreShuttles }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateIgnoreRookieShips() {
-        this.setState({ ignoreRookieShips: !this.state.ignoreRookieShips })
+        this.setState({ ignoreRookieShips: !this.state.ignoreRookieShips }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateShowHighsec() {
-        this.setState({ showHighsec: !this.state.showHighsec })
+        this.setState({ showHighsec: !this.state.showHighsec }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateShowLowsec() {
-        this.setState({ showLowsec: !this.state.showLowsec })
+        this.setState({ showLowsec: !this.state.showLowsec }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateShowNullsec() {
-        this.setState({ showNullsec: !this.state.showNullsec })
+        this.setState({ showNullsec: !this.state.showNullsec }, () => {
+            this.props.setOptions(this.state)
+        })
     }
 
     updateMinIsk(event) {
         let input = event.target.value
         if(input === '' || input.match(/^\d+$/)) {
-            this.setState({ minIsk: input })
+            this.setState({ minIsk: input }, () => {
+                this.props.setOptions(this.state)
+            })
         }
     }
 
     updateMaxIsk(event) {
         let input = event.target.value
         if(input === '' || input.match(/^\d+$/)) {
-            this.setState({ maxIsk: input })
+            this.setState({ maxIsk: input }, () => {
+                this.props.setOptions(this.state)
+            })
         }
     }
 
@@ -111,9 +130,14 @@ class Options extends Component {
     }
 }
 
-function mapStateToProps({  }) {
-    return ({  })
+function mapStateToProps({ options }) {
+    return ({ options })
 }
 
-export default connect(mapStateToProps)(Options)
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ setOptions }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Options)
 

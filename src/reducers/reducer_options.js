@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
 
-import { GET_OPTIONS } from '../actions/actions'
-import { RESET_OPTIONS } from '../actions/actions'
-
-export default function(state = [], action) {
+import { SET_OPTIONS } from '../actions/actions'
+export default function(state = {showOptions: false, ignorePods: true, ignoreShuttles: true, ignoreRookieShips: true,
+    showHighsec: false,  showLowsec: true, showNullsec: true, minIsk: '', maxIsk: ''}, action) {
     switch (action.type) {
-        case GET_OPTIONS:
-          return action.meta.options.concat(action.payload.data)
+        case SET_OPTIONS:
+          return action.payload
 
-        case RESET_OPTIONS:
-          return []
     }
     return state
 }
-
-
