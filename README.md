@@ -1,6 +1,10 @@
 # zFilter
 
-Application to filter killmails based on user criteria. Built on top of the zKillboard API and (hopefully) the eve_nav API. 
+####Application to filter killmails based on user criteria. Built on top of the zKillboard API and (hopefully) the eve_nav API. 
+
+####Disclaimer: If a killmail is not on zKillboard, it will not show on this application either
+
+
 
 Currently Functioning Filters:
   - Light Year distance from multiple systems
