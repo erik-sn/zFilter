@@ -3,6 +3,7 @@
   z-index: 1;
   position: absolute;
   width: 100%;
+  min-width: 1250px;
   height: 50px;
   opacity: 1;
   color: white;
@@ -63,6 +64,7 @@
 }
 
 .dropdown-menu-visible {
+  position: fixed;
   list-style-type: none;
   background-color: white;
   width: 250px;
@@ -94,6 +96,7 @@
 }
 
 .isk-input {
+  padding-left: 10px;
   width: 75px;
 }
 
@@ -121,6 +124,7 @@ button .glyphicon .glyphicon-cog {
 }
 
 .reddit-logo {
+  cursor: pointer;
   width: 40px;
   float: right;
   margin-right: 15px;

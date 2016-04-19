@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
 import SearchFilter from './search_filter'
+import Options from './options'
 
 class Navbar extends Component {
 
@@ -50,33 +51,7 @@ class Navbar extends Component {
                   </div>
                   <div className="kill-counter">Active Killmails: { items }</div>
                   <div className="search-container"><SearchFilter /></div>
-                  <div className="option-container">
-                      <div className="row">
-                          <div className="col-lg-12">
-                              <div className="button-group">
-                                  <button type="button" className="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" onClick={ this.toggleOptions }><span className="glyphicon glyphicon-cog"></span> <span className="caret"></span></button>
-                                  <ul className={ dropdownClass }>
-                                      <li className="dropdown-spacer"></li>
-                                      <li><input type="checkbox" checked/><span>Disable Pods</span></li>
-                                      <li><input type="checkbox" checked/><span>Disable Shuttles</span></li>
-                                      <li><input type="checkbox" checked/><span>Disable Rookie Ships</span></li>
-                                      <li><input type="checkbox" /><span>Highsec</span></li>
-                                      <li><input type="checkbox" checked/><span>Lowsec</span></li>
-                                      <li><input type="checkbox" checked/><span>Nullsec</span></li>
-                                      <li>
-                                        <span className="isk-label">ISK Value (Millions):</span>
-                                        <div className="isk-input-container">
-                                          <input className="isk-input" type="text" />
-                                          <span>to</span>
-                                          <input className="isk-input isk-input-right" type="text"/>
-                                        </div>
-                                      </li>
-                                      <li className="dropdown-spacer"></li>
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+                  <Options />
                 </div>
                 <div className="right-container">
                   <div className="github-logo" onClick={ this.showGithub }>
