@@ -6,8 +6,7 @@
 
 
 
-###### Filters - Lets you specify what killmails show up in the feed. Changing filters does not delete or affect the killmails the application keeps track of - they will just not be visible.
-Functioning Filters:
+###### Filters - Lets you specify what killmails show up in the feed. Changing filters does not delete or affect the killmails the application keeps track of - only determines whether or not they will be visible.
   - Light Year distance from multiple systems
   - Stargate jump distance from multiple systems
   - Region
@@ -19,8 +18,7 @@ Functioning Filters:
   - ISK Value
   - Players involved
 
-##### Options - Killmails that do not match option settings will NOT be stored or displayed on the application
-Functioning Options:
+###### Options - Killmails that do not match option settings will NOT be stored or displayed on the application
   - Ignore Pods
   - Ignore Shuttles
   - Ignore Rookie Ships
