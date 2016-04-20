@@ -29,6 +29,8 @@ function initializeOptions() {
         matchAny: true,
         minIsk: '',
         maxIsk: '',
+        minPlayers: '',
+        maxPlayers: '',
         maxKillmails: 5000
     }
 }

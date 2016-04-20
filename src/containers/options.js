@@ -12,7 +12,8 @@ class Options extends Component {
 
     constructor(props) {
         super(props)
-        const { ignorePods, ignoreShuttles, ignoreRookieShips, showHighsec, showLowsec, showNullsec, matchAny, minIsk, maxIsk, maxKillmails } = this.props.options
+        const { ignorePods, ignoreShuttles, ignoreRookieShips, showHighsec, showLowsec, showNullsec, matchAny, minIsk,
+            maxIsk, minPlayers, maxPlayers, maxKillmails } = this.props.options
         this.state = {
             showOptions: false,
             ignorePods: ignorePods,
@@ -24,6 +25,8 @@ class Options extends Component {
             matchAny: matchAny,
             minIsk: minIsk,
             maxIsk: maxIsk,
+            minPlayers: minPlayers,
+            maxPlayers: maxPlayers,
             maxKillmails: maxKillmails
 
         }
@@ -38,6 +41,8 @@ class Options extends Component {
         this.updateFilterMatch = this.updateFilterMatch.bind(this)
         this.updateMinIsk = this.updateMinIsk.bind(this)
         this.updateMaxIsk = this.updateMaxIsk.bind(this)
+        this.updateMinPlayersInvolved = this.updateMinPlayersInvolved.bind(this)
+        this.updateMaxPlayersInvolved = this.updateMaxPlayersInvolved.bind(this)
         this.updateMaxKillmails = this.updateMaxKillmails.bind(this)
     }
 
@@ -97,7 +102,7 @@ class Options extends Component {
     }
 
     updateMinIsk(event) {
-        let input = event.target.value
+        let input = event.target.value.trim()
         if(input === '' || input.match(/^\d+$/)) {
             this.setState({ minIsk: input }, () => {
                 this.props.setOptions(this.state)
@@ -111,6 +116,28 @@ class Options extends Component {
         let input = event.target.value.trim()
         if(input === '' || input.match(/^\d+$/)) {
             this.setState({ maxIsk: input }, () => {
+                this.props.setOptions(this.state)
+                storeOptions(this.state)
+                this.props.filterKillmails(this.state)
+            })
+        }
+    }
+
+    updateMinPlayersInvolved(event) {
+        let input = event.target.value.trim()
+        if(input === '' || input.match(/^\d+$/)) {
+            this.setState({ minPlayers: input }, () => {
+                this.props.setOptions(this.state)
+                storeOptions(this.state)
+                this.props.filterKillmails(this.state)
+            })
+        }
+    }
+
+    updateMaxPlayersInvolved(event) {
+        let input = event.target.value.trim()
+        if(input === '' || input.match(/^\d+$/)) {
+            this.setState({ maxPlayers: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
                 this.props.filterKillmails(this.state)
@@ -171,6 +198,14 @@ class Options extends Component {
                                           <span>to</span>
                                           <input value={ this.state.maxIsk } onChange={ this.updateMaxIsk } className="isk-input isk-input-right" placeholder="Max.." type="text"/>
                                         </div>
+                                      </li>
+                                      <li>
+                                          <span className="isk-label">Players Involved:</span>
+                                          <div className="isk-input-container">
+                                              <input value={ this.state.minPlayers } onChange={ this.updateMinPlayersInvolved } className="isk-input" placeholder="Min.." type="text" />
+                                              <span>to</span>
+                                              <input value={ this.state.maxPlayers } onChange={ this.updateMaxPlayersInvolved } className="isk-input isk-input-right" placeholder="Max.." type="text"/>
+                                          </div>
                                       </li>
                                   </ul>
                               </div>

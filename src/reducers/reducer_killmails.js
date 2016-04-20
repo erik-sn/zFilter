@@ -22,7 +22,7 @@ export default function(state = [], action) {
 
                 let passedFilter
                 if(action.meta.props.options.matchAny) passedFilter = isActiveAny(killmail, action.meta.props, [])
-                else passedFilter = isActiveAll(killmail, action.meta.props, [])
+                else passedFilter = isActiveAll(killmail, action.meta.props)
 
                 if(!passedFilter) killmail.active = false
                 if(state.length >= parseInt(action.meta.props.options.maxKillmails)) return [killmail].concat(state.slice(0, -1))
@@ -35,7 +35,7 @@ export default function(state = [], action) {
 
                 let passedFilter
                 if(action.meta.props.options.matchAny) passedFilter = isActiveAny(killmail, action.meta.props, filterIDs)
-                else passedFilter = isActiveAll(killmail, action.meta.props, [])
+                else passedFilter = isActiveAll(killmail, action.meta.props)
 
                 if(passedFilter) {
                     killmail.active = true
@@ -57,6 +57,7 @@ export default function(state = [], action) {
 
         case FILTER_KILLMAILS:
             const props = action.payload.props
+            console.log(props)
             if(evaluateNoFilters(props)) return setAllActive(props.killmail_list)
 
             const filterIDs = getActiveFilterIDs(props)
@@ -363,12 +364,19 @@ function isActiveAny(killmail, props, filterIDs) {
     if(!killmail) return false
     if(evaluateExistingFilter(killmail, filterIDs)) return true
 
-
+    // evaluate static filters
     const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
+    //console.log('ISK: ', iskEvaluate)
     if(!iskEvaluate) return false
 
+    const playersInvolvedEvaluate = evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
+    //console.log('players: ', playersInvolvedEvaluate)
+    if(!playersInvolvedEvaluate) return false
+
+    // Check to see if no dynamic filters are being applied
     if(evaluateNoFilters(props)) return true
 
+    // evaluate dynamic filters
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
     if(props.filters.groups.length > 0 && groupEvaluate) return groupEvaluate
 
@@ -393,15 +401,22 @@ function isActiveAny(killmail, props, filterIDs) {
 }
 
 
-function isActiveAll(killmail, props, filterIDs) {
+function isActiveAll(killmail, props) {
     if(!killmail) return false
 
-
+    // evaluate static filters
     const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
+    //console.log('ISK: ', iskEvaluate)
     if(!iskEvaluate) return false
 
+    const playersInvolvedEvaluate = evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
+    //console.log('players: ', playersInvolvedEvaluate)
+    if(!playersInvolvedEvaluate) return false
+
+    // Check to see if no dynamic filters are being applied
     if(evaluateNoFilters(props)) return true
 
+    // evaluate dynamic filters
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
     if(props.filters.groups.length > 0 && !groupEvaluate) return false
 
@@ -435,12 +450,11 @@ function isActiveAll(killmail, props, filterIDs) {
  * @returns {boolean} - whether or not the killmail has already passed this filter
  */
 function evaluateExistingFilter(killmail, filterIDs ) {
-    const intersection = filterIDs.filter((n) => {
-        return killmail.passedFilters.indexOf(n) != -1
-    })
-    if(intersection.length > 0 ) {
-        console.log('Bypassing ')
-        return true
+    if(filterIDs) {
+        const intersection = filterIDs.filter((n) => {
+            return killmail.passedFilters.indexOf(n) != -1
+        })
+        if (intersection.length > 0)  return true
     }
     return false
 }
@@ -454,6 +468,8 @@ function evaluateNoFilters(props) {
     if(props.system_filter.length === 0 &&
         props.options.minIsk.trim() === '' &&
         props.options.maxIsk.trim() === '' &&
+        props.options.minPlayers.trim() === '' &&
+        props.options.maxPlayers.trim() === '' &&
         props.filters.ships.length === 0 &&
         props.filters.alliances.length === 0 &&
         props.filters.corporations.length === 0 &&
@@ -590,6 +606,16 @@ function evaluateISKFilter(killmail, minIsk, maxIsk) {
     if(minIsk.trim() != '' && parseInt(minIsk) > val ) return false
     if(maxIsk.trim() != '' && parseInt(maxIsk) < val) return false
     return `ISK-${minIsk}-${maxIsk}`
+}
+
+function evaluatePlayersInvolvedFilter(killmail, minPlayers, maxPlayers) {
+    const val = killmail.attackerCount
+    if(!val) return false
+    if(parseInt(minPlayers) > parseInt(maxPlayers)) return true
+    if(minPlayers.trim() == '' && maxPlayers.trim() == '') return true
+    if(minPlayers.trim() != '' && parseInt(minPlayers) > val ) return false
+    if(maxPlayers.trim() != '' && parseInt(maxPlayers) < val) return false
+    return `Players-${minPlayers}-${maxPlayers}`
 }
 
 
