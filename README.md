@@ -2,11 +2,12 @@
 
 ####Application to filter killmails based on user criteria. Built on top of the zKillboard API and (hopefully) the eve_nav API. 
 
-####Disclaimer: If a killmail is not on zKillboard, it will not show on this application either
+#####Disclaimer: If a killmail is not on zKillboard it won't be here either!
 
 
 
-Currently Functioning Filters:
+###### Filters - Lets you specify what killmails show up in the feed. Changing filters does not delete or affect the killmails the application keeps track of - they will just not be visible.
+Functioning Filters:
   - Light Year distance from multiple systems
   - Stargate jump distance from multiple systems
   - Region
@@ -15,10 +16,12 @@ Currently Functioning Filters:
   - Alliance Names
   - Ship groups (Frigates, Destroyers, etc.)
   - Ship types (Caracal, Rupture, Thorax, Moa, etc.)
+  - ISK Value
+  - Players involved
 
+##### Options - Killmails that do not match option settings will NOT be stored or displayed on the application
 Functioning Options:
   - Ignore Pods
   - Ignore Shuttles
   - Ignore Rookie Ships
   - System Security (High, Low, Null)
-  - ISK Value
