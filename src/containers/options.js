@@ -137,36 +137,44 @@ class Options extends Component {
                   <div className="col-lg-12">
                       <div className="button-group">
                           <button type="button" className="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" onClick={ this.toggleOptions }><span className="glyphicon glyphicon-cog"></span> <span className="caret"></span></button>
-                          <ul className={ dropdownClass }>
-                              <li className="dropdown-spacer"></li>
-                              <li><input type="checkbox" onChange={ this.updateIgnorePods } checked={ this.state.ignorePods } /><span>Ignore Pods</span></li>
-                              <li><input type="checkbox" onChange={ this.updateIgnoreShuttles }  checked={ this.state.ignoreShuttles }/><span>Ignore Shuttles</span></li>
-                              <li><input type="checkbox" onChange={ this.updateIgnoreRookieShips }  checked={ this.state.ignoreRookieShips }/><span>Ignore Rookie Ships</span></li>
-                              <li><input type="checkbox" onChange={ this.updateShowHighsec }  checked={ this.state.showHighsec }/><span>Highsec</span></li>
-                              <li><input type="checkbox" onChange={ this.updateShowLowsec }  checked={ this.state.showLowsec }/><span>Lowsec</span></li>
-                              <li><input type="checkbox" onChange={ this.updateShowNullsec }  checked={ this.state.showNullsec }/><span>Nullsec</span></li>
-                              <li className="dropdown-spacer"></li>
-                              <li>
-                                  <span className="isk-label">Match Filters:</span>
-                                  <div className="filter-match" ><input onChange={ this.updateFilterMatch }  type="radio" name="AnyAll" value="Any" checked={ this.state.matchAny } /><span>Any</span></div>
-                              </li>
-                              <li><div className="filter-match"><input onChange={ this.updateFilterMatch } type="radio" name="AnyAll" value="All" checked={ !this.state.matchAny } /><span>All</span></div></li>
-                              <li>
-                                <span className="isk-label">ISK Value (Millions):</span>
-                                <div className="isk-input-container">
-                                  <input value={ this.state.minIsk } onChange={ this.updateMinIsk } className="isk-input" placeholder="Min.." type="text" />
-                                  <span>to</span>
-                                  <input value={ this.state.maxIsk } onChange={ this.updateMaxIsk } className="isk-input isk-input-right" placeholder="Max.." type="text"/>
-                                </div>
-                              </li>
-                              <li>
-                                  <span className="isk-label">Maximum Killmails:</span>
-                                  <div className="isk-input-container">
-                                      <input value={ this.state.maxKillmails } onChange={ this.updateMaxKillmails } className="killmail-input" placeholder="Default is 5000" type="text" />
-                                  </div>
-                              </li>
-                              <li className="dropdown-spacer"></li>
-                          </ul>
+                              <div className={ dropdownClass }>
+                              <div>
+                                  <h2>Options</h2>
+                                  <ul>
+                                      <li><input type="checkbox" onChange={ this.updateIgnorePods } checked={ this.state.ignorePods } /><span>Ignore Pods</span></li>
+                                      <li><input type="checkbox" onChange={ this.updateIgnoreShuttles }  checked={ this.state.ignoreShuttles }/><span>Ignore Shuttles</span></li>
+                                      <li><input type="checkbox" onChange={ this.updateIgnoreRookieShips }  checked={ this.state.ignoreRookieShips }/><span>Ignore Rookie Ships</span></li>
+                                      <li><input type="checkbox" onChange={ this.updateShowHighsec }  checked={ this.state.showHighsec }/><span>Highsec</span></li>
+                                      <li><input type="checkbox" onChange={ this.updateShowLowsec }  checked={ this.state.showLowsec }/><span>Lowsec</span></li>
+                                      <li><input type="checkbox" onChange={ this.updateShowNullsec }  checked={ this.state.showNullsec }/><span>Nullsec</span></li>
+                                      <li className="dropdown-spacer"></li>
+                                      <li>
+                                          <span className="isk-label">Match Filters:</span>
+                                          <div className="filter-match" ><input onChange={ this.updateFilterMatch }  type="radio" name="AnyAll" value="Any" checked={ this.state.matchAny } /><span>Any</span></div>
+                                      </li>
+                                      <li><div className="filter-match"><input onChange={ this.updateFilterMatch } type="radio" name="AnyAll" value="All" checked={ !this.state.matchAny } /><span>All</span></div></li>
+                                      <li>
+                                          <span className="isk-label">Maximum Killmails:</span>
+                                          <div className="isk-input-container">
+                                              <input value={ this.state.maxKillmails } onChange={ this.updateMaxKillmails } className="killmail-input" placeholder="Default is 5000" type="text" />
+                                          </div>
+                                      </li>
+                                  </ul>
+                              </div>
+                              <div>
+                                  <h2>Static Filters</h2>
+                                  <ul>
+                                      <li>
+                                        <span className="isk-label">ISK Value (Millions):</span>
+                                        <div className="isk-input-container">
+                                          <input value={ this.state.minIsk } onChange={ this.updateMinIsk } className="isk-input" placeholder="Min.." type="text" />
+                                          <span>to</span>
+                                          <input value={ this.state.maxIsk } onChange={ this.updateMaxIsk } className="isk-input isk-input-right" placeholder="Max.." type="text"/>
+                                        </div>
+                                      </li>
+                                  </ul>
+                              </div>
+                              </div>
                       </div>
                   </div>
               </div>

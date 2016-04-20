@@ -66,7 +66,6 @@
 
 .dropdown-menu-visible {
   position: fixed;
-  list-style-type: none;
   background-color: white;
   width: 250px;
   color: #333;
@@ -86,6 +85,14 @@
 }
 .dropdown-menu-visible span {
   padding-left: 15px;
+}
+
+.dropdown-menu-visible h2 {
+  text-align: center;
+}
+
+li {
+  list-style-type: none;
 }
 
 .filter-match {
