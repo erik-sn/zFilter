@@ -12,16 +12,15 @@ export default function(state = [], action) {
         case GET_KILLMAIL:
             if(action.payload.data.package == null) return state // see if any new killmails have arrived
 
-            const kill = action.payload.data.package.killmail
-            const shipID = kill.victim.shipType.id
-            const systemID = kill.solarSystem.id
+            const response = action.payload.data.package
+            const shipID = response.killmail.victim.shipType.id
+            const systemID = response.killmail.solarSystem.id
 
             if(isValid(shipID, systemID, action.meta.props.options)) {
-                const killmail = transformRedisKillmail(kill)
+                const killmail = transformRedisKillmail(response)
                 addToDatabase(killmail) // add killmail with true status, need to develop middleware to remove side effect
 
                 let passedFilter
-                //console.log('Match Any?', action.meta.props.options.matchAny)
                 if(action.meta.props.options.matchAny) passedFilter = isActiveAny(killmail, action.meta.props, [])
                 else passedFilter = isActiveAll(killmail, action.meta.props, [])
 
@@ -32,7 +31,20 @@ export default function(state = [], action) {
             return state
 
         case INITIALIZE_KILLMAILS:
-            return action.payload
+            const initialKillmails = action.payload.map((killmail) => {
+
+                let passedFilter
+                if(action.meta.props.options.matchAny) passedFilter = isActiveAny(killmail, action.meta.props, filterIDs)
+                else passedFilter = isActiveAll(killmail, action.meta.props, [])
+
+                if(passedFilter) {
+                    killmail.active = true
+                    if(passedFilter !== true) killmail.passedFilters.push(passedFilter)
+                }
+                else killmail.active = false
+                return killmail
+            })
+            return initialKillmails
 
         case INITIALIZE_ZKILL_KILLMAILS:
             return action.payload.filter((killmail) => {
@@ -45,7 +57,6 @@ export default function(state = [], action) {
 
         case FILTER_KILLMAILS:
             const props = action.payload.props
-            console.log('Match Any?', props.options)
             if(evaluateNoFilters(props)) return setAllActive(props.killmail_list)
 
             const filterIDs = getActiveFilterIDs(props)
@@ -88,7 +99,8 @@ function addToDatabase(killmail) {
  * @param kill - redis killmail object
  * @returns {object} killmail
  */
-function transformRedisKillmail(kill) {
+function transformRedisKillmail(response) {
+    const kill = response.killmail
     const shipID = kill.victim.shipType.id
     const systemID = kill.solarSystem.id
     const victimInfo = getVictimInfo(kill.victim)
@@ -115,6 +127,7 @@ function transformRedisKillmail(kill) {
         attackerCorporationIDs: attackerCorporationInfo[1],
         attackerAlliance: attackerAllianceInfo[0],
         attackerAllianceIDs: attackerAllianceInfo[1],
+        value: response.zkb.totalValue,
         time: kill.killTime.substring(10, 16),
         passedFilters: [],
         active: true
@@ -172,7 +185,7 @@ function getVictimInfo(victim) {
         victimAlliance = victim.alliance.name
         victimAllianceID = victim.alliance.id
     }
-    let victimName = ''
+    let victimName = 'Unkown'
     let victimID = ''
     if(victim.character) {
         victimName = victim.character.name
@@ -350,6 +363,10 @@ function isActiveAny(killmail, props, filterIDs) {
     if(!killmail) return false
     if(evaluateExistingFilter(killmail, filterIDs)) return true
 
+
+    const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
+    if(!iskEvaluate) return false
+
     if(evaluateNoFilters(props)) return true
 
     const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
@@ -378,6 +395,10 @@ function isActiveAny(killmail, props, filterIDs) {
 
 function isActiveAll(killmail, props, filterIDs) {
     if(!killmail) return false
+
+
+    const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
+    if(!iskEvaluate) return false
 
     if(evaluateNoFilters(props)) return true
 
@@ -431,6 +452,8 @@ function evaluateExistingFilter(killmail, filterIDs ) {
  */
 function evaluateNoFilters(props) {
     if(props.system_filter.length === 0 &&
+        props.options.minIsk.trim() === '' &&
+        props.options.maxIsk.trim() === '' &&
         props.filters.ships.length === 0 &&
         props.filters.alliances.length === 0 &&
         props.filters.corporations.length === 0 &&
@@ -558,6 +581,17 @@ function evaluateRegionFilter(regionFilter, killmail) {
     }
     return false
 }
+
+function evaluateISKFilter(killmail, minIsk, maxIsk) {
+    const val = (killmail.value) / 1000000
+    if(!val) return false
+    if(parseInt(minIsk) > parseInt(maxIsk)) return true
+    if(minIsk.trim() == '' && maxIsk.trim() == '') return true
+    if(minIsk.trim() != '' && parseInt(minIsk) > val ) return false
+    if(maxIsk.trim() != '' && parseInt(maxIsk) < val) return false
+    return `ISK-${minIsk}-${maxIsk}`
+}
+
 
 /**
  * Consolidate all filterIDs from the filter object into an array of integers

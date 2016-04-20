@@ -102,16 +102,18 @@ class Options extends Component {
             this.setState({ minIsk: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
+                this.props.filterKillmails(this.state)
             })
         }
     }
 
     updateMaxIsk(event) {
-        let input = event.target.value
+        let input = event.target.value.trim()
         if(input === '' || input.match(/^\d+$/)) {
             this.setState({ maxIsk: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
+                this.props.filterKillmails(this.state)
             })
         }
     }
