@@ -43,10 +43,17 @@ class SearchFilter extends Component {
     }
 
     update(input) {
-        this.props.getFilterOptions(input)
+        this.setState({ input: input})
+        if(input.trim() === '') this.setState({ listVisible: false })
+        else {
+            this.setState({ listVisible: true })
+            this.props.getFilterOptions(input.trim())
+        }
+        document.addEventListener("click", this.hide)
     }
 
     show() {
+        console.log('showing')
         this.setState({ listVisible: true })
         document.addEventListener("click", this.hide)
     }
@@ -80,7 +87,7 @@ class SearchFilter extends Component {
                     type="text"
                     className="dropdown-input"
                     onClick={ this.show }
-                    onChange={(e)=>{ this.setState({ input: e.target.value }); this.update(e.target.value); this.show }}
+                    onChange={(e)=>{ this.update(e.target.value) }}
                     value={ this.state.input }
                 />
                 <div className={"filter-list" + (this.state.listVisible ? "-clicked": "")}>
