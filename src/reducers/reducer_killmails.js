@@ -19,7 +19,11 @@ export default function(state = [], action) {
             if(isValid(shipID, systemID, action.meta.props.options)) {
                 const killmail = transformRedisKillmail(kill)
                 addToDatabase(killmail) // add killmail with true status, need to develop middleware to remove side effect
-                const passedFilter = isActiveAny(killmail, action.meta.props, [])
+
+                let passedFilter
+                //console.log('Match Any?', action.meta.props.options.matchAny)
+                if(action.meta.props.options.matchAny) passedFilter = isActiveAny(killmail, action.meta.props, [])
+                else passedFilter = isActiveAll(killmail, action.meta.props, [])
 
                 if(!passedFilter) killmail.active = false
                 if(state.length >= parseInt(action.meta.props.options.maxKillmails)) return [killmail].concat(state.slice(0, -1))
@@ -41,11 +45,16 @@ export default function(state = [], action) {
 
         case FILTER_KILLMAILS:
             const props = action.payload.props
+            console.log('Match Any?', props.options)
             if(evaluateNoFilters(props)) return setAllActive(props.killmail_list)
 
             const filterIDs = getActiveFilterIDs(props)
             return props.killmail_list.map((killmail) => {
-                let passedFilter = isActiveAny(killmail, props, filterIDs)
+
+                let passedFilter
+                if(props.options.matchAny) passedFilter = isActiveAny(killmail, props, filterIDs)
+                else passedFilter = isActiveAll(killmail, props, filterIDs)
+
                 if(passedFilter) {
                     killmail.active = true
                     if(passedFilter !== true) killmail.passedFilters.push(passedFilter)
@@ -163,7 +172,13 @@ function getVictimInfo(victim) {
         victimAlliance = victim.alliance.name
         victimAllianceID = victim.alliance.id
     }
-    return [victim.character.name, victim.character.id, victim.corporation.name, victim.corporation.id, victimAlliance, victimAllianceID]
+    let victimName = ''
+    let victimID = ''
+    if(victim.character) {
+        victimName = victim.character.name
+        victimID = victim.character.id
+    }
+    return [victimName, victimID, victim.corporation.name, victim.corporation.id, victimAlliance, victimAllianceID]
 }
 
 /**
@@ -179,18 +194,18 @@ function setAllActive(killmails) {
 }
 
 /**
- * Check to make sure this killmail is valid; no pods, shuttles or rookie ships
+ * Check to make sure this killmail is valid; killmails that do not pass this will not
+ * be entered into the store OR the indexedb, essentially never existing.
  * @param   {integer} shipID   - Type ID of the ship
  * @param   {integer} systemID - Type ID of the system
+ * @param   {object} options - options object from redux store
  * @returns {boolean}   - Whether or not the killmail is valid
  */
 function isValid(shipID, systemID, options) {
-    if(options.ignorePods && (shipID == 670 || shipID == 33328)) return false // ignore pods
+    if(options.ignorePods && (shipID === 670 || shipID === 33328)) return false // ignore pods
     if(options.ignoreRookieShips && (groups.RookieShips.indexOf(shipID) != -1)) return false // ignore rookie ships
     if(options.ignoreShuttles && (groups.Shuttles.indexOf(shipID) != -1)) return false // ignore shuttles
     if(!shipdata[shipID] || !systemData[systemID]) return false // if we do not have the system on record
-
-    console.log(systemData[systemID].security)
     if(!options.showHighsec && (systemData[systemID].security >= 0.5)) return false
     if(!options.showLowsec && (systemData[systemID].security < 0.5 && systemData[systemID].security > 0)) return false
     if(!options.showNullsec && (systemData[systemID].security <= 0)) return false
@@ -360,6 +375,36 @@ function isActiveAny(killmail, props, filterIDs) {
     return false
 }
 
+
+function isActiveAll(killmail, props, filterIDs) {
+    if(!killmail) return false
+
+    if(evaluateNoFilters(props)) return true
+
+    const groupEvaluate =  evaluateGroupFilter(props.filters.groups, killmail)
+    if(props.filters.groups.length > 0 && !groupEvaluate) return false
+
+    const shipEvaluate = evaluateShipFilter(props.filters.ships, killmail)
+    if(props.filters.ships.length > 0 && !shipEvaluate) return false
+
+    const allianceEvaluate = evaluateAllianceFilter(props.filters.alliances, killmail)
+    if(props.filters.alliances.length > 0 && !allianceEvaluate) return false
+
+    const corporationEvaluate = evaluateCorporationFilter(props.filters.corporations, killmail)
+    if(props.filters.corporations.length > 0 && !corporationEvaluate) return false
+
+    const characterEvaluate = evaluateCharacterFilter(props.filters.characters, killmail)
+    if(props.filters.characters.length > 0 && !characterEvaluate) return false
+
+    const systemEvaluate = evaluateSystemFilter(props.system_filter, killmail, props.jump_filter)
+    if(props.system_filter.length > 0 && !systemEvaluate) return false
+
+    const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
+    if(props.filters.regions.length > 0 && !regionEvaluate) return false
+    return true
+}
+
+
 /**
  * Find the intersection between the passedFilters variable on a killmail and the
  * list of filter ids in the Redux store. If an intersection exists then the killmail
@@ -496,7 +541,7 @@ function evaluateCorporationFilter(corporationFilter, killmail) {
 function evaluateCharacterFilter(characterFilter, killmail) {
     for(let i in characterFilter) {
         const status = characterFilter[i].status
-        if ((status == 'both' || status == 'victim') && (killmail.victimGroupID == characterFilter[i].id)) return characterFilter[i].filterID // victim match
+        if ((status == 'both' || status == 'victim') && (killmail.victimID == characterFilter[i].id)) return characterFilter[i].filterID // victim match
         if ((status == 'both' || status == 'attacker') && (killmail.attackerIDs.indexOf(parseInt(characterFilter[i].id)) !== -1)) return characterFilter[i].filterID
     }
     return false

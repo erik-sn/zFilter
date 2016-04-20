@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux'
 import SearchFilter from './search_filter'
 
 import { setOptions } from '../actions/actions'
+import { filterKillmails } from '../actions/actions'
 
 class Options extends Component {
 
@@ -91,6 +92,7 @@ class Options extends Component {
         this.setState({ matchAny: !this.state.matchAny }, () => {
             this.props.setOptions(this.state)
             storeOptions(this.state)
+            this.props.filterKillmails(this.state)
         })
     }
 
@@ -144,9 +146,9 @@ class Options extends Component {
                               <li className="dropdown-spacer"></li>
                               <li>
                                   <span className="isk-label">Match Filters:</span>
-                                  <div className="filter-match" ><input onChange={ this.updateFilterMatch }  type="radio" name="type" value="Any" checked={ this.state.matchAny } /><span>Any</span></div>
+                                  <div className="filter-match" ><input onChange={ this.updateFilterMatch }  type="radio" name="AnyAll" value="Any" checked={ this.state.matchAny } /><span>Any</span></div>
                               </li>
-                              <li><div className="filter-match"><input onChange={ this.updateFilterMatch } type="radio" name="type" value="All" checked={ !this.state.matchAny } /><span>All</span></div></li>
+                              <li><div className="filter-match"><input onChange={ this.updateFilterMatch } type="radio" name="AnyAll" value="All" checked={ !this.state.matchAny } /><span>All</span></div></li>
                               <li>
                                 <span className="isk-label">ISK Value (Millions):</span>
                                 <div className="isk-input-container">
