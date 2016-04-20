@@ -362,18 +362,15 @@ function formatLabel(label, maxChars) {
 // time
 function isActiveAny(killmail, props, filterIDs) {
     if(!killmail) return false
-    if(evaluateExistingFilter(killmail, filterIDs)) return true
 
     // evaluate static filters
-    const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
-    //console.log('ISK: ', iskEvaluate)
-    if(!iskEvaluate) return false
-
-    const playersInvolvedEvaluate = evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
-    //console.log('players: ', playersInvolvedEvaluate)
-    if(!playersInvolvedEvaluate) return false
+    const iskFilter =  evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
+    const playerFilter =  evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
+    console.log(iskFilter, playerFilter)
+    if(iskFilter && playerFilter) return true
 
     // Check to see if no dynamic filters are being applied
+    if(evaluateExistingFilter(killmail, filterIDs)) return true
     if(evaluateNoFilters(props)) return true
 
     // evaluate dynamic filters
@@ -397,6 +394,8 @@ function isActiveAny(killmail, props, filterIDs) {
 
     const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
     if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
+
+    console.log('returning false')
     return false
 }
 
@@ -605,6 +604,7 @@ function evaluateISKFilter(killmail, minIsk, maxIsk) {
     if(minIsk.trim() == '' && maxIsk.trim() == '') return true
     if(minIsk.trim() != '' && parseInt(minIsk) > val ) return false
     if(maxIsk.trim() != '' && parseInt(maxIsk) < val) return false
+
     return `ISK-${minIsk}-${maxIsk}`
 }
 
