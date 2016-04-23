@@ -284,6 +284,5 @@ function getZkillQuery(data) {
     for(let i in data) {
         if(lowest === undefined || data[i].killID < lowest) lowest = data[i].killID
     }
-    console.log(lowest)
     return `https://zkillboard.com/api/kills/beforeKillID/${lowest}/orderDirection/desc`
 }

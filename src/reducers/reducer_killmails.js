@@ -366,7 +366,6 @@ function isActiveAny(killmail, props, filterIDs) {
     // evaluate static filters
     const iskFilter =  evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
     const playerFilter =  evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
-    console.log(iskFilter, playerFilter)
     if(iskFilter && playerFilter) return true
 
     // Check to see if no dynamic filters are being applied
@@ -395,7 +394,6 @@ function isActiveAny(killmail, props, filterIDs) {
     const regionEvaluate = evaluateRegionFilter(props.filters.regions, killmail)
     if(props.filters.regions.length > 0 && regionEvaluate) return regionEvaluate
 
-    console.log('returning false')
     return false
 }
 
@@ -405,11 +403,9 @@ function isActiveAll(killmail, props) {
 
     // evaluate static filters
     const iskEvaluate = evaluateISKFilter(killmail, props.options.minIsk, props.options.maxIsk)
-    //console.log('ISK: ', iskEvaluate)
     if(!iskEvaluate) return false
 
     const playersInvolvedEvaluate = evaluatePlayersInvolvedFilter(killmail, props.options.minPlayers, props.options.maxPlayers)
-    //console.log('players: ', playersInvolvedEvaluate)
     if(!playersInvolvedEvaluate) return false
 
     // Check to see if no dynamic filters are being applied
