@@ -57,7 +57,6 @@ export default function(state = [], action) {
 
         case FILTER_KILLMAILS:
             const props = action.payload.props
-            console.log(props)
             if(evaluateNoFilters(props)) return setAllActive(props.killmail_list)
 
             const filterIDs = getActiveFilterIDs(props)
@@ -90,7 +89,7 @@ function addToDatabase(killmail) {
     };
 
     request.onerror = function(event) {
-        console.log('Unable to add data', killmail)
+        //console.log('Unable to add data', killmail)
     }
 }
 

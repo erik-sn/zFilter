@@ -1,5 +1,4 @@
 .navbar-container {
-  display: flexbox;
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -15,25 +14,23 @@
 }
 
 .left-container {
-  float: left;
-  width: 90%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
+    float: left;
+    width: 90%;
 }
 
 .right-container {
   width: 10%;
-  position: relative;
   float: right;
 }
 
 .logo-container {
+    float: left;
     margin-left: 15%;
     margin-top: 2px;
 }
 
 .kill-counter {
+    float: left;
     width: 250px;
     height: 40px;
     margin-left: 40px;
@@ -44,17 +41,19 @@
 
 
 .mode-container {
+  float: left;
   height: 40px;
   width: 150px;
   margin-top: 10px;
 }
 
 .search-container {
+    float: left;
     margin-left: 25px;
-    margin-top: 5px;
     display: inline-block;
     color: #333;
     height: 40px;
+    padding: 5px 0px 5px 0px;
 }
 
 .search-container input {
@@ -64,8 +63,9 @@
 }
 
 .option-container {
+  float: left;
   height: 40px;
-  margin-top: 5px;
+  padding: 5px 0px 5px 0px;
 }
 
 .dropdown-menu-hide {
