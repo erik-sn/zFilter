@@ -36,7 +36,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        setInterval(this.refreshList, 2500)
+        setInterval(this.refreshList, 5000)
         if(getTimeDifference() > 3600) {
           const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
           if(empty) window.indexedDB.deleteDatabase("killmails")
