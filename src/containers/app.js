@@ -41,6 +41,7 @@ class App extends Component {
           const empty = confirm('The killmails in storage are more than an hour old - do you want to clear the list?')
           if(empty) window.indexedDB.deleteDatabase("killmails")
         }
+        console.log('Hello :)')
         getAllItems(this.props, function(props, items) {
           props.setInitialKillmails(items, props) // reset storage if time > 3 hours
         })

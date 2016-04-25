@@ -11,12 +11,10 @@ let db;
 var request = window.indexedDB.open("killmails", 1)
 
 request.onerror = function(event) {
-    console.log("error: ");
 };
 
 request.onsuccess = function(event) {
     db = request.result;
-    console.log("success: "+ db);
 };
 
 request.onupgradeneeded = function(event) {
