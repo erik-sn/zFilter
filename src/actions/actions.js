@@ -20,7 +20,7 @@ export const FILTER_DELETE = 'FILTER_DELETE'
 import { getJumpRangeUrl } from '../functions/system_functions'
 
 export function getFilterOptions(input) {
-    const request = axios.get(AUTOCOMPLETE + input)
+    const request = axios.get(AUTOCOMPLETE + input + '/')
     return {
         type: GET_FILTER_OPTIONS,
         payload: request,
