@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const URL_EVE_NAV = 'http://127.0.0.1:8000/api/v1'
+const URL_EVE_NAV = 'http://107.170.33.131:8000/api/v1'
 
 /**
  * See if a system exists in the system database by system name, and return it's info if it does
