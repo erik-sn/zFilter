@@ -1,8 +1,5 @@
 var webpack = require("webpack");
 
-// differentiate between build and start
-var build = './src/index.js'
-var start = './app.min.js'
 
 module.exports = {	
   entry: [
@@ -14,7 +11,7 @@ module.exports = {
            'process.env.NODE_ENV': '"production"'
          }),
          // minimize and uglify the code
-		 new webpack.optimize.UglifyJsPlugin({
+         new webpack.optimize.UglifyJsPlugin({
             include: /\.min\.js$/,
              minimize: true,
              compress: {
@@ -23,9 +20,9 @@ module.exports = {
          })
   ],
   output: {
-    path: __dirname + '/build',
+    path: __dirname,
     publicPath: 'http://0.0.0.0:3000/zFilter',
-    filename: 'app.min.js'
+    filename: 'bundle.js'
   },
   module: {
     loaders: [{
