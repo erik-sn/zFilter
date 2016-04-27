@@ -103,7 +103,7 @@ class Options extends Component {
 
     updateMinIsk(event) {
         let input = event.target.value.trim()
-        if(input === '' || input.match(/^\d+$/)) {
+        if(input === '' || (input.match(/^\d+$/) && input < 10000000)) {
             this.setState({ minIsk: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
@@ -114,7 +114,7 @@ class Options extends Component {
 
     updateMaxIsk(event) {
         let input = event.target.value.trim()
-        if(input === '' || input.match(/^\d+$/)) {
+        if(input === '' || (input.match(/^\d+$/) && input < 10000000)) {
             this.setState({ maxIsk: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
@@ -125,7 +125,7 @@ class Options extends Component {
 
     updateMinPlayersInvolved(event) {
         let input = event.target.value.trim()
-        if(input === '' || input.match(/^\d+$/)) {
+        if(input === '' || (input.match(/^\d+$/) && input < 10000)) {
             this.setState({ minPlayers: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
@@ -136,7 +136,7 @@ class Options extends Component {
 
     updateMaxPlayersInvolved(event) {
         let input = event.target.value.trim()
-        if(input === '' || input.match(/^\d+$/)) {
+        if(input === '' || (input.match(/^\d+$/) && input < 10000)) {
             this.setState({ maxPlayers: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
@@ -147,7 +147,7 @@ class Options extends Component {
 
     updateMaxKillmails(event) {
         let input = event.target.value
-        if((input === '' || input.match(/^\d+$/) && input < 20000)) {
+        if((input === '' || input.match(/^\d+$/) && input < 25000)) {
             this.setState({ maxKillmails: input }, () => {
                 this.props.setOptions(this.state)
                 storeOptions(this.state)
