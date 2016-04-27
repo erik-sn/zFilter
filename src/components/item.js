@@ -32,7 +32,7 @@ class Item extends Component {
 
       return (
             <div className="item-row" key={ key }>
-              <div onClick={ this.onClick } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>
+              <div onClick={ this.showZkill } className="victim-img"><img src={ imgUrl } height="42" width="42" /></div>
               <div className="victim-info" onClick={ this.showZkill }>
                   <span className="victim-name">{ item.victimName }</span>
                   <span className="victim-group">{ victimGroup }</span>
